@@ -1,0 +1,33 @@
+security:
+    encoders:
+        App\Entity\User:
+            algorithm: bcrypt
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        api_user_provider:
+            entity:
+                class: App\Entity\User
+                property: username
+    firewalls:
+        login:
+            pattern:  ^/auth/token
+            stateless: true
+            anonymous: true
+            json_login:
+                check_path:               /auth/token
+                success_handler:          lexik_jwt_authentication.handler.authentication_success
+                failure_handler:          lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
+        api:
+            pattern:   ^(/|/stock|order/|/*)
+            stateless: true
+            anonymous: false
+            provider: api_user_provider
+            guard:
+                authenticators:
+                    - App\Security\AppKeyAuthenticator
+                    - App\Security\JWTTokenAuthenticator
+                entry_point: App\Security\AppKeyAuthenticator
+    access_control:
+        - { path: ^/auth/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^(/|/stock|order/|/*), roles: IS_AUTHENTICATED_FULLY }

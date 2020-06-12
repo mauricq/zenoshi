@@ -1,0 +1,19 @@
+parameters:
+    # Adds a fallback DATABASE_URL if the env var is not set.
+    # This allows you to run cache:warmup even if your
+    # environment variables are not available yet.
+    # You should not need to change this value.
+     env(DATABASE_URL): ''
+
+doctrine:
+    dbal:
+        # configure these for your database server
+        connections:
+            pedidos:
+                dbname: test02
+                host: localhost
+                port: 3306
+                user: 'admin'
+                password: 'admin'
+                driver: 'pdo_mysql'
+                server_version: 'mariadb-10.0.17'
