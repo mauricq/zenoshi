@@ -7,6 +7,10 @@ on:
 jobs:
   symfony-tests:
 
+    defaults:
+      run:
+        working-directory: ./app
+
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
