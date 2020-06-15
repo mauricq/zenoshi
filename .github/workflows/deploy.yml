@@ -1,0 +1,67 @@
+name: Symfony
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  laravel-tests:
+
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./app
+    steps:
+    - uses: actions/checkout@v2
+    - name: Copy .env
+      env:
+        env_file: ${{ secrets.DEPLOY_ENV }} 
+      run: echo "$env_file" > ./.env
+    - name: Install Dependencies
+      run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+    - name: Run migrations
+      run: php bin/console doctrine:migrations:migrate
+    - name: Run specific migration file
+      run: php bin/console doctrine:migrations:migrate 20200504231536
+    - name: Run AppFixtures
+      run: php bin/console doctrine:fixtures:load
+    - name: Run server
+      run: symfony server:start
+    - name: Build process
+      working-directory: ./
+      run: | 
+        rm ./docker-compose.override.yaml
+        docker-compose build
+    - name: Log into registry
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+    - name: Push image
+      run: |
+        IMAGE_PHP_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/php_zenoshi:latest
+        IMAGE_APACHE_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/apache_zenoshi:latest
+        
+        docker tag php:local $IMAGE_PHP_ID
+        docker push $IMAGE_PHP_ID
+        
+        docker tag apache:local $IMAGE_APACHE_ID
+        docker push $IMAGE_APACHE_ID
+    - name: Deploy stack
+      uses: appleboy/ssh-action@master
+      env:
+        DOCKER_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        DOCKER_USER: ${{ secrets.DOCKER_USERNAME }}
+      with: 
+        host: ${{ secrets.DEPLOY_HOST }}
+        username: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.DEPLOY_KEY }}
+        port: ${{ secrets.DEPLOY_PORT }}
+        envs: DOCKER_TOKEN,DOCKER_USER   
+        script: |
+          IMAGE_PHP_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/php_zenoshi:latest
+          IMAGE_APACHE_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/apache_zenoshi:latest
+          echo "$DOCKER_TOKEN" | sudo docker login docker.pkg.github.com -u $DOCKER_USER --password-stdin
+          sudo docker pull $IMAGE_PHP_ID
+          sudo docker pull $IMAGE_APACHE_ID
+          cd ~
+          sudo docker stack rm api-zenoshi
+          sleep 40
+          sudo docker stack deploy -c zenoshi-stack.yml api-zenoshi
