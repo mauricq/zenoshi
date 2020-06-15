@@ -5,7 +5,7 @@ on:
     branches: [ master ]
 
 jobs:
-  laravel-tests:
+  symfony-tests:
 
     runs-on: ubuntu-latest
     defaults:
@@ -13,6 +13,11 @@ jobs:
         working-directory: ./app
     steps:
     - uses: actions/checkout@v2
+    - name: Install Composer, Docker, Symfony
+      run: |
+        sh infrastructure/scripts/setup-docker.sh
+        sh infrastructure/scripts/setup-dive.sh
+        sh infrastructure/scripts/setup-portainer.sh
     - name: Install Dependencies
       run: composer install
     - name: Run migrations
