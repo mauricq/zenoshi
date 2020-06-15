@@ -25,8 +25,6 @@ jobs:
       run: php bin/console doctrine:migrations:migrate 20200504231536
     - name: Run AppFixtures
       run: php bin/console doctrine:fixtures:load
-    - name: Run server
-      run: symfony server:start
     - name: Build process
       working-directory: ./
       run: | 
