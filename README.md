@@ -1,7 +1,7 @@
 # Zenoshi Api
 REST application for Zenoshi.
 
-## Installation
+## Installation 
 
 Use the console and run next commands.
 
