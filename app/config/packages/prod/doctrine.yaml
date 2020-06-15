@@ -10,10 +10,10 @@ doctrine:
         # configure these for your database server
         connections:
             pedidos:
-                dbname: test02
-                host: localhost
+                dbname: zenoshidb
+                host: teamq_db
                 port: 3306
-                user: 'admin'
-                password: 'admin'
+                user: 'zenoshi'
+                password: 'w4nmTQQvKeC2N3we'
                 driver: 'pdo_mysql'
                 server_version: 'mariadb-10.0.17'
