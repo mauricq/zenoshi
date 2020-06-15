@@ -15,9 +15,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install Composer, Docker, Symfony
       run: |
-        sh ./infrastructure/scripts/setup-docker.sh
-        sh ./infrastructure/scripts/setup-dive.sh
-        sh ./infrastructure/scripts/setup-portainer.sh
+        sh /infrastructure/scripts/setup-docker.sh
+        sh /infrastructure/scripts/setup-dive.sh
+        sh /infrastructure/scripts/setup-portainer.sh
     - name: Install Dependencies
       run: composer install
     - name: Run migrations
