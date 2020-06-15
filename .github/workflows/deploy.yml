@@ -8,24 +8,10 @@ jobs:
   symfony-tests:
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./
     steps:
     - uses: actions/checkout@v2
-    - name: Install Composer, Docker, Symfony
-      run: |
-        sh /infrastructure/scripts/setup-docker.sh
-        sh /infrastructure/scripts/setup-dive.sh
-        sh /infrastructure/scripts/setup-portainer.sh
     - name: Install Dependencies
-      run: composer install
-    - name: Run migrations
-      run: php bin/console doctrine:migrations:migrate
-    - name: Run specific migration file
-      run: php bin/console doctrine:migrations:migrate 20200504231536
-    - name: Run AppFixtures
-      run: php bin/console doctrine:fixtures:load
+      run: composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
     - name: Build process
       working-directory: ./
       run: | 
