@@ -17,7 +17,7 @@ jobs:
     - name: Install Dependencies
       run: composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
     - name: Clean composer cache
-      run: php bin/console cache:warmup
+      run: composer clear-cache
     - name: Build process
       working-directory: ./
       run: | 
