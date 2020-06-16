@@ -16,6 +16,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install Dependencies
       run: composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+    - name: Clean composer cache
+      run: php bin/console cache:warmup
     - name: Build process
       working-directory: ./
       run: | 
