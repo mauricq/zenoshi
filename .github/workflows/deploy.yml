@@ -20,7 +20,7 @@ jobs:
       working-directory: ./
       run: | 
         rm ./docker-compose.override.yaml
-        docker-compose build
+        docker-compose build --no-cache
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
     - name: Push image
