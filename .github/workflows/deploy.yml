@@ -15,7 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Dependencies
-      run: composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+      run: |        
+        composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+        php bin/console cache:clear
     - name: Build process
       working-directory: ./
       run: | 
