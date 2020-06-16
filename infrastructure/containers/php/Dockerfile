@@ -102,7 +102,7 @@ RUN chmod -R 0777 /var/www/app/bin/console
 
 #RUN /var/www/app/bin/console cache:warmup --env=testing -vvv
 
-RUN /var/www/app/bin/console cache:warmup --env=prod -vvv
+#RUN /var/www/app/bin/console cache:warmup --env=prod -vvv
 
 RUN chown -R www-data:www-data /var/www/app/var
 
