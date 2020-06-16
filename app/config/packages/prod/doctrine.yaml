@@ -7,4 +7,4 @@ parameters:
 
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%';
+        url: '%env(resolve:DATABASE_URL)%'
