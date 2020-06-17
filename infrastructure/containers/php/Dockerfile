@@ -1,10 +1,10 @@
 ################################## Base PHP dependencies ##################################
 
-FROM php:7.3-fpm-stretch as base
+FROM php:7.2-fpm-stretch as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV ACCEPT_EULA=Y
-ENV TZ Europe/Berlin
+ENV TZ America/Guayaquil
 
 RUN buildDeps=" \
         default-libmysqlclient-dev \
