@@ -7,4 +7,13 @@ parameters:
 
 doctrine:
     dbal:
-        url: '%env(resolve:DATABASE_URL)%'
+        # configure these for your database server
+        connections:
+          pedidos:
+            dbname: zenoshidb
+            host: teamq_db
+            port: 3306
+            user: 'zenoshi'
+            password: 'w4nmTQQvKeC2N3we'
+            driver: 'pdo_mysql'
+            server_version: 'mariadb-10.0.17'
