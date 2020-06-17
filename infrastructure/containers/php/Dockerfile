@@ -15,8 +15,6 @@ RUN buildDeps=" \
     runtimeDeps=" \
         curl \
         openssl \
-        libcurl3 \
-        libcurl3-dev \
         libfreetype6-dev \
         libicu-dev \
         libjpeg-dev \
