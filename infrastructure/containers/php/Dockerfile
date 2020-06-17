@@ -1,6 +1,6 @@
 ################################## Base PHP dependencies ##################################
 
-FROM php:7.4-fpm as base
+FROM php:7.3-fpm-stretch as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV ACCEPT_EULA=Y
@@ -15,6 +15,8 @@ RUN buildDeps=" \
     runtimeDeps=" \
         curl \
         openssl \
+        libcurl3 \
+        libcurl3-dev \
         libfreetype6-dev \
         libicu-dev \
         libjpeg-dev \
