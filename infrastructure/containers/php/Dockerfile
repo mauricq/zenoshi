@@ -1,6 +1,6 @@
 ################################## Base PHP dependencies ##################################
 
-FROM php:7.2-fpm-stretch as base
+FROM php:7.4-fpm as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV ACCEPT_EULA=Y
