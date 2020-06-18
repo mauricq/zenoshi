@@ -8,8 +8,9 @@ parameters:
 doctrine:
     dbal:
         # configure these for your database server
+        default_connection: zenoshi
         connections:
-            pedidos:
+            zenoshi:
                 dbname: test02
                 host: localhost
                 port: 3306
