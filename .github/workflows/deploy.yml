@@ -27,7 +27,7 @@ jobs:
       run: docker image ls
     - name: Push image
       run: |
-        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx:local
+        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx:lastest
         docker tag nginx $IMAGE_NGINX_ID
         docker push $IMAGE_NGINX_ID
     - name: Deploy stack
@@ -42,7 +42,7 @@ jobs:
         port: ${{ secrets.DEPLOY_PORT }}
         envs: DOCKER_TOKEN,DOCKER_USER   
         script: |
-          IMAGE_NGINX_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/nginx:local
+          IMAGE_NGINX_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/nginx:lastest
           echo "$DOCKER_TOKEN" | sudo docker login docker.pkg.github.com -u $DOCKER_USER --password-stdin
           sudo docker pull $IMAGE_NGINX_ID
           cd ~
