@@ -29,8 +29,13 @@ jobs:
     - name: Push image
       run: |
         IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:lastest
+        IMAGE_SYMFONY_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/symfony_zenoshi:latest
+
         docker tag nginx_zenoshi:lastest $IMAGE_NGINX_ID
         docker push $IMAGE_NGINX_ID
+
+        docker tag symfony_zenoshi:lastest $IMAGE_SYMFONY_ID
+        docker push $IMAGE_SYMFONY_ID
     - name: Deploy stack
       uses: appleboy/ssh-action@master
       env:
@@ -44,8 +49,10 @@ jobs:
         envs: DOCKER_TOKEN,DOCKER_USER   
         script: |
           IMAGE_NGINX_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/nginx_zenoshi:lastest
+          IMAGE_SYMFONY_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/symfony_zenoshi:latest
           echo "$DOCKER_TOKEN" | sudo docker login docker.pkg.github.com -u $DOCKER_USER --password-stdin
           sudo docker pull $IMAGE_NGINX_ID
+          sudo docker pull $IMAGE_SYMFONY_ID
           cd ~
           sudo docker stack rm api-zenoshi
           sleep 40
