@@ -1,6 +1,6 @@
 ################################## Base PHP dependencies ##################################
 
-FROM php:7.3-fpm-stretch as base
+FROM php:7.4-fpm as base
 
 ARG DEBIAN_FRONTEND=noninteractive
 ENV ACCEPT_EULA=Y
@@ -12,21 +12,7 @@ RUN buildDeps=" \
         libmemcached-dev \
         libsasl2-dev \
     " \
-    runtimeDeps=" \
-        curl \
-        openssl \
-        libcurl3 \
-        libcurl3-dev \
-        libfreetype6-dev \
-        libicu-dev \
-        libjpeg-dev \
-        librabbitmq-dev \
-        libmemcachedutil2 \
-        libpng-dev \
-        libssh-dev \
-        libpq-dev \
-        libxml2-dev \
-    " \
+
     && apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get install -y zlib1g-dev libzip-dev git zip unzip acl libfontconfig1 libxrender1\
     && apt-get install -y --no-install-recommends $buildDeps $runtimeDeps \
     && docker-php-ext-install bcmath bz2 calendar iconv intl mbstring mysqli opcache pdo_mysql soap curl zip\
@@ -102,7 +88,7 @@ RUN chmod -R 0777 /var/www/app/bin/console
 
 #RUN /var/www/app/bin/console cache:warmup --env=testing -vvv
 
-#RUN /var/www/app/bin/console cache:warmup --env=prod -vvv
+RUN /var/www/app/bin/console cache:warmup --env=prod -vvv
 
 RUN chown -R www-data:www-data /var/www/app/var
 
