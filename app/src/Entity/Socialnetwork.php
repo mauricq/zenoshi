@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Socialnetwork
  *
- * @ORM\Table(name="socialnetwork", indexes={@ORM\Index(name="FK_USER_SOCIALNETWORK", columns={"ID_USER"})})
+ * @ORM\Table(name="socialnetwork", indexes={@ORM\Index(name="fk_user_socialnetwork", columns={"id_user"})})
  * @ORM\Entity(repositoryClass="App\Repository\SocialnetworkRepository")
  */
 class Socialnetwork extends EntityProvider
@@ -15,7 +15,7 @@ class Socialnetwork extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_SOCIAL_NETWORK", type="integer", nullable=false)
+     * @ORM\Column(name="id_social_network", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,28 +24,28 @@ class Socialnetwork extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="NETWORK", type="string", length=200, nullable=false)
+     * @ORM\Column(name="network", type="string", length=200, nullable=false)
      */
     private $network;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="ID_NETWORK", type="string", length=200, nullable=false)
+     * @ORM\Column(name="id_network", type="string", length=200, nullable=false)
      */
     private $idNetwork;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="STATUS", type="string", length=10, nullable=false)
+     * @ORM\Column(name="status", type="string", length=10, nullable=false)
      */
     private $status;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="OBSERVATION", type="string", length=200, nullable=true)
+     * @ORM\Column(name="observation", type="string", length=200, nullable=true)
      */
     private $observation;
 
@@ -54,7 +54,7 @@ class Socialnetwork extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_USER", referencedColumnName="ID_USER")
+     *   @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
      * })
      */
     private $idUser;

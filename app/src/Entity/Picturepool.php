@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Picturepool
  *
- * @ORM\Table(name="picturepool", indexes={@ORM\Index(name="FK_PICTURE_POOL_FILES", columns={"ID_FILE"}), @ORM\Index(name="FK_RECEIP_PICTURE_POOL", columns={"ID_RECEIP"})})
+ * @ORM\Table(name="picturepool", indexes={@ORM\Index(name="fk_picture_pool_files", columns={"id_file"}), @ORM\Index(name="fk_receip_picture_pool", columns={"id_receip"})})
  * @ORM\Entity(repositoryClass="App\Repository\PicturepoolRepository")
  */
 class Picturepool extends EntityProvider
@@ -15,7 +15,7 @@ class Picturepool extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_PICTURE_POOL", type="integer", nullable=false)
+     * @ORM\Column(name="id_picture_pool", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,7 +24,7 @@ class Picturepool extends EntityProvider
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="CREATION_DATE", type="datetime", nullable=false)
+     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
     private $creationDate;
 
@@ -33,7 +33,7 @@ class Picturepool extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="File")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_FILE", referencedColumnName="ID_FILE")
+     *   @ORM\JoinColumn(name="id_file", referencedColumnName="id_file")
      * })
      */
     private $idFile;
@@ -43,7 +43,7 @@ class Picturepool extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Receip")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_RECEIP", referencedColumnName="ID_RECEIP")
+     *   @ORM\JoinColumn(name="id_receip", referencedColumnName="id_receip")
      * })
      */
     private $idReceip;

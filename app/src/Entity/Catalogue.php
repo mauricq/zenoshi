@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Catalogue
  *
- * @ORM\Table(name="catalogue", indexes={@ORM\Index(name="FK_PARENT", columns={"ID_PARENT"})})
+ * @ORM\Table(name="catalogue", indexes={@ORM\Index(name="fk_parent", columns={"id_parent"})})
  * @ORM\Entity(repositoryClass="App\Repository\CatalogueRepository")
  */
 class Catalogue extends EntityProvider
@@ -15,7 +15,7 @@ class Catalogue extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_CATALOG", type="integer", nullable=false)
+     * @ORM\Column(name="id_catalog", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,28 +24,35 @@ class Catalogue extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="STATUS", type="string", length=10, nullable=false)
+     * @ORM\Column(name="status", type="string", length=10, nullable=false)
      */
     private $status;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="icon", type="string", length=100, nullable=true)
+     */
+    private $icon;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="TYPE", type="string", length=100, nullable=false)
+     * @ORM\Column(name="type", type="string", length=100, nullable=false)
      */
     private $type;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="NAME", type="string", length=200, nullable=false)
+     * @ORM\Column(name="name", type="string", length=200, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="DESCRIPTION", type="string", length=200, nullable=false)
+     * @ORM\Column(name="description", type="string", length=200, nullable=false)
      */
     private $description;
 
@@ -54,7 +61,7 @@ class Catalogue extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PARENT", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_parent", referencedColumnName="id_catalog")
      * })
      */
     private $idParent;
@@ -72,6 +79,18 @@ class Catalogue extends EntityProvider
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getIcon(): ?string
+    {
+        return $this->icon;
+    }
+
+    public function setIcon(?string $icon): self
+    {
+        $this->icon = $icon;
 
         return $this;
     }
@@ -124,5 +143,12 @@ class Catalogue extends EntityProvider
         return $this;
     }
 
+    /**
+     * @param int $idCatalog
+     */
+    public function setIdCatalog(int $idCatalog): void
+    {
+        $this->idCatalog = $idCatalog;
+    }
 
 }

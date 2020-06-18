@@ -14,7 +14,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class MerchantRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+	use RepositoryTrait;
+	
+	public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Merchant::class);
     }

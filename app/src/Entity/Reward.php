@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Reward
  *
- * @ORM\Table(name="reward", indexes={@ORM\Index(name="FK_REWARD_STATUS", columns={"ID_CATALOG"})})
+ * @ORM\Table(name="reward", indexes={@ORM\Index(name="fk_reward_status", columns={"id_reward_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\RewardRepository")
  */
 class Reward extends EntityProvider
@@ -15,7 +15,7 @@ class Reward extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_REWARD", type="integer", nullable=false)
+     * @ORM\Column(name="id_reward", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,28 +24,28 @@ class Reward extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="NAME_REWARD", type="string", length=100, nullable=false)
+     * @ORM\Column(name="name_reward", type="string", length=100, nullable=false)
      */
     private $nameReward;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="DESCRIPTION_REWARD", type="string", length=999, nullable=true)
+     * @ORM\Column(name="description_reward", type="string", length=999, nullable=true)
      */
     private $descriptionReward;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="RULE_REWARD", type="string", length=9999, nullable=true)
+     * @ORM\Column(name="rule_reward", type="string", length=9999, nullable=true)
      */
     private $ruleReward;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="INCENTIVE_POINTS", type="integer", nullable=true)
+     * @ORM\Column(name="incentive_points", type="integer", nullable=true)
      */
     private $incentivePoints;
 
@@ -54,10 +54,10 @@ class Reward extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_reward_status", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idRewardStatus;
 
     public function getIdReward(): ?int
     {
@@ -112,14 +112,14 @@ class Reward extends EntityProvider
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdRewardStatus(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idRewardStatus;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdRewardStatus(?Catalogue $idRewardStatus): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idRewardStatus = $idRewardStatus;
 
         return $this;
     }

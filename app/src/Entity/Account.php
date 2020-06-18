@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Account
  *
- * @ORM\Table(name="account", indexes={@ORM\Index(name="FK_PERSON_ACCOUNT", columns={"ID_PERSON"})})
+ * @ORM\Table(name="account", indexes={@ORM\Index(name="fk_person_account", columns={"id_person"})})
  * @ORM\Entity(repositoryClass="App\Repository\AccountRepository")
  */
 class Account extends EntityProvider
@@ -15,7 +15,7 @@ class Account extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_ACCOUNT", type="integer", nullable=false)
+     * @ORM\Column(name="id_account", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,28 +24,28 @@ class Account extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="ACCOUNT_NUMBER", type="string", length=20, nullable=false)
+     * @ORM\Column(name="account_number", type="string", length=20, nullable=false)
      */
     private $accountNumber;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="TOTAL_INCENTIVE_POINTS", type="integer", nullable=true)
+     * @ORM\Column(name="total_incentive_points", type="integer", nullable=true)
      */
     private $totalIncentivePoints;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="REWARD_COINS", type="integer", nullable=true)
+     * @ORM\Column(name="reward_coins", type="integer", nullable=true)
      */
     private $rewardCoins;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="LAST_UPDATE", type="datetime", nullable=true)
+     * @ORM\Column(name="last_update", type="datetime", nullable=true)
      */
     private $lastUpdate;
 
@@ -54,7 +54,7 @@ class Account extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON", referencedColumnName="ID_PERSON")
+     *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
      */
     private $idPerson;

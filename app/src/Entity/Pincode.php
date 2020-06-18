@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Pincode
  *
- * @ORM\Table(name="pincode", indexes={@ORM\Index(name="FK_PERSON_PINCODES", columns={"ID_PERSON"}), @ORM\Index(name="FK_PIN_STATUS", columns={"ID_CATALOG"})})
+ * @ORM\Table(name="pincode", indexes={@ORM\Index(name="fk_person_pincodes", columns={"id_person"}), @ORM\Index(name="fk_pin_status", columns={"id_pin_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\PincodeRepository")
  */
 class Pincode extends EntityProvider
@@ -15,7 +15,7 @@ class Pincode extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_PINCODE", type="integer", nullable=false)
+     * @ORM\Column(name="id_pincode", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,56 +24,56 @@ class Pincode extends EntityProvider
     /**
      * @var string|null
      *
-     * @ORM\Column(name="PLASTIC_BRAND", type="string", length=25, nullable=true)
+     * @ORM\Column(name="plastic_brand", type="string", length=25, nullable=true)
      */
     private $plasticBrand;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="NAME_DISPLAYED", type="string", length=200, nullable=false)
+     * @ORM\Column(name="name_displayed", type="string", length=200, nullable=false)
      */
     private $nameDisplayed;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="PIN_CODE", type="string", length=16, nullable=false)
+     * @ORM\Column(name="pin_code", type="string", length=16, nullable=false)
      */
     private $pinCode;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="STATUS", type="string", length=10, nullable=true)
+     * @ORM\Column(name="status", type="string", length=10, nullable=true)
      */
     private $status;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="CITY", type="string", length=100, nullable=true)
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
      */
     private $city;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="COUNTRY", type="string", length=100, nullable=true)
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
      */
     private $country;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="CONTINENT", type="string", length=20, nullable=true)
+     * @ORM\Column(name="continent", type="string", length=20, nullable=true)
      */
     private $continent;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="EXPIRATION_DATE", type="string", length=5, nullable=true)
+     * @ORM\Column(name="expiration_date", type="string", length=5, nullable=true)
      */
     private $expirationDate;
 
@@ -82,7 +82,7 @@ class Pincode extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON", referencedColumnName="ID_PERSON")
+     *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
      */
     private $idPerson;
@@ -92,10 +92,10 @@ class Pincode extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_pin_status", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idPinStatus;
 
     public function getIdPincode(): ?int
     {
@@ -210,14 +210,14 @@ class Pincode extends EntityProvider
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdPinStatus(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idPinStatus;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdPinStatus(?Catalogue $idPinStatus): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idPinStatus = $idPinStatus;
 
         return $this;
     }

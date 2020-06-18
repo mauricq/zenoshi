@@ -8,6 +8,7 @@ class Constants
     const RESULT_ERROR = "ERROR";
     const RESULT_DUPLICATED = "DUPLICATED";
     const RESULT_MESSAGE_DUPLICATED_EMAIL = "Email already registered. ";
+    const RESULT_MESSAGE_DUPLICATED_USERNAME = "Username already registered. ";
     const RESULT_MESSAGE_DUPLICATED_MOBILE = "Mobile already registered. ";
     const RESULT_LABEL_DATA = "Data";
     const RESULT_LABEL_STATUS = "Status";
@@ -16,4 +17,7 @@ class Constants
     const APP_KEY_HEADER_NAME = "appKey";
     const UNAUTHORIZED_MESSAGE = "Unauthorized, use JWT login or AppKey";
     const AUTHENTICATION_FAILED_MESSAGE = "Unauthorized, use JWT login or AppKey";
+
+    const LOGIN_USERNAME_LABEL = "username";
+    const LOGIN_PASSWORD_LABEL = "password";
 }

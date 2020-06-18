@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -49,4 +51,33 @@ class UserEntityRepository extends ServiceEntityRepository
         ;
     }
     */
+
+
+    /**
+     * Custom method to get user name from Database using username or email fields
+     * @param string $username
+     * @param string $email
+     * @param string $mobile |null
+     * @return mixeds
+     */
+    public function searchDuplicated(string $username, string $email, ?string $mobile = "")
+    {
+        $result = $this->createQueryBuilder('u')
+            ->select('
+	(CASE 
+		WHEN( u.username = :username ) THEN \'username\'
+        WHEN( u.email = :email ) THEN \'email\'
+        WHEN( p.mobile = :mobile ) THEN \'mobile\'
+		ELSE \'\'
+	END) as duplicated')
+            ->join('u.idPerson', 'p', Join::WITH, 'u.idPerson = p.idPerson')
+            ->andwhere('u.username = :username OR u.email = :email OR p.mobile = :mobile')
+            ->setParameter('username', $username)
+            ->setParameter('email', $email)
+            ->setParameter('mobile', $mobile)
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
 }

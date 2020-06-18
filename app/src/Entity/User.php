@@ -5,21 +5,22 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\SerializedName;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as Serializer;
 
 /**
  * User
  *
- * @ORM\Table(name="user", indexes={@ORM\Index(name="FK_PERSON_USER", columns={"ID_PERSON"}), @ORM\Index(name="FK_USER_STATUS", columns={"ID_CATALOG"})})
- * @ORM\Entity(repositoryClass="App\Repository\UserEntityRepository")
+ * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_person_user", columns={"id_person"}), @ORM\Index(name="fk_user_status", columns={"id_user_status"})})
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User extends EntityProvider implements UserInterface
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_USER", type="integer", nullable=false)
+     * @ORM\Column(name="id_user", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -28,14 +29,14 @@ class User extends EntityProvider implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="USERNAME", type="string", length=255, nullable=true)
+     * @ORM\Column(name="username", type="string", length=255, nullable=true)
      */
     private $username;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="PASSWORD", type="string", length=255, nullable=true)
+     * @ORM\Column(name="password", type="string", length=255, nullable=true)
      * @Serializer\Exclude()
      */
     private $password;
@@ -43,56 +44,56 @@ class User extends EntityProvider implements UserInterface
     /**
      * @var string|null
      *
-     * @ORM\Column(name="PLAINPASSWORD", type="string", length=255, nullable=true)
+     * @ORM\Column(name="plainpassword", type="string", length=255, nullable=true)
      */
     private $plainpassword;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="UNIQUE_ID", type="string", length=200, nullable=false)
+     * @ORM\Column(name="unique_id", type="string", length=200, nullable=false)
      */
     private $uniqueId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="EMAIL", type="string", length=100, nullable=false)
+     * @ORM\Column(name="email", type="string", length=100, nullable=false)
      */
     private $email;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="SALT", type="string", length=50, nullable=true)
+     * @ORM\Column(name="salt", type="string", length=50, nullable=true)
      */
     private $salt;
 
     /**
-     * @var array|null
+     * @var string|null
      *
-     * @ORM\Column(name="ROLES", type="json", length=100, nullable=true)
+     * @ORM\Column(name="roles", type="string", length=100, nullable=true)
      */
-    private $roles = [];
+    private $roles;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="APP_KEY", type="string", length=191, nullable=true)
+     * @ORM\Column(name="app_key", type="string", length=191, nullable=true)
      */
     private $appKey;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="CREATED_AT", type="datetime", nullable=true)
+     * @ORM\Column(name="created_at", type="datetime", nullable=true)
      */
     private $createdAt;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="UPDATED_AT", type="datetime", nullable=true)
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -101,7 +102,7 @@ class User extends EntityProvider implements UserInterface
      *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON", referencedColumnName="ID_PERSON")
+     *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
      */
     private $idPerson;
@@ -111,10 +112,10 @@ class User extends EntityProvider implements UserInterface
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_user_status", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idUserStatus;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -122,10 +123,10 @@ class User extends EntityProvider implements UserInterface
      * @ORM\ManyToMany(targetEntity="Profile", inversedBy="idUser")
      * @ORM\JoinTable(name="user_has_profile",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="ID_USER", referencedColumnName="ID_USER")
+     *     @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ID_PROFILE", referencedColumnName="ID_PROFILE")
+     *     @ORM\JoinColumn(name="id_profile", referencedColumnName="id_profile")
      *   }
      * )
      */
@@ -223,28 +224,16 @@ class User extends EntityProvider implements UserInterface
         return $this;
     }
 
-    /**
-     * Set roles
-     *
-     * @param array $roles
-     *
-     * @return self
-     */
-    public function setRoles(array $roles) : self
+    public function getRoles(): ?array
     {
-        $this->roles = $roles;
-
-        return $this;
+        return [$this->roles];
     }
 
-    /**
-     * Get roles
-     *
-     * @return array
-     */
-    public function getRoles() : array
+    public function setRoles(?array $roles): self
     {
-        return ["ROLE_USER"];
+        $this->roles = implode(" ", $roles);
+
+        return $this;
     }
 
     public function getAppKey(): ?string
@@ -295,14 +284,14 @@ class User extends EntityProvider implements UserInterface
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdUserStatus(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idUserStatus;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdUserStatus(?Catalogue $idUserStatus): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idUserStatus = $idUserStatus;
 
         return $this;
     }

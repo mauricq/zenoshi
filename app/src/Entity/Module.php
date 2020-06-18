@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Module
  *
- * @ORM\Table(name="module", indexes={@ORM\Index(name="FK_MODULE_STATUS", columns={"ID_MODULE_STATUS"}), @ORM\Index(name="FK_SUBMODULO", columns={"ID_SUBMODULE"})})
+ * @ORM\Table(name="module", indexes={@ORM\Index(name="fk_module_status", columns={"id_module_status"}), @ORM\Index(name="fk_submodulo", columns={"id_submodule"})})
  * @ORM\Entity(repositoryClass="App\Repository\ModuleRepository")
  */
 class Module extends EntityProvider
@@ -17,7 +17,7 @@ class Module extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_MODULE", type="integer", nullable=false)
+     * @ORM\Column(name="id_module", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,14 +26,14 @@ class Module extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="MODULE_CODE", type="string", length=50, nullable=false)
+     * @ORM\Column(name="module_code", type="string", length=50, nullable=false)
      */
     private $moduleCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="MODULE_NAME", type="string", length=50, nullable=false)
+     * @ORM\Column(name="module_name", type="string", length=50, nullable=false)
      */
     private $moduleName;
 
@@ -42,7 +42,7 @@ class Module extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_MODULE_STATUS", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_module_status", referencedColumnName="id_catalog")
      * })
      */
     private $idModuleStatus;
@@ -52,7 +52,7 @@ class Module extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Module")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_SUBMODULE", referencedColumnName="ID_MODULE")
+     *   @ORM\JoinColumn(name="id_submodule", referencedColumnName="id_module")
      * })
      */
     private $idSubmodule;

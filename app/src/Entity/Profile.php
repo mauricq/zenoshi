@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Profile
  *
- * @ORM\Table(name="profile", indexes={@ORM\Index(name="FK_PROFILE_STATUS", columns={"ID_CATALOG"})})
+ * @ORM\Table(name="profile", indexes={@ORM\Index(name="fk_profile_status", columns={"id_profile_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\ProfileRepository")
  */
 class Profile extends EntityProvider
@@ -17,7 +17,7 @@ class Profile extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_PROFILE", type="integer", nullable=false)
+     * @ORM\Column(name="id_profile", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -26,14 +26,14 @@ class Profile extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="PROFILE_CODE", type="string", length=50, nullable=false)
+     * @ORM\Column(name="profile_code", type="string", length=50, nullable=false)
      */
     private $profileCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="PROFILE_NAME", type="string", length=50, nullable=false)
+     * @ORM\Column(name="profile_name", type="string", length=50, nullable=false)
      */
     private $profileName;
 
@@ -42,10 +42,10 @@ class Profile extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_profile_status", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idProfileStatus;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -53,10 +53,10 @@ class Profile extends EntityProvider
      * @ORM\ManyToMany(targetEntity="Module", inversedBy="idProfile")
      * @ORM\JoinTable(name="profile_module",
      *   joinColumns={
-     *     @ORM\JoinColumn(name="ID_PROFILE", referencedColumnName="ID_PROFILE")
+     *     @ORM\JoinColumn(name="id_profile", referencedColumnName="id_profile")
      *   },
      *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="ID_MODULE", referencedColumnName="ID_MODULE")
+     *     @ORM\JoinColumn(name="id_module", referencedColumnName="id_module")
      *   }
      * )
      */
@@ -107,14 +107,14 @@ class Profile extends EntityProvider
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdProfileStatus(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idProfileStatus;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdProfileStatus(?Catalogue $idProfileStatus): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idProfileStatus = $idProfileStatus;
 
         return $this;
     }

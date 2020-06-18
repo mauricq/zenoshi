@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Transaction
  *
- * @ORM\Table(name="transaction", indexes={@ORM\Index(name="FK_ACCOUNT_TRANSACTION", columns={"ID_ACCOUNT"}), @ORM\Index(name="FK_TRANSACTION_TYPE", columns={"ID_TRANSACTION_TYPE"})})
+ * @ORM\Table(name="transaction", indexes={@ORM\Index(name="fk_account_transaction", columns={"id_account"}), @ORM\Index(name="fk_transaction_type", columns={"id_transaction_type"})})
  * @ORM\Entity(repositoryClass="App\Repository\TransactionRepository")
  */
 class Transaction extends EntityProvider
@@ -15,7 +15,7 @@ class Transaction extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_TRANSACTION", type="integer", nullable=false)
+     * @ORM\Column(name="id_transaction", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,28 +24,28 @@ class Transaction extends EntityProvider
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DATE_TRANSACTION", type="datetime", nullable=false)
+     * @ORM\Column(name="date_transaction", type="datetime", nullable=false)
      */
     private $dateTransaction;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="POINTS", type="integer", nullable=false)
+     * @ORM\Column(name="points", type="integer", nullable=false)
      */
     private $points;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="DEBIT_CREDIT", type="string", length=1, nullable=false, options={"fixed"=true})
+     * @ORM\Column(name="debit_credit", type="string", length=1, nullable=false, options={"fixed"=true})
      */
     private $debitCredit;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="DESCRIPTION", type="string", length=200, nullable=true)
+     * @ORM\Column(name="description", type="string", length=200, nullable=true)
      */
     private $description;
 
@@ -54,7 +54,7 @@ class Transaction extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Account")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_ACCOUNT", referencedColumnName="ID_ACCOUNT")
+     *   @ORM\JoinColumn(name="id_account", referencedColumnName="id_account")
      * })
      */
     private $idAccount;
@@ -64,7 +64,7 @@ class Transaction extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_TRANSACTION_TYPE", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_transaction_type", referencedColumnName="id_catalog")
      * })
      */
     private $idTransactionType;

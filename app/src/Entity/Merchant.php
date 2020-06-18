@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Merchant
  *
- * @ORM\Table(name="merchant", indexes={@ORM\Index(name="FK_MERCHANT_CATEGORY", columns={"ID_MERCHANT_CATEGORY"}), @ORM\Index(name="FK_MERCHANT_OWNER_PERSON", columns={"ID_PERSON"}), @ORM\Index(name="FK_STATUS_APPROVAL", columns={"CAT_ID_CATALOG2"}), @ORM\Index(name="FK_STATUS_MERCHANT", columns={"ID_CATALOG"})})
+ * @ORM\Table(name="merchant", indexes={@ORM\Index(name="fk_merchant_category", columns={"id_merchant_category"}), @ORM\Index(name="fk_merchant_owner_person", columns={"id_person"}), @ORM\Index(name="fk_merchant_status", columns={"id_merchant_status"}), @ORM\Index(name="fk_merchant_status_approval", columns={"id_merchant_status_approval"})})
  * @ORM\Entity(repositoryClass="App\Repository\MerchantRepository")
  */
 class Merchant extends EntityProvider
@@ -15,7 +15,7 @@ class Merchant extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_MERCHANT", type="integer", nullable=false)
+     * @ORM\Column(name="id_merchant", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,56 +24,56 @@ class Merchant extends EntityProvider
     /**
      * @var string|null
      *
-     * @ORM\Column(name="MERCHANT_NAME", type="string", length=200, nullable=true)
+     * @ORM\Column(name="merchant_name", type="string", length=200, nullable=true)
      */
     private $merchantName;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="ADDRESS", type="string", length=200, nullable=true)
+     * @ORM\Column(name="address", type="string", length=200, nullable=true)
      */
     private $address;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="POINTS", type="integer", nullable=true)
+     * @ORM\Column(name="points", type="integer", nullable=true)
      */
     private $points;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="CITY", type="string", length=100, nullable=true)
+     * @ORM\Column(name="city", type="string", length=100, nullable=true)
      */
     private $city;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="COUNTRY", type="string", length=100, nullable=true)
+     * @ORM\Column(name="country", type="string", length=100, nullable=true)
      */
     private $country;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="WEBSITE", type="string", length=999, nullable=true)
+     * @ORM\Column(name="website", type="string", length=999, nullable=true)
      */
     private $website;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="APPROVAL_DATE", type="datetime", nullable=true)
+     * @ORM\Column(name="approval_date", type="datetime", nullable=true)
      */
     private $approvalDate;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="REGISTRATION_DATE", type="datetime", nullable=false)
+     * @ORM\Column(name="registration_date", type="datetime", nullable=false)
      */
     private $registrationDate;
 
@@ -82,7 +82,7 @@ class Merchant extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_MERCHANT_CATEGORY", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_merchant_category", referencedColumnName="id_catalog")
      * })
      */
     private $idMerchantCategory;
@@ -92,7 +92,7 @@ class Merchant extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON", referencedColumnName="ID_PERSON")
+     *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
      */
     private $idPerson;
@@ -102,20 +102,20 @@ class Merchant extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="CAT_ID_CATALOG2", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_merchant_status", referencedColumnName="id_catalog")
      * })
      */
-    private $catIdCatalog2;
+    private $idMerchantStatus;
 
     /**
      * @var \Catalogue
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_merchant_status_approval", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idMerchantStatusApproval;
 
     public function getIdMerchant(): ?int
     {
@@ -242,26 +242,26 @@ class Merchant extends EntityProvider
         return $this;
     }
 
-    public function getCatIdCatalog2(): ?Catalogue
+    public function getIdMerchantStatus(): ?Catalogue
     {
-        return $this->catIdCatalog2;
+        return $this->idMerchantStatus;
     }
 
-    public function setCatIdCatalog2(?Catalogue $catIdCatalog2): self
+    public function setIdMerchantStatus(?Catalogue $idMerchantStatus): self
     {
-        $this->catIdCatalog2 = $catIdCatalog2;
+        $this->idMerchantStatus = $idMerchantStatus;
 
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdMerchantStatusApproval(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idMerchantStatusApproval;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdMerchantStatusApproval(?Catalogue $idMerchantStatusApproval): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idMerchantStatusApproval = $idMerchantStatusApproval;
 
         return $this;
     }

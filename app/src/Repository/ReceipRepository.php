@@ -14,6 +14,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ReceipRepository extends ServiceEntityRepository
 {
+    use RepositoryTrait;
+
+    
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Receip::class);
