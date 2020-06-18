@@ -13,9 +13,9 @@ RUN set -xe \
 
 RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
 
-RUN apk add --no-cache libzip-dev && docker-php-ext-install zip
+RUN apk add --no-cache libzip-dev && docker-php-ext-install zip && docker-php-ext-install xml
 
-RUN docker-php-ext-install soap
+RUN docker-php-ext-configure soap --enable-soap
 
 # Override php.ini settings
 # COPY ./infrastructure/containers/symfony/app_custom.ini /usr/local/etc/php/conf.d/app_custom.ini
