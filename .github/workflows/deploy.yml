@@ -21,11 +21,13 @@ jobs:
         docker-compose up -d --build
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-    - name: Check Docker Images
+    - name: Check Docker Containers
       run: docker ps -a
+    - name: List Docker Images
+      run: docker image ls
     - name: Push image
       run: |
-        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/zenoshi_nginx:latest
+        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:latest
         docker tag nginx $IMAGE_NGINX_ID
         docker push $IMAGE_NGINX_ID
     - name: Deploy stack
