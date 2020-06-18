@@ -38,6 +38,12 @@ services:
 
     App\Entity\EntityProvider: ~
 
-    App\Controller\Share\ReportControllerProvider: ~
-
     App\Service\Share\IServiceProviderInterface: ~
+
+    api_bundle.security.auth_user_provider:
+        class: App\Security\AuthUserProvider
+        factory: ["@doctrine", getRepository]
+        arguments:
+              - App\Entity\User
+        public: true
+

@@ -6,8 +6,10 @@ namespace App\Service;
 
 use App\Entity\User;
 use App\Entity\EntityProvider;
+use App\Repository\mixeds;
 use App\Repository\UserEntityRepository;
 use App\Service\Share\IServiceProviderInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 
 /**
@@ -84,5 +86,17 @@ class UserService implements IServiceProviderInterface
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): array
     {
         return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+    }
+
+    /**
+     * @param string $username
+     * @param string $email
+     * @param string $mobile
+     * @return mixeds
+     * @throws NonUniqueResultException
+     */
+    public function searchDuplicated(string $username, string $email, string $mobile)
+    {
+        return $this->repository->searchDuplicated($username, $email, $mobile);
     }
 }

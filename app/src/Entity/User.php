@@ -5,6 +5,7 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\SerializedName;
 use Symfony\Component\Security\Core\User\UserInterface;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -12,7 +13,7 @@ use JMS\Serializer\Annotation as Serializer;
  * User
  *
  * @ORM\Table(name="user", indexes={@ORM\Index(name="FK_PERSON_USER", columns={"ID_PERSON"}), @ORM\Index(name="FK_USER_STATUS", columns={"ID_CATALOG"})})
- * @ORM\Entity(repositoryClass="App\Repository\UserEntityRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User extends EntityProvider implements UserInterface
 {

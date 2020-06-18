@@ -4,9 +4,11 @@
 namespace App\Controller;
 
 use App\Controller\Share\ControllerProvider;
+use App\Entity\Catalogue;
 use App\Entity\Constants;
 use App\Entity\Person;
 use App\Entity\User;
+use App\Service\CatalogueService;
 use App\Service\UserService;
 use App\Service\PersonService;
 use ErrorException;
@@ -38,22 +40,25 @@ class UserController extends ControllerProvider
     private $personService;
 
     /**
+     * @var CatalogueService
+     */
+    private $catalogueService;
+
+    /**
      * User constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
      * @param UserService $userService
      * @param PersonService $personService
      * @param UserPasswordEncoderInterface $passwordEncoder
+     * @param CatalogueService $catalogueService
      */
-    public function __construct(ArrayTransformerInterface $arrayTransformer,
-                                SerializerInterface $serializer,
-                                UserService $userService,
-                                PersonService $personService,
-                                UserPasswordEncoderInterface $passwordEncoder)
+    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserService $userService, PersonService $personService, UserPasswordEncoderInterface $passwordEncoder, CatalogueService $catalogueService)
     {
         parent::__construct($arrayTransformer, $serializer, $userService);
         $this->passwordEncoder = $passwordEncoder;
         $this->personService = $personService;
+        $this->catalogueService = $catalogueService;
     }
 
 
@@ -84,14 +89,20 @@ class UserController extends ControllerProvider
         try {
             $body = $request->getContent();
             $personObject = $this->serializer->deserialize($body, Person::class, Constants::REQUEST_FORMAT_JSON);
+            $personObject->setMobile(str_replace("+", "", $personObject->getMobile()));
+
             $userObject = $this->serializer->deserialize($body, User::class, Constants::REQUEST_FORMAT_JSON);
 
-            $personExist = $this->personService->filterBy(['mobile' => $personObject->getMobile()]);
-            $userExist = $this->service->filterBy(['email' => $userObject->getEmail()]);
-            if (!empty($userExist) or !empty($personExist)) {
+            $duplicated = $this->service->searchDuplicated(
+                empty($userObject->getUsername()) ? "" : $userObject->getUsername(), $userObject->getEmail(), $personObject->getMobile());
+
+            if (!empty($duplicated)) {
                 $data = "";
-                $data = !empty($userExist) ? $data . Constants::RESULT_MESSAGE_DUPLICATED_EMAIL : $data;
-                $data = !empty($personExist) ? $data . Constants::RESULT_MESSAGE_DUPLICATED_MOBILE : $data;
+                foreach ($duplicated as $dup) {
+                    if ($dup['duplicated'] === "email") $data = $data . Constants::RESULT_MESSAGE_DUPLICATED_EMAIL;
+                    if ($dup['duplicated'] === "mobile") $data = $data . Constants::RESULT_MESSAGE_DUPLICATED_MOBILE;
+                    if ($dup['duplicated'] === "username") $data = $data . Constants::RESULT_MESSAGE_DUPLICATED_USERNAME;
+                }
                 return new JsonResponse(
                     array(
                         Constants::RESULT_LABEL_STATUS => Constants::RESULT_DUPLICATED,
@@ -103,15 +114,19 @@ class UserController extends ControllerProvider
 
             $person = $this->personService->save($personObject);
 
-            $userObject->setUsername($userObject->getEmail());
-            $userObject->setPlainPassword($userObject->getPassword());
-            $userObject->setPassword($this->passwordEncoder->encodePassword($userObject, $userObject->getPlainPassword()));
+            $userObject->setUsername(empty($userObject->getUserName()) ? $userObject->getEmail() : $userObject->getUserName());
+            $userObject->setPassword($this->passwordEncoder->encodePassword($userObject, $request->get("password")));
             $userObject->setRoles(array('ROLE_USER'));
             $userObject->setAppKey($this->util->generateUid()); //TODO analyst AppKey
             $userObject->setCreatedAt(date_create());
             $userObject->setUpdatedAt(date_create());
             $userObject->setUniqueId($userObject->getAppKey());
             $userObject->setIdPerson($person);
+
+            $catalogue = new Catalogue();
+            $catalogue->setIdCatalog(empty($request->get("id_user_status")) ? 0 : $request->get("id_user_status"));
+            $userObject->setIdCatalog(empty($request->get("id_user_status")) ? null : $catalogue);
+
             $userObjectResult = $this->service->save($userObject);
 
             $result = new JsonResponse(

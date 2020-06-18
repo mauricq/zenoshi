@@ -124,5 +124,11 @@ class Catalogue extends EntityProvider
         return $this;
     }
 
-
+    /**
+     * @param int $idCatalog
+     */
+    public function setIdCatalog(int $idCatalog): void
+    {
+        $this->idCatalog = $idCatalog;
+    }
 }

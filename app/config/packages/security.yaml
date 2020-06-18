@@ -5,9 +5,7 @@ security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
         api_user_provider:
-            entity:
-                class: App\Entity\User
-                property: username
+            id: api_bundle.security.auth_user_provider
     firewalls:
         login:
             pattern:  ^/auth/token
@@ -19,7 +17,7 @@ security:
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
         api:
-            pattern:   ^(/|/stock|order/|/*)
+            pattern:   ^(/|/api|app/|/*)
             stateless: true
             anonymous: false
             provider: api_user_provider
@@ -30,4 +28,4 @@ security:
                 entry_point: App\Security\AppKeyAuthenticator
     access_control:
         - { path: ^/auth/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^(/|/stock|order/|/*), roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^(/|/api|app/|/*), roles: IS_AUTHENTICATED_FULLY }
