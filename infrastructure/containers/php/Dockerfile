@@ -17,21 +17,14 @@ RUN buildDeps=" \
     && docker-php-ext-install bcmath bz2 calendar iconv intl mbstring mysqli opcache pdo_mysql soap curl zip\
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install exif \
-    && pecl install redis memcached amqp \
     && docker-php-ext-enable memcached.so redis.so amqp \
     && apt-get purge -y --auto-remove $buildDeps \
     && ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone \
     && echo 'memory_limit = 2048M;' >> /usr/local/etc/php/php.ini \
-    && echo "upload_max_filesize=100M" >> /usr/local/etc/php/conf.d/giffits_upload.ini \
-    && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/giffits_post_max.ini \
-    && echo "date.timezone = \"Europe/Berlin\"" >> /usr/local/etc/php/conf.d/docker-php-timezone.ini \
-
-    # Install Microsoft SQL Drivers for PHP in Linux
-    && apt-get install -y gnupg apt-transport-https unixodbc-dev \
-    && apt-get update -yqq \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && echo "upload_max_filesize=100M" >> /usr/local/etc/php/conf.d/zenoshi_upload.ini \
+    && echo "post_max_size=100M" >> /usr/local/etc/php/conf.d/zenoshi_post_max.ini \
+    && echo "date.timezone = \"America/Guayaquil\"" >> /usr/local/etc/php/conf.d/docker-php-timezone.ini \
 
 RUN docker-php-ext-install gd
 
@@ -80,10 +73,9 @@ RUN chmod -R 0777 /var/www/app/bin/console
 
 #RUN /var/www/app/bin/console cache:warmup --env=testing -vvv
 
-RUN /var/www/app/bin/console cache:warmup --env=prod -vvv
-
 RUN chown -R www-data:www-data /var/www/app/var
 
+RUN /var/www/app/bin/console cache:warmup --env=prod -vvv
 
 ################################## Development Build ##################################
 
