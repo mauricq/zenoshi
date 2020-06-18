@@ -28,21 +28,20 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends ControllerProvider
 {
-
     /**
      * @var UserPasswordEncoderInterface
      */
-    private $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     /**
      * @var PersonService
      */
-    private $personService;
+    private PersonService $personService;
 
     /**
      * @var CatalogueService
      */
-    private $catalogueService;
+    private CatalogueService $catalogueService;
 
     /**
      * User constructor.
@@ -124,8 +123,8 @@ class UserController extends ControllerProvider
             $userObject->setIdPerson($person);
 
             $catalogue = new Catalogue();
-            $catalogue->setIdCatalog(empty($request->get("id_user_status")) ? 0 : $request->get("id_user_status"));
-            $userObject->setIdCatalog(empty($request->get("id_user_status")) ? null : $catalogue);
+            $catalogue->setIdCatalog(empty($request->get("user_status")) ? 0 : $request->get("user_status"));
+            $userObject->setIdUserStatus(empty($request->get("user_status")) ? null : $catalogue);
 
             $userObjectResult = $this->service->save($userObject);
 

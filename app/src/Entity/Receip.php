@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Receip
  *
- * @ORM\Table(name="receip", indexes={@ORM\Index(name="FK_PERSON_UPLOAD_RECEIP", columns={"ID_PERSON_UPLOAD_RECEIP"}), @ORM\Index(name="FK_RECEIP_APPROBATION", columns={"ID_CATALOG"}), @ORM\Index(name="FK_RECEIP_MERCHANT", columns={"ID_MERCHANT"})})
+ * @ORM\Table(name="receip", indexes={@ORM\Index(name="fk_person_upload_receip", columns={"id_person_upload_receip"}), @ORM\Index(name="fk_receip_approbation", columns={"id_receip_approbation"}), @ORM\Index(name="fk_receip_merchant", columns={"id_merchant"})})
  * @ORM\Entity(repositoryClass="App\Repository\ReceipRepository")
  */
 class Receip extends EntityProvider
@@ -15,7 +15,7 @@ class Receip extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_RECEIP", type="integer", nullable=false)
+     * @ORM\Column(name="id_receip", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,35 +24,35 @@ class Receip extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="MERCHANT_NAME", type="string", length=200, nullable=false)
+     * @ORM\Column(name="merchant_name", type="string", length=200, nullable=false)
      */
     private $merchantName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="AMOUNT", type="decimal", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="amount", type="decimal", precision=10, scale=0, nullable=false)
      */
     private $amount;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DATE_EMISSION", type="datetime", nullable=false)
+     * @ORM\Column(name="date_emission", type="datetime", nullable=false)
      */
     private $dateEmission;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="DATE_REGISTRATION", type="datetime", nullable=false)
+     * @ORM\Column(name="date_registration", type="datetime", nullable=false)
      */
     private $dateRegistration;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="INCENTIVE_POINTS", type="integer", nullable=true)
+     * @ORM\Column(name="incentive_points", type="integer", nullable=true)
      */
     private $incentivePoints;
 
@@ -61,7 +61,7 @@ class Receip extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Person")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON_UPLOAD_RECEIP", referencedColumnName="ID_PERSON")
+     *   @ORM\JoinColumn(name="id_person_upload_receip", referencedColumnName="id_person")
      * })
      */
     private $idPersonUploadReceip;
@@ -71,17 +71,17 @@ class Receip extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_receip_approbation", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idReceipApprobation;
 
     /**
      * @var \Merchant
      *
      * @ORM\ManyToOne(targetEntity="Merchant")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_MERCHANT", referencedColumnName="ID_MERCHANT")
+     *   @ORM\JoinColumn(name="id_merchant", referencedColumnName="id_merchant")
      * })
      */
     private $idMerchant;
@@ -163,14 +163,14 @@ class Receip extends EntityProvider
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdReceipApprobation(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idReceipApprobation;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdReceipApprobation(?Catalogue $idReceipApprobation): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idReceipApprobation = $idReceipApprobation;
 
         return $this;
     }

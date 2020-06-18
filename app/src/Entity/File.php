@@ -15,7 +15,7 @@ class File extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_FILE", type="integer", nullable=false)
+     * @ORM\Column(name="id_file", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,42 +24,42 @@ class File extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="FILE_NAME", type="string", length=100, nullable=false)
+     * @ORM\Column(name="file_name", type="string", length=100, nullable=false)
      */
     private $fileName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="FILE_LOCATION", type="string", length=200, nullable=false)
+     * @ORM\Column(name="file_location", type="string", length=200, nullable=false)
      */
     private $fileLocation;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="FILE_REAL_NAME", type="string", length=200, nullable=false)
+     * @ORM\Column(name="file_real_name", type="string", length=200, nullable=false)
      */
     private $fileRealName;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="SIZE", type="integer", nullable=true)
+     * @ORM\Column(name="size", type="integer", nullable=true)
      */
     private $size;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="CREATION_DATE", type="datetime", nullable=false)
+     * @ORM\Column(name="creation_date", type="datetime", nullable=false)
      */
     private $creationDate;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="STATUS", type="string", length=10, nullable=true)
+     * @ORM\Column(name="status", type="string", length=10, nullable=true)
      */
     private $status;
 

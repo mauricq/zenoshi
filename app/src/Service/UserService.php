@@ -11,6 +11,8 @@ use App\Repository\UserEntityRepository;
 use App\Service\Share\IServiceProviderInterface;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
+use JMS\Serializer\ArrayTransformerInterface;
+use JMS\Serializer\SerializerInterface;
 
 /**
  * Class UserService
@@ -19,18 +21,34 @@ use Doctrine\ORM\ORMException;
 class UserService implements IServiceProviderInterface
 {
     /**
+     * @var ArrayTransformerInterface
+     */
+    protected ArrayTransformerInterface $arrayTransformer;
+    /**
+     * @var SerializerInterface
+     */
+    protected SerializerInterface $serializer;
+    /**
      * @var UserEntityRepository
      */
-    private $repository;
+    private UserEntityRepository $repository;
 
+    /**
+     * UserService constructor.
+     * @param ArrayTransformerInterface $arrayTransformer
+     * @param SerializerInterface $serializer
+     * @param UserEntityRepository $repository
+     */
+    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserEntityRepository $repository)
+    {
+        $this->arrayTransformer = $arrayTransformer;
+        $this->serializer = $serializer;
+        $this->repository = $repository;
+    }
     /**
      * UserService constructor.
      * @param UserEntityRepository $repository
      */
-    public function __construct(UserEntityRepository $repository)
-    {
-        $this->repository = $repository;
-    }
 
 
     /**
@@ -93,10 +111,18 @@ class UserService implements IServiceProviderInterface
      * @param string $email
      * @param string $mobile
      * @return mixeds
-     * @throws NonUniqueResultException
      */
     public function searchDuplicated(string $username, string $email, string $mobile)
     {
         return $this->repository->searchDuplicated($username, $email, $mobile);
+    }
+
+    public function prepareResponseData(User $object): object
+    {
+        $result = [];
+
+        $data = $this->arrayTransformer->toArray($object);
+
+        return $result;
     }
 }

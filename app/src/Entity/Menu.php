@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Menu
  *
- * @ORM\Table(name="menu", indexes={@ORM\Index(name="FK_CORRESPOND", columns={"ID_MODULE"}), @ORM\Index(name="FK_MENU_STATUS", columns={"ID_MENU_STATUS"})})
+ * @ORM\Table(name="menu", indexes={@ORM\Index(name="fk_correspond", columns={"id_module"}), @ORM\Index(name="fk_menu_status", columns={"id_menu_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\MenuRepository")
  */
 class Menu extends EntityProvider
@@ -15,7 +15,7 @@ class Menu extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_MENU", type="integer", nullable=false)
+     * @ORM\Column(name="id_menu", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,21 +24,21 @@ class Menu extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="MENU_CODE", type="string", length=50, nullable=false)
+     * @ORM\Column(name="menu_code", type="string", length=50, nullable=false)
      */
     private $menuCode;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="MENU_NAME", type="string", length=50, nullable=false)
+     * @ORM\Column(name="menu_name", type="string", length=50, nullable=false)
      */
     private $menuName;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="MENU_LINK", type="string", length=200, nullable=false)
+     * @ORM\Column(name="menu_link", type="string", length=200, nullable=false)
      */
     private $menuLink;
 
@@ -47,7 +47,7 @@ class Menu extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Module")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_MODULE", referencedColumnName="ID_MODULE")
+     *   @ORM\JoinColumn(name="id_module", referencedColumnName="id_module")
      * })
      */
     private $idModule;
@@ -57,7 +57,7 @@ class Menu extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_MENU_STATUS", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_menu_status", referencedColumnName="id_catalog")
      * })
      */
     private $idMenuStatus;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Person
  *
- * @ORM\Table(name="person", indexes={@ORM\Index(name="FK_CLIENT_LOCATION", columns={"ID_CLIENT_LOCATION"}), @ORM\Index(name="FK_PERSON_PICTURE", columns={"ID_PERSON_PICTURE"}), @ORM\Index(name="FK_PERSON_STATUS", columns={"ID_PERSON_STATUS"})})
+ * @ORM\Table(name="person", indexes={@ORM\Index(name="fk_client_location", columns={"id_client_location"}), @ORM\Index(name="fk_person_picture", columns={"id_person_picture"}), @ORM\Index(name="fk_person_status", columns={"id_person_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\PersonRepository")
  */
 class Person extends EntityProvider
@@ -15,7 +15,7 @@ class Person extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_PERSON", type="integer", nullable=false)
+     * @ORM\Column(name="id_person", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,49 +24,49 @@ class Person extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="NAME", type="string", length=200, nullable=false)
+     * @ORM\Column(name="name", type="string", length=200, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="LAST_NAME", type="string", length=100, nullable=false)
+     * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
      */
     private $lastName;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="IDENTIFICATION_TYPE", type="string", length=50, nullable=true)
+     * @ORM\Column(name="identification_type", type="string", length=50, nullable=true)
      */
     private $identificationType;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="IDENTIFICATION_NUMBER", type="string", length=20, nullable=true)
+     * @ORM\Column(name="identification_number", type="string", length=20, nullable=true)
      */
     private $identificationNumber;
 
     /**
      * @var \DateTime|null
      *
-     * @ORM\Column(name="BIRTH_DATE", type="date", nullable=true)
+     * @ORM\Column(name="birth_date", type="date", nullable=true)
      */
     private $birthDate;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="MOBILE", type="string", length=20, nullable=false)
+     * @ORM\Column(name="mobile", type="string", length=20, nullable=false)
      */
     private $mobile;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="ADDRESS", type="string", length=200, nullable=true)
+     * @ORM\Column(name="address", type="string", length=200, nullable=true)
      */
     private $address;
 
@@ -75,7 +75,7 @@ class Person extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CLIENT_LOCATION", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_client_location", referencedColumnName="id_catalog")
      * })
      */
     private $idClientLocation;
@@ -85,7 +85,7 @@ class Person extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="File")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON_PICTURE", referencedColumnName="ID_FILE")
+     *   @ORM\JoinColumn(name="id_person_picture", referencedColumnName="id_file")
      * })
      */
     private $idPersonPicture;
@@ -95,7 +95,7 @@ class Person extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PERSON_STATUS", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_person_status", referencedColumnName="id_catalog")
      * })
      */
     private $idPersonStatus;

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Product
  *
- * @ORM\Table(name="product", indexes={@ORM\Index(name="FK_MERCHANT_PRODUCT", columns={"ID_MERCHANT"}), @ORM\Index(name="FK_PHOTO_PRODUCT", columns={"ID_PHOTO_PRODUCT"}), @ORM\Index(name="FK_PRODUCT_STATUS", columns={"ID_CATALOG"})})
+ * @ORM\Table(name="product", indexes={@ORM\Index(name="fk_merchant_product", columns={"id_merchant"}), @ORM\Index(name="fk_photo_product", columns={"id_photo_product"}), @ORM\Index(name="fk_product_status", columns={"id_product_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
  */
 class Product extends EntityProvider
@@ -15,7 +15,7 @@ class Product extends EntityProvider
     /**
      * @var int
      *
-     * @ORM\Column(name="ID_PRODUCT", type="integer", nullable=false)
+     * @ORM\Column(name="id_product", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -24,28 +24,28 @@ class Product extends EntityProvider
     /**
      * @var string
      *
-     * @ORM\Column(name="NAME", type="string", length=200, nullable=false)
+     * @ORM\Column(name="name", type="string", length=200, nullable=false)
      */
     private $name;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="DESCRIPTION", type="string", length=200, nullable=false)
+     * @ORM\Column(name="description", type="string", length=200, nullable=false)
      */
     private $description;
 
     /**
      * @var string|null
      *
-     * @ORM\Column(name="DISCOUNT", type="decimal", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="discount", type="decimal", precision=10, scale=0, nullable=true)
      */
     private $discount;
 
     /**
      * @var int|null
      *
-     * @ORM\Column(name="POINTS", type="integer", nullable=true)
+     * @ORM\Column(name="points", type="integer", nullable=true)
      */
     private $points;
 
@@ -54,7 +54,7 @@ class Product extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Merchant")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_MERCHANT", referencedColumnName="ID_MERCHANT")
+     *   @ORM\JoinColumn(name="id_merchant", referencedColumnName="id_merchant")
      * })
      */
     private $idMerchant;
@@ -64,7 +64,7 @@ class Product extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="File")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_PHOTO_PRODUCT", referencedColumnName="ID_FILE")
+     *   @ORM\JoinColumn(name="id_photo_product", referencedColumnName="id_file")
      * })
      */
     private $idPhotoProduct;
@@ -74,10 +74,10 @@ class Product extends EntityProvider
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
      * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="ID_CATALOG", referencedColumnName="ID_CATALOG")
+     *   @ORM\JoinColumn(name="id_product_status", referencedColumnName="id_catalog")
      * })
      */
-    private $idCatalog;
+    private $idProductStatus;
 
     public function getIdProduct(): ?int
     {
@@ -156,14 +156,14 @@ class Product extends EntityProvider
         return $this;
     }
 
-    public function getIdCatalog(): ?Catalogue
+    public function getIdProductStatus(): ?Catalogue
     {
-        return $this->idCatalog;
+        return $this->idProductStatus;
     }
 
-    public function setIdCatalog(?Catalogue $idCatalog): self
+    public function setIdProductStatus(?Catalogue $idProductStatus): self
     {
-        $this->idCatalog = $idCatalog;
+        $this->idProductStatus = $idProductStatus;
 
         return $this;
     }
