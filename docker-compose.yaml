@@ -24,7 +24,7 @@ services:
   symfony:
     image: symfony:lastest
     container_name: symfony
-    build:
+    build: 
       context: .
       dockerfile: ./infrastructure/containers/symfony/Dockerfile
     volumes:
