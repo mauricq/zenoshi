@@ -24,13 +24,13 @@ jobs:
     - name: Push image
       run: |
         IMAGE_PHP_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/php_zenoshi:latest
-        IMAGE_APACHE_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/apache_zenoshi:latest
+        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:latest
         
         docker tag php:local $IMAGE_PHP_ID
         docker push $IMAGE_PHP_ID
         
-        docker tag apache:local $IMAGE_APACHE_ID
-        docker push $IMAGE_APACHE_ID
+        docker tag nginx:local $IMAGE_NGINX_ID
+        docker push $IMAGE_NGINX_ID
     - name: Deploy stack
       uses: appleboy/ssh-action@master
       env:
@@ -44,10 +44,10 @@ jobs:
         envs: DOCKER_TOKEN,DOCKER_USER   
         script: |
           IMAGE_PHP_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/php_zenoshi:latest
-          IMAGE_APACHE_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/apache_zenoshi:latest
+          IMAGE_NGINX_ID=docker.pkg.github.com/$DOCKER_USER/zenoshi/nginx_zenoshi:latest
           echo "$DOCKER_TOKEN" | sudo docker login docker.pkg.github.com -u $DOCKER_USER --password-stdin
           sudo docker pull $IMAGE_PHP_ID
-          sudo docker pull $IMAGE_APACHE_ID
+          sudo docker pull $IMAGE_NGINX_ID
           cd ~
           sudo docker stack rm api-zenoshi
           sleep 40
