@@ -14,6 +14,13 @@ services:
       MYSQL_DATABASE: zenoshidb  # Database will be created on start
       MYSQL_USER: zenoshi      # Password for MySQL User.
       MYSQL_PASSWORD: w4nmTQQvKeC2N3we
+    # We need to run healthcheck because we need to make sure that the initial & default
+    # database has been created
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=ZHjA3t2wgqu642kL --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
   symfony:
     image: symfony_zenoshi:lastest
     container_name: symfony
