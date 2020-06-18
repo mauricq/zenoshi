@@ -14,6 +14,8 @@ RUN set -xe \
 # Override php.ini settings
 # COPY ./infrastructure/containers/symfony/app_custom.ini /usr/local/etc/php/conf.d/app_custom.ini
 
+COPY ./app/composer.json /var/www/app/compose.json
+
 WORKDIR /var/www/app
 
 COPY . /var/www/app
