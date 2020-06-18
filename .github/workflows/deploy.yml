@@ -14,15 +14,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Install Dependencies
-      run: composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-    - name: Clean composer cache
-      run: composer clear-cache
     - name: Build process
       working-directory: ./
-      run: | 
-        rm ./docker-compose.override.yaml
-        docker-compose build --no-cache
+      run: docker-compose up -d --build
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
     - name: Push image
