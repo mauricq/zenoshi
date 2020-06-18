@@ -25,7 +25,7 @@ jobs:
       run: docker ps -a
     - name: Push image
       run: |
-        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:latest
+        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/zenoshi_nginx:latest
         docker tag nginx $IMAGE_NGINX_ID
         docker push $IMAGE_NGINX_ID
     - name: Deploy stack
