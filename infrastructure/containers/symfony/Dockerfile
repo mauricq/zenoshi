@@ -11,15 +11,7 @@ RUN set -xe \
     && rm -rf /tmp/* \
     && apk del  .phpize-deps
 
-RUN apt-get update -y && apt-get install -y libpng-dev
-
-RUN apt-get install -y zlib1g-dev
-
-RUN docker-php-ext-install mbstring
-
-RUN docker-php-ext-install zip
-
-RUN docker-php-ext-install gd
+RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
 
 # Override php.ini settings
 # COPY ./infrastructure/containers/symfony/app_custom.ini /usr/local/etc/php/conf.d/app_custom.ini
