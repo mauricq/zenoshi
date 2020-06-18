@@ -9,9 +9,9 @@ RUN set -xe \
     && docker-php-ext-install pdo pdo_mysql \
     && rm -rf /usr/share/php \
     && rm -rf /tmp/* \
-    && apk del  .phpize-deps \
-    && libxml2-dev  \
-    && curl-dev
+    && apk del  .phpize-deps
+
+RUN apk add --no-cache libxml2-dev
 
 RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
 
