@@ -28,7 +28,7 @@ services:
       dockerfile: ./infrastructure/containers/symfony/Dockerfile
     command: ./prepare.sh   # Reset database, run migration + fixtures
     volumes:
-      - ./var:/var/www/html/var
+      - ./var:/var/www/app/var
     environment:
       DATABASE_URL: mysql://zenoshi:w4nmTQQvKeC2N3we@teamq_db:3306/zenoshidb?serverVersion=5.7
       APP_ENV: dev  # For debugging purpose we built it as a dev version

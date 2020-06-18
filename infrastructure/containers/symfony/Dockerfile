@@ -14,9 +14,9 @@ RUN set -xe \
 # Override php.ini settings
 # COPY ./infrastructure/containers/symfony/app_custom.ini /usr/local/etc/php/conf.d/app_custom.ini
 
-WORKDIR /var/www/html
+WORKDIR /var/www/app
 
-COPY . /var/www/html
+COPY . /var/www/app
 
 # To run some additional command during build time (db migrations, loading fixtures, etc)
 # COPY ./docker/symfony/prepare.sh .
