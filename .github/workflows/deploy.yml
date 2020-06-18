@@ -24,7 +24,7 @@ jobs:
     - name: Push image
       run: |
         IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:latest
-        docker tag nginx:local $IMAGE_NGINX_ID
+        docker tag nginx $IMAGE_NGINX_ID
         docker push $IMAGE_NGINX_ID
     - name: Deploy stack
       uses: appleboy/ssh-action@master
