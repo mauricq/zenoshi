@@ -22,9 +22,8 @@ jobs:
     - name: Log into registry
       run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
     - name: Push image
-      run: IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:latest
-
-        
+      run: |
+        IMAGE_NGINX_ID=docker.pkg.github.com/${{ secrets.DOCKER_USERNAME }}/zenoshi/nginx_zenoshi:latest
         docker tag nginx:local $IMAGE_NGINX_ID
         docker push $IMAGE_NGINX_ID
     - name: Deploy stack
