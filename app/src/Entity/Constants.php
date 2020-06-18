@@ -20,4 +20,5 @@ class Constants
 
     const LOGIN_USERNAME_LABEL = "username";
     const LOGIN_PASSWORD_LABEL = "password";
+    const CATALOG_LABEL = "CATALOG";
 }
