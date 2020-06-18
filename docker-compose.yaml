@@ -39,7 +39,7 @@ services:
       mysql:
         condition: service_healthy    # DB service must be in healthy state to start this App
   nginx:
-    image: nginx:lastest
+    image: nginx_zenoshi:lastest
     container_name: nginx
     build:
       context: .
