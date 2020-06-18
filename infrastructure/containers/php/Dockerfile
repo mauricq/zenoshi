@@ -12,9 +12,8 @@ RUN buildDeps=" \
         libmemcached-dev \
         libsasl2-dev \
     " \
-
     && apt-get update && DEBIAN_FRONTEND=noninteractive && apt-get install -y zlib1g-dev libzip-dev git zip unzip acl libfontconfig1 libxrender1\
-    && apt-get install -y --no-install-recommends $buildDeps $runtimeDeps \
+    && apt-get install -y --no-install-recommends $buildDeps \
     && docker-php-ext-install bcmath bz2 calendar iconv intl mbstring mysqli opcache pdo_mysql soap curl zip\
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install exif \
@@ -30,14 +29,7 @@ RUN buildDeps=" \
 
     # Install Microsoft SQL Drivers for PHP in Linux
     && apt-get install -y gnupg apt-transport-https unixodbc-dev \
-    && curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-    && curl https://packages.microsoft.com/config/debian/9/prod.list > /etc/apt/sources.list.d/mssql-release.list \
     && apt-get update -yqq \
-    && apt-get install -y msodbcsql17 mssql-tools \
-    && ln -fsv /opt/mssql-tools/bin/* /usr/bin \
-    && pecl install sqlsrv \
-    && pecl install pdo_sqlsrv \
-    && docker-php-ext-enable sqlsrv pdo_sqlsrv \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
