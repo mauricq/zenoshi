@@ -9,17 +9,17 @@ RUN set -xe \
     && docker-php-ext-install pdo pdo_mysql \
     && rm -rf /usr/share/php \
     && rm -rf /tmp/* \
-    && apk del  .phpize-deps
+    && apk del  .phpize-deps \
+    && libxml2-dev  \
+    && curl-dev
 
 RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
 
 RUN apk add --no-cache libzip-dev
 
-RUN docker-php-ext-install xml
-
 RUN docker-php-ext-install zip
 
-RUN docker-php-ext-configure soap --enable-soap
+RUN docker-php-ext-install soap
 
 # Override php.ini settings
 # COPY ./infrastructure/containers/symfony/app_custom.ini /usr/local/etc/php/conf.d/app_custom.ini
