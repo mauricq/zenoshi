@@ -13,7 +13,11 @@ RUN set -xe \
 
 RUN apk add --no-cache libpng libpng-dev && docker-php-ext-install gd && apk del libpng-dev
 
-RUN apk add --no-cache libzip-dev && docker-php-ext-install zip && docker-php-ext-install xml
+RUN apk add --no-cache libzip-dev
+
+RUN docker-php-ext-install xml
+
+RUN docker-php-ext-install zip
 
 RUN docker-php-ext-configure soap --enable-soap
 
