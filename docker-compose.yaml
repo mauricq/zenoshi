@@ -44,7 +44,7 @@ services:
       context: .
       dockerfile: ./infrastructure/containers/nginx/Dockerfile
     ports:
-      - "8011:80"   # Webserver will run on http://localhost:8011
+      - "80:80"
     depends_on:
       - symfony     # Web App service must be running
       - mysql          # DB must be ready
