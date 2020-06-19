@@ -82,13 +82,13 @@ class LoginController extends ControllerProvider
      * Login constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param UserService $userService
+     * @param UserService $service
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                UserService $userService)
+                                UserService $service)
     {
-        parent::__construct($arrayTransformer, $serializer, $userService);
+        parent::__construct($arrayTransformer, $serializer, $service);
     }
 
 

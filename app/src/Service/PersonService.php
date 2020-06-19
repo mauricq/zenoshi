@@ -58,10 +58,10 @@ class PersonService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
+     * @param array $value
      * @return array
      */
-    public function filterOneBy(string $value = ''): array
+    public function filterOneBy(array $value): array
     {
         $this->repository->findOneBy($value);
     }

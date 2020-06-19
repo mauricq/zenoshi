@@ -20,25 +20,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CatalogueController extends ControllerProvider
 {
-    /**
-     * @var PrepareDataUtil
-     */
-    private PrepareDataUtil $prepareDataUtil;
 
     /**
      * Catalogue constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param CatalogueService $userService
-     * @param PrepareDataUtil $prepareDataUtil
+     * @param CatalogueService $service
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                CatalogueService $userService,
-                                PrepareDataUtil $prepareDataUtil)
+                                CatalogueService $service)
     {
-        parent::__construct($arrayTransformer, $serializer, $userService);
-        $this->prepareDataUtil = $prepareDataUtil;
+        parent::__construct($arrayTransformer, $serializer, $service);
     }
 
 
@@ -61,21 +54,6 @@ class CatalogueController extends ControllerProvider
      */
     public function controllerFilterBy(Request $request, string $type): JsonResponse
     {
-        $criteria = ["type" => $type, "status" => "A"];
-
-        $orderBy = $request->query->get("orderBy", 'name');
-        $limit = $request->query->get("limit", null);
-        $offset = $request->query->get("offset", null);
-
-        $data = $this->service->filterBy($criteria, [$orderBy => 'ASC'], $limit, $offset);
-        $data = $this->prepareDataUtil->deleteParentCatalog($type, $data);
-        $data = $this->prepareDataUtil->deleteParamFromCatalog("id_parent", "id_catalog", $data);
-        return new JsonResponse(
-            array(
-                Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
-                Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($data)
-            ),
-            Response::HTTP_OK
-        );
+        return parent::filterBy($request, $type);
     }
 }

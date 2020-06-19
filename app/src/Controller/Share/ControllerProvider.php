@@ -24,17 +24,17 @@ class ControllerProvider extends AbstractController implements IControllerProvid
     /**
      * @var ArrayTransformerInterface
      */
-    protected $arrayTransformer;
+    protected ArrayTransformerInterface $arrayTransformer;
 
     /**
      * @var SerializerInterface
      */
-    protected $serializer;
+    protected SerializerInterface $serializer;
 
     /**
      * @var IServiceProviderInterface
      */
-    protected $service;
+    protected IServiceProviderInterface $service;
 
     /**
      * @var Utils
@@ -54,15 +54,15 @@ class ControllerProvider extends AbstractController implements IControllerProvid
      * ReportControllerProvider constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param IServiceProviderInterface $userService
+     * @param IServiceProviderInterface $service
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                IServiceProviderInterface $userService)
+                                IServiceProviderInterface $service)
     {
         $this->arrayTransformer = $arrayTransformer;
         $this->serializer = $serializer;
-        $this->service = $userService;
+        $this->service = $service;
     }
 
 
@@ -154,18 +154,19 @@ class ControllerProvider extends AbstractController implements IControllerProvid
 
     /**
      * @param Request $request
-     * @param string $type
+     * @param string $value
      * @return JsonResponse
      */
-    public function filterBy(Request $request, string $type): JsonResponse
+    public function filterBy(Request $request, string $value): JsonResponse
     {
-        $criteria = ["type" => $type, "status" => "A"];
+        $criteria = ["value" => $value];
 
-        $orderBy = $request->query->get("orderBy", 'name');
+        $orderBy = $request->query->get("orderBy", null);
         $limit = $request->query->get("limit", null);
         $offset = $request->query->get("offset", null);
 
-        $data = $this->service->filterBy($criteria, [$orderBy => 'ASC'], $limit, $offset);
+        $orderBy = empty($orderBy) ? null : [$orderBy => 'ASC']; //TODO $orderBy separated by coma.
+        $data = $this->service->filterBy($criteria, $orderBy, $limit, $offset);
         return new JsonResponse(
             array(
                 Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,

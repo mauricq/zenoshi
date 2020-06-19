@@ -78,10 +78,10 @@ class UserService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
+     * @param array $value
      * @return array
      */
-    public function filterOneBy(string $value = ''): array
+    public function filterOneBy(array $value): array
     {
         $this->repository->findOneBy([$value]);
     }
@@ -117,12 +117,8 @@ class UserService implements IServiceProviderInterface
         return $this->repository->searchDuplicated($username, $email, $mobile);
     }
 
-    public function prepareResponseData(User $object): object
+    public function prepareResponseData(User $object): array
     {
-        $result = [];
-
-        $data = $this->arrayTransformer->toArray($object);
-
-        return $result;
+        return $this->arrayTransformer->toArray($object);
     }
 }

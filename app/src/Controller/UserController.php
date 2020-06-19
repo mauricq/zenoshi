@@ -23,7 +23,7 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 /**
  * @Route("user")
- * Class ArticleController
+ * Class UserController
  * @package App\Controller
  */
 class UserController extends ControllerProvider
@@ -47,14 +47,14 @@ class UserController extends ControllerProvider
      * User constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param UserService $userService
+     * @param UserService $service
      * @param PersonService $personService
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param CatalogueService $catalogueService
      */
-    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserService $userService, PersonService $personService, UserPasswordEncoderInterface $passwordEncoder, CatalogueService $catalogueService)
+    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserService $service, PersonService $personService, UserPasswordEncoderInterface $passwordEncoder, CatalogueService $catalogueService)
     {
-        parent::__construct($arrayTransformer, $serializer, $userService);
+        parent::__construct($arrayTransformer, $serializer, $service);
         $this->passwordEncoder = $passwordEncoder;
         $this->personService = $personService;
         $this->catalogueService = $catalogueService;
@@ -79,7 +79,7 @@ class UserController extends ControllerProvider
 
 
     /**
-     * @Route("/", name="create", methods={"POST"})
+     * @Route("/", name="createUser", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */

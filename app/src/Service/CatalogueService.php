@@ -8,6 +8,7 @@ use App\Entity\EntityProvider;
 use App\Entity\Catalogue;
 use App\Repository\CatalogueRepository;
 use App\Service\Share\IServiceProviderInterface;
+use App\Utils\PrepareDataUtil;
 
 /**
  * Class CatalogueService
@@ -19,14 +20,21 @@ class CatalogueService implements IServiceProviderInterface
      * @var CatalogueRepository
      */
     private $repository;
+    /**
+     * @var PrepareDataUtil
+     */
+    private PrepareDataUtil $prepareDataUtil;
 
     /**
      * CatalogueService constructor.
      * @param CatalogueRepository $repository
+     * @param PrepareDataUtil $prepareDataUtil
      */
-    public function __construct(CatalogueRepository $repository)
+    public function __construct(CatalogueRepository $repository,
+                                PrepareDataUtil $prepareDataUtil)
     {
         $this->repository = $repository;
+        $this->prepareDataUtil = $prepareDataUtil;
     }
 
 
@@ -75,12 +83,12 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
+     * @param array $value
      * @return array
      */
-    public function filterOneBy(string $value = ''): array
+    public function filterOneBy(array $value): array
     {
-        return $this->repository->findOneBy($value);
+        return [$this->repository->findOneBy($value)];
     }
 
     /**
@@ -92,6 +100,24 @@ class CatalogueService implements IServiceProviderInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
-        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        $value = $criteria['value'];
+        $criteria = ["type" => $value, "status" => "A"];
+        $orderBy = empty($orderBy) ? null : ['name' => 'ASC'];
+
+        $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        $data = $this->prepareDataUtil->deleteParentCatalog($value, $result);
+        $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), $data);
+
+        return $data;
+    }
+    /**
+     * @return array
+     */
+    public function getIds(): array
+    {
+        //json_key_input => id_field_db, idField, FK_Entity, FK_idEntity, FK_id_entity
+        return [
+            "parent" => ["id_parent", "parent", "Catalogue", "idCatalog", "id_catalog"]
+        ];
     }
 }
