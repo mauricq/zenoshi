@@ -50,12 +50,12 @@
   },
   "autoload": {
     "psr-4": {
-      "": "src/"
+      "\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "tests": "tests/"
+      "\\Tests\\": "tests/"
     }
   },
   "replace": {
