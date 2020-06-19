@@ -1,4 +1,16 @@
 .idea
-.vagrant
-.git
-.github
+
+###> symfony/framework-bundle ###
+/package-lock.json
+/.env.local
+/.env.local.php
+/.env.*.local
+/symfony.lock
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###
