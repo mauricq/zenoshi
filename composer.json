@@ -90,10 +90,10 @@
     }
   },
     "require-dev": {
-      "coduo/php-matcher": "^3.1",
-      "doctrine/doctrine-fixtures-bundle": "^3.1",
-      "symfony/console": "4.*",
-      "symfony/css-selector": "4.*",
-      "symfony/maker-bundle": "^1.11"
+    "coduo/php-matcher": "^3.1",
+    "doctrine/doctrine-fixtures-bundle": "^3.1",
+    "symfony/console": "4.*",
+    "symfony/css-selector": "4.*",
+    "symfony/maker-bundle": "^1.19"
   }
 }
