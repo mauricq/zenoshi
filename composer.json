@@ -9,7 +9,7 @@
     "sort-packages": true
   },
   "require": {
-    "php": "^7.2.5",
+    "php": "^7.4",
     "ext-ctype": "*",
     "ext-fileinfo": "*",
     "ext-gd": "*",
@@ -28,7 +28,6 @@
     "phpoffice/phpspreadsheet": "^1.11",
     "ramsey/uuid": "^4.0",
     "sensio/framework-extra-bundle": "^5.2",
-    "symfony/apache-pack": "^1.0",
     "symfony/cache": "4.*",
     "symfony/doctrine-bridge": "4.*",
     "symfony/dotenv": "4.*",

@@ -25,14 +25,15 @@ final class Version20200504155000 extends AbstractMigration
         $this->addSql('
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     11/6/2020 18:12:49                           */
+/* Created on:     18/6/2020 3:13:46                            */
 /*==============================================================*/
 
-/* drop database test02;*/
 
-/* create database test02;*/
+/*        drop database zenoshidb;         */
 
-/* use test02;*/
+/*        create database zenoshidb;       */
+
+/*        use zenoshidb;                   */
 
 drop table if exists TRANSACTION;
 
@@ -70,343 +71,385 @@ drop table if exists REWARD;
 
 drop table if exists CATALOGUE;
 
+
 /*==============================================================*/
-/* Table: CATALOGUE                                             */
+/* Table: catalogue                                             */
 /*==============================================================*/
-create table CATALOGUE
+create table catalogue
 (
-   ID_CATALOG           int not null AUTO_INCREMENT,
-   ID_PARENT            int,
-   STATUS               varchar(10) not null,
-   TYPE                 varchar(100) not null,
-   NAME                 varchar(200) not null,
-   DESCRIPTION          varchar(200) not null,
-   primary key (ID_CATALOG),
-   constraint FK_PARENT foreign key (ID_PARENT)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_catalog           int not null AUTO_INCREMENT,
+   cat_id_catalog       int,
+   status               varchar(10) not null,
+   icon                 varchar(100),
+   type                 varchar(100) not null,
+   name                 varchar(200) not null,
+   description          varchar(200) not null,
+   primary key (id_catalog),
+   constraint fk_parent foreign key (cat_id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: FILE                                                  */
+/* Table: file                                                  */
 /*==============================================================*/
-create table FILE
+create table file
 (
-   ID_FILE              int not null AUTO_INCREMENT,
-   FILE_NAME            varchar(100) not null,
-   FILE_LOCATION        varchar(200) not null,
-   FILE_REAL_NAME       varchar(200) not null,
-   SIZE                 int,
-   CREATION_DATE        datetime not null,
-   STATUS               varchar(10),
-   primary key (ID_FILE)
+   id_file              int not null AUTO_INCREMENT,
+   file_name            varchar(100) not null,
+   file_location        varchar(200) not null,
+   file_real_name       varchar(200) not null,
+   size                 int,
+   creation_date        datetime not null,
+   status               varchar(10),
+   primary key (id_file)
 );
 
 /*==============================================================*/
-/* Table: PERSON                                                */
+/* Table: person                                                */
 /*==============================================================*/
-create table PERSON
+create table person
 (
-   ID_PERSON            int not null AUTO_INCREMENT,
-   ID_PERSON_STATUS     int,
-   ID_PERSON_PICTURE    int,
-   ID_CLIENT_LOCATION   int,
-   NAME                 varchar(200) not null,
-   LAST_NAME            varchar(100) not null,
-   IDENTIFICATION_TYPE  varchar(50),
-   IDENTIFICATION_NUMBER varchar(20),
-   BIRTH_DATE           date,
-   MOBILE               varchar(20) not null,
-   ADDRESS              varchar(200),
-   primary key (ID_PERSON),
-   constraint FK_CLIENT_LOCATION foreign key (ID_CLIENT_LOCATION)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict,
-   constraint FK_PERSON_PICTURE foreign key (ID_PERSON_PICTURE)
-      references FILE (ID_FILE) on delete restrict on update restrict,
-   constraint FK_PERSON_STATUS foreign key (ID_PERSON_STATUS)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_person            int not null AUTO_INCREMENT,
+   id_catalog           int,
+   id_file              int,
+   cat_id_catalog       int,
+   name                 varchar(200) not null,
+   last_name            varchar(100) not null,
+   identification_type  varchar(50),
+   identification_number varchar(20),
+   birth_date           date,
+   mobile               varchar(20) not null,
+   address              varchar(200),
+   primary key (id_person),
+   constraint fk_client_location foreign key (cat_id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict,
+   constraint fk_person_picture foreign key (id_file)
+      references file (id_file) on delete restrict on update restrict,
+   constraint fk_person_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: ACCOUNT                                               */
+/* Table: account                                               */
 /*==============================================================*/
-create table ACCOUNT
+create table account
 (
-   ID_ACCOUNT           int not null AUTO_INCREMENT,
-   ID_PERSON            int,
-   ACCOUNT_NUMBER       varchar(20) not null,
-   TOTAL_INCENTIVE_POINTS int,
-   REWARD_COINS         int,
-   LAST_UPDATE          datetime,
-   primary key (ID_ACCOUNT),
-   constraint FK_PERSON_ACCOUNT foreign key (ID_PERSON)
-      references PERSON (ID_PERSON) on delete restrict on update restrict
+   id_account           int not null AUTO_INCREMENT,
+   id_person            int,
+   account_number       varchar(20) not null,
+   total_incentive_points int,
+   reward_coins         int,
+   last_update          datetime,
+   primary key (id_account),
+   constraint fk_person_account foreign key (id_person)
+      references person (id_person) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: MODULE                                                */
+/* Table: module                                                */
 /*==============================================================*/
-create table MODULE
+create table module
 (
-   ID_MODULE            int not null AUTO_INCREMENT,
-   ID_SUBMODULE         int,
-   ID_MODULE_STATUS     int,
-   MODULE_CODE          varchar(50) not null,
-   MODULE_NAME          varchar(50) not null,
-   primary key (ID_MODULE),
-   constraint FK_SUBMODULO foreign key (ID_SUBMODULE)
-      references MODULE (ID_MODULE) on delete restrict on update restrict,
-   constraint FK_MODULE_STATUS foreign key (ID_MODULE_STATUS)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_module            int not null AUTO_INCREMENT,
+   mod_id_module        int,
+   id_catalog           int,
+   module_code          varchar(50) not null,
+   module_name          varchar(50) not null,
+   primary key (id_module),
+   constraint fk_submodulo foreign key (mod_id_module)
+      references module (id_module) on delete restrict on update restrict,
+   constraint fk_module_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: MENU                                                  */
+/* Table: menu                                                  */
 /*==============================================================*/
-create table MENU
+create table menu
 (
-   ID_MENU              int not null AUTO_INCREMENT,
-   ID_MODULE            int,
-   ID_MENU_STATUS       int,
-   MENU_CODE            varchar(50) not null,
-   MENU_NAME            varchar(50) not null,
-   MENU_LINK            varchar(200) not null,
-   primary key (ID_MENU),
-   constraint FK_CORRESPOND foreign key (ID_MODULE)
-      references MODULE (ID_MODULE) on delete restrict on update restrict,
-   constraint FK_MENU_STATUS foreign key (ID_MENU_STATUS)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_menu              int not null AUTO_INCREMENT,
+   id_module            int,
+   id_catalog           int,
+   menu_code            varchar(50) not null,
+   menu_name            varchar(50) not null,
+   menu_link            varchar(200) not null,
+   primary key (id_menu),
+   constraint fk_correspond foreign key (id_module)
+      references module (id_module) on delete restrict on update restrict,
+   constraint fk_menu_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: MERCHANT                                              */
+/* Table: merchant                                              */
 /*==============================================================*/
-create table MERCHANT
+create table merchant
 (
-   ID_MERCHANT          int not null AUTO_INCREMENT,
-   ID_CATALOG           int,
-   ID_MERCHANT_CATEGORY int,
-   CAT_ID_CATALOG2      int,
-   ID_PERSON            int,
-   MERCHANT_NAME        varchar(200),
-   ADDRESS              varchar(200),
-   POINTS               int,
-   CITY                 varchar(100),
-   COUNTRY              varchar(100),
-   WEBSITE              varchar(999),
-   APPROVAL_DATE        datetime,
-   REGISTRATION_DATE    datetime not null,
-   primary key (ID_MERCHANT),
-   constraint FK_MERCHANT_OWNER_PERSON foreign key (ID_PERSON)
-      references PERSON (ID_PERSON) on delete restrict on update restrict,
-   constraint FK_STATUS_APPROVAL foreign key (CAT_ID_CATALOG2)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict,
-   constraint FK_STATUS_MERCHANT foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict,
-   constraint FK_MERCHANT_CATEGORY foreign key (ID_MERCHANT_CATEGORY)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_merchant          int not null AUTO_INCREMENT,
+   id_catalog           int,
+   cat_id_catalog       int,
+   cat_id_catalog2      int,
+   id_person            int,
+   merchant_name        varchar(200),
+   address              varchar(200),
+   points               int,
+   city                 varchar(100),
+   country              varchar(100),
+   website              varchar(999),
+   approval_date        datetime,
+   registration_date    datetime not null,
+   primary key (id_merchant),
+   constraint fk_merchant_owner_person foreign key (id_person)
+      references person (id_person) on delete restrict on update restrict,
+   constraint fk_merchant_status_approval foreign key (cat_id_catalog2)
+      references catalogue (id_catalog) on delete restrict on update restrict,
+   constraint fk_merchant_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict,
+   constraint fk_merchant_category foreign key (cat_id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: RECEIP                                                */
+/* Table: receip                                                */
 /*==============================================================*/
-create table RECEIP
+create table receip
 (
-   ID_RECEIP            int not null AUTO_INCREMENT,
-   ID_PERSON_UPLOAD_RECEIP int,
-   ID_MERCHANT          int,
-   ID_CATALOG           int,
-   MERCHANT_NAME        varchar(200) not null,
-   AMOUNT               decimal not null,
-   DATE_EMISSION        datetime not null,
-   DATE_REGISTRATION    datetime not null,
-   INCENTIVE_POINTS     int,
-   primary key (ID_RECEIP),
-   constraint FK_RECEIP_MERCHANT foreign key (ID_MERCHANT)
-      references MERCHANT (ID_MERCHANT) on delete restrict on update restrict,
-   constraint FK_PERSON_UPLOAD_RECEIP foreign key (ID_PERSON_UPLOAD_RECEIP)
-      references PERSON (ID_PERSON) on delete restrict on update restrict,
-   constraint FK_RECEIP_APPROBATION foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_receip            int not null AUTO_INCREMENT,
+   id_person            int,
+   id_merchant          int,
+   id_catalog           int,
+   merchant_name        varchar(200) not null,
+   amount               decimal not null,
+   date_emission        datetime not null,
+   date_registration    datetime not null,
+   incentive_points     int,
+   primary key (id_receip),
+   constraint fk_receip_merchant foreign key (id_merchant)
+      references merchant (id_merchant) on delete restrict on update restrict,
+   constraint fk_person_upload_receip foreign key (id_person)
+      references person (id_person) on delete restrict on update restrict,
+   constraint fk_receip_approbation foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: PICTUREPOOL                                           */
+/* Table: picturepool                                           */
 /*==============================================================*/
-create table PICTUREPOOL
+create table picturepool
 (
-   ID_PICTURE_POOL      int not null AUTO_INCREMENT,
-   ID_RECEIP            int,
-   ID_FILE              int,
-   CREATION_DATE        datetime not null,
-   primary key (ID_PICTURE_POOL),
-   constraint FK_RECEIP_PICTURE_POOL foreign key (ID_RECEIP)
-      references RECEIP (ID_RECEIP) on delete restrict on update restrict,
-   constraint FK_PICTURE_POOL_FILES foreign key (ID_FILE)
-      references FILE (ID_FILE) on delete restrict on update restrict
+   id_picture_pool      int not null AUTO_INCREMENT,
+   id_receip            int,
+   id_file              int,
+   creation_date        datetime not null,
+   primary key (id_picture_pool),
+   constraint fk_receip_picture_pool foreign key (id_receip)
+      references receip (id_receip) on delete restrict on update restrict,
+   constraint fk_picture_pool_files foreign key (id_file)
+      references file (id_file) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: PINCODE                                               */
+/* Table: pincode                                               */
 /*==============================================================*/
-create table PINCODE
+create table pincode
 (
-   ID_PINCODE           int not null AUTO_INCREMENT,
-   ID_CATALOG           int,
-   ID_PERSON            int,
-   PLASTIC_BRAND        varchar(25),
-   NAME_DISPLAYED       varchar(200) not null,
-   PIN_CODE             varchar(16) not null,
-   STATUS               varchar(10),
-   CITY                 varchar(100),
-   COUNTRY              varchar(100),
-   CONTINENT            varchar(20),
-   EXPIRATION_DATE      varchar(5),
-   primary key (ID_PINCODE),
-   constraint FK_PERSON_PINCODES foreign key (ID_PERSON)
-      references PERSON (ID_PERSON) on delete restrict on update restrict,
-   constraint FK_PIN_STATUS foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_pincode           int not null AUTO_INCREMENT,
+   id_catalog           int,
+   id_person            int,
+   plastic_brand        varchar(25),
+   name_displayed       varchar(200) not null,
+   pin_code             varchar(16) not null,
+   status               varchar(10),
+   city                 varchar(100),
+   country              varchar(100),
+   continent            varchar(20),
+   expiration_date      varchar(5),
+   primary key (id_pincode),
+   constraint fk_person_pincodes foreign key (id_person)
+      references person (id_person) on delete restrict on update restrict,
+   constraint fk_pin_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: PRODUCT                                               */
+/* Table: product                                               */
 /*==============================================================*/
-create table PRODUCT
+create table product
 (
-   ID_PRODUCT           int not null AUTO_INCREMENT,
-   ID_MERCHANT          int,
-   ID_CATALOG           int,
-   ID_PHOTO_PRODUCT     int,
-   NAME                 varchar(200) not null,
-   DESCRIPTION          varchar(200) not null,
-   DISCOUNT             decimal,
-   POINTS               int,
-   primary key (ID_PRODUCT),
-   constraint FK_MERCHANT_PRODUCT foreign key (ID_MERCHANT)
-      references MERCHANT (ID_MERCHANT) on delete restrict on update restrict,
-   constraint FK_PRODUCT_STATUS foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict,
-   constraint FK_PHOTO_PRODUCT foreign key (ID_PHOTO_PRODUCT)
-      references FILE (ID_FILE) on delete restrict on update restrict
+   id_product           int not null AUTO_INCREMENT,
+   id_merchant          int,
+   id_catalog           int,
+   id_file              int,
+   name                 varchar(200) not null,
+   description          varchar(200) not null,
+   discount             decimal,
+   points               int,
+   primary key (id_product),
+   constraint fk_merchant_product foreign key (id_merchant)
+      references merchant (id_merchant) on delete restrict on update restrict,
+   constraint fk_product_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict,
+   constraint fk_photo_product foreign key (id_file)
+      references file (id_file) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: PROFILE                                               */
+/* Table: profile                                               */
 /*==============================================================*/
-create table PROFILE
+create table profile
 (
-   ID_PROFILE           int not null AUTO_INCREMENT,
-   ID_CATALOG           int,
-   PROFILE_CODE         varchar(50) not null,
-   PROFILE_NAME         varchar(50) not null,
-   primary key (ID_PROFILE),
-   constraint FK_PROFILE_STATUS foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_profile           int not null AUTO_INCREMENT,
+   id_catalog           int,
+   profile_code         varchar(50) not null,
+   profile_name         varchar(50) not null,
+   primary key (id_profile),
+   constraint fk_profile_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: PROFILE_MODULE                                        */
+/* Table: profile_module                                        */
 /*==============================================================*/
-create table PROFILE_MODULE
+create table profile_module
 (
-   ID_PROFILE           int not null AUTO_INCREMENT,
-   ID_MODULE            int not null,
-   primary key (ID_PROFILE, ID_MODULE),
-   constraint FK_PROFILE_MODULE foreign key (ID_PROFILE)
-      references PROFILE (ID_PROFILE) on delete restrict on update restrict,
-   constraint FK_PROFILE_MODULE2 foreign key (ID_MODULE)
-      references MODULE (ID_MODULE) on delete restrict on update restrict
+   id_profile           int not null,
+   id_module            int not null,
+   primary key (id_profile, id_module),
+   constraint fk_profile_module foreign key (id_profile)
+      references profile (id_profile) on delete restrict on update restrict,
+   constraint fk_profile_module2 foreign key (id_module)
+      references module (id_module) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: REWARD                                                */
+/* Table: reward                                                */
 /*==============================================================*/
-create table REWARD
+create table reward
 (
-   ID_REWARD            int not null AUTO_INCREMENT,
-   ID_CATALOG           int,
-   NAME_REWARD          varchar(100) not null,
-   DESCRIPTION_REWARD   varchar(999),
-   RULE_REWARD          varchar(9999),
-   INCENTIVE_POINTS     int,
-   primary key (ID_REWARD),
-   constraint FK_REWARD_STATUS foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_reward            int not null AUTO_INCREMENT,
+   id_catalog           int,
+   name_reward          varchar(100) not null,
+   description_reward   varchar(999),
+   rule_reward          varchar(9999),
+   incentive_points     int,
+   primary key (id_reward),
+   constraint fk_reward_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: USER                                                  */
+/* Table: user                                                  */
 /*==============================================================*/
-create table USER
+create table user
 (
-   ID_USER              int not null AUTO_INCREMENT,
-   ID_PERSON            int,
-   ID_CATALOG           int,
-   USERNAME             varchar(255),
-   PASSWORD             varchar(255),
-   PLAINPASSWORD        varchar(255),
-   UNIQUE_ID            varchar(200) not null,
-   EMAIL                varchar(100) not null,
-   SALT                 varchar(50),
-   ROLES                varchar(100),
-   APP_KEY              varchar(191),
-   CREATED_AT           datetime,
-   UPDATED_AT           datetime,
-   primary key (ID_USER),
-   constraint FK_PERSON_USER foreign key (ID_PERSON)
-      references PERSON (ID_PERSON) on delete restrict on update restrict,
-   constraint FK_USER_STATUS foreign key (ID_CATALOG)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict
+   id_user              int not null AUTO_INCREMENT,
+   id_person            int,
+   id_catalog           int,
+   username             varchar(255),
+   password             varchar(255),
+   plainpassword        varchar(255),
+   unique_id            varchar(200) not null,
+   email                varchar(100) not null,
+   salt                 varchar(50),
+   roles                varchar(100),
+   app_key              varchar(191),
+   created_at           datetime,
+   updated_at           datetime,
+   primary key (id_user),
+   constraint fk_person_user foreign key (id_person)
+      references person (id_person) on delete restrict on update restrict,
+   constraint fk_user_status foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: SOCIALNETWORK                                         */
+/* Table: socialnetwork                                         */
 /*==============================================================*/
-create table SOCIALNETWORK
+create table socialnetwork
 (
-   ID_SOCIAL_NETWORK    int not null AUTO_INCREMENT,
-   ID_USER              int,
-   NETWORK              varchar(200) not null,
-   ID_NETWORK           varchar(200) not null,
-   STATUS               varchar(10) not null,
-   OBSERVATION          varchar(200),
-   primary key (ID_SOCIAL_NETWORK),
-   constraint FK_USER_SOCIALNETWORK foreign key (ID_USER)
-      references USER (ID_USER) on delete restrict on update restrict
+   id_social_network    int not null AUTO_INCREMENT,
+   id_user              int,
+   network              varchar(200) not null,
+   id_network           varchar(200) not null,
+   status               varchar(10) not null,
+   observation          varchar(200),
+   primary key (id_social_network),
+   constraint fk_user_socialnetwork foreign key (id_user)
+      references user (id_user) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: TRANSACTION                                           */
+/* Table: transaction                                           */
 /*==============================================================*/
-create table TRANSACTION
+create table transaction
 (
-   ID_TRANSACTION       int not null AUTO_INCREMENT,
-   ID_ACCOUNT           int not null,
-   ID_TRANSACTION_TYPE  int not null,
-   DATE_TRANSACTION     datetime not null,
-   POINTS               int not null,
-   DEBIT_CREDIT         char(1) not null,
-   DESCRIPTION          varchar(200),
-   primary key (ID_TRANSACTION),
-   constraint FK_TRANSACTION_TYPE foreign key (ID_TRANSACTION_TYPE)
-      references CATALOGUE (ID_CATALOG) on delete restrict on update restrict,
-   constraint FK_ACCOUNT_TRANSACTION foreign key (ID_ACCOUNT)
-      references ACCOUNT (ID_ACCOUNT) on delete restrict on update restrict
+   id_transaction       int not null AUTO_INCREMENT,
+   id_account           int,
+   id_catalog           int,
+   date_transaction     datetime not null,
+   points               int not null,
+   debit_credit         char(1) not null,
+   description          varchar(200),
+   primary key (id_transaction),
+   constraint fk_transaction_type foreign key (id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict,
+   constraint fk_account_transaction foreign key (id_account)
+      references account (id_account) on delete restrict on update restrict
 );
 
 /*==============================================================*/
-/* Table: USER_HAS_PROFILE                                      */
+/* Table: user_has_profile                                      */
 /*==============================================================*/
-create table USER_HAS_PROFILE
+create table user_has_profile
 (
-   ID_USER              int not null AUTO_INCREMENT,
-   ID_PROFILE           int not null,
-   primary key (ID_USER, ID_PROFILE),
-   constraint FK_USER_HAS_PROFILE foreign key (ID_USER)
-      references USER (ID_USER) on delete restrict on update restrict,
-   constraint FK_USER_HAS_PROFILE2 foreign key (ID_PROFILE)
-      references PROFILE (ID_PROFILE) on delete restrict on update restrict
+   id_user              int not null,
+   id_profile           int not null,
+   primary key (id_user, id_profile),
+   constraint fk_user_has_profile foreign key (id_user)
+      references user (id_user) on delete restrict on update restrict,
+   constraint fk_user_has_profile2 foreign key (id_profile)
+      references profile (id_profile) on delete restrict on update restrict
 );
+
+
+
+alter table user rename column id_catalog to id_user_status;
+
+alter table transaction rename column id_catalog to id_transaction_type;
+
+alter table reward rename column id_catalog to id_reward_status;
+
+alter table receip rename column id_catalog to id_receip_approbation;
+
+alter table receip rename column id_person to id_person_upload_receip;
+
+alter table profile rename column id_catalog to id_profile_status;
+
+alter table product rename column id_catalog to id_product_status;
+
+alter table product rename column id_file to id_photo_product;
+
+alter table pincode rename column id_catalog to id_pin_status;
+
+alter table person rename column id_catalog to id_person_status;
+
+alter table person rename column id_file to id_person_picture;
+
+alter table person rename column cat_id_catalog to id_client_location;
+
+alter table module rename column mod_id_module to id_submodule;
+
+alter table module rename column id_catalog to id_module_status;
+
+alter table merchant rename column cat_id_catalog2 to id_merchant_status_approval;
+
+alter table merchant rename column id_catalog to id_merchant_status;
+
+alter table merchant rename column cat_id_catalog to id_merchant_category;
+
+alter table menu rename column id_catalog to id_menu_status;
+
+alter table catalogue rename column cat_id_catalog to id_parent;
 
 
         ');
@@ -418,45 +461,41 @@ create table USER_HAS_PROFILE
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('
-drop table if exists CATALOGUE;
+drop table if exists TRANSACTION;
 
-drop table if exists CLIENT;
+drop table if exists ACCOUNT;
 
-drop table if exists COURIER;
+drop table if exists PICTUREPOOL;
 
-drop table if exists FILE;
-
--- drop index CORRESPOND2_FK on MENU;
-
-drop table if exists MENU;
-
-drop table if exists MODULE;
-
-drop table if exists ORDERDETAIL;
-
-drop table if exists ORDERPAYMENT;
-
-drop table if exists PERSON;
+drop table if exists RECEIP;
 
 drop table if exists PRODUCT;
 
-drop table if exists PROFILE;
+drop table if exists MERCHANT;
 
-drop table if exists PROFILE_MODULE;
+drop table if exists PINCODE;
 
-drop table if exists PURCHASEORDER;
+drop table if exists SOCIALNETWORK;
 
-drop table if exists ROL;
-
-drop table if exists SALER;
-
-drop table if exists SHIPPING;
+drop table if exists USER_HAS_PROFILE;
 
 drop table if exists USER;
 
-drop table if exists USER_HAS_PROFILES;
+drop table if exists PERSON;
 
-drop table if exists USER_HAS_ROLS;
+drop table if exists FILE;
+
+drop table if exists MENU;
+
+drop table if exists PROFILE_MODULE;
+
+drop table if exists MODULE;
+
+drop table if exists PROFILE;
+
+drop table if exists REWARD;
+
+drop table if exists CATALOGUE;
 
         ');
     }
