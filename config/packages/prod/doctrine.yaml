@@ -8,4 +8,4 @@ parameters:
 doctrine:
     dbal:
     # configure these for your database server
-        url: '%env(resolve:DATABASE_URL)%'
+        url: '%env(DATABASE_URL)%'
