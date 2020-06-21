@@ -124,4 +124,17 @@ class MerchantController extends ControllerProvider
         }
         return $result;
     }
+
+
+    /**
+     * @Route("/{field}/{value}", name="merchantfilterBy", methods={"GET"})
+     * @param Request $request
+     * @param string $field
+     * @param string $value
+     * @return JsonResponse
+     */
+    public function merchantFilterBy(Request $request, string $field, string $value): JsonResponse
+    {
+        return parent::filterBy($request, $field, $value);
+    }
 }

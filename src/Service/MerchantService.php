@@ -131,7 +131,8 @@ class MerchantService implements IServiceProviderInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
-        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), $result);
     }
 
     /**

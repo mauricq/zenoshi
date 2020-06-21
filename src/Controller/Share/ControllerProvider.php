@@ -8,6 +8,7 @@ use App\Entity\Constants;
 use App\Service\Share\IServiceProviderInterface;
 use App\Utils\Utils;
 use Exception;
+use phpDocumentor\Reflection\Types\This;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use JMS\Serializer\ArrayTransformerInterface;
@@ -154,12 +155,13 @@ class ControllerProvider extends AbstractController implements IControllerProvid
 
     /**
      * @param Request $request
+     * @param string $field
      * @param string $value
      * @return JsonResponse
      */
-    public function filterBy(Request $request, string $value): JsonResponse
+    public function filterBy(Request $request, string $field, string $value): JsonResponse
     {
-        $criteria = ["value" => $value];
+        $criteria = [$field => $value];
 
         $orderBy = $request->query->get("orderBy", null);
         $limit = $request->query->get("limit", null);
