@@ -29,11 +29,11 @@ final class Version20200504155000 extends AbstractMigration
 /*==============================================================*/
 
 
-/*        drop database zenoshidb;         */
+/*        drop database az8lyu5njajf84ao;         */
 
-/*        create database zenoshidb;       */
+/*        create database az8lyu5njajf84ao;       */
 
-/*        use zenoshidb;                   */
+/*        use az8lyu5njajf84ao;                   */
 
 drop table if exists TRANSACTION;
 

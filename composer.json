@@ -28,6 +28,7 @@
     "phpoffice/phpspreadsheet": "^1.11",
     "ramsey/uuid": "^4.0",
     "sensio/framework-extra-bundle": "^5.2",
+    "symfony/apache-pack": "^1.0",
     "symfony/cache": "4.*",
     "symfony/doctrine-bridge": "4.*",
     "symfony/dotenv": "4.*",
@@ -91,7 +92,7 @@
   },
     "require-dev": {
     "coduo/php-matcher": "^3.1",
-    "doctrine/doctrine-fixtures-bundle": "^3.1",
+    "doctrine/doctrine-fixtures-bundle": "^3.3",
     "symfony/console": "4.*",
     "symfony/css-selector": "4.*"
   }
