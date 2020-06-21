@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\Constants;
 use App\Entity\User;
 use App\Entity\EntityProvider;
 use App\Repository\mixeds;
@@ -92,6 +93,14 @@ class UserService implements IServiceProviderInterface
     public function getClass(): string
     {
         return User::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassOnly(): string
+    {
+        return str_replace(Constants::PREPARED_DATA_PATH_ENTITY, "", $this->getClass());
     }
 
     /**

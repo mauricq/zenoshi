@@ -4,6 +4,7 @@
 namespace App\Service;
 
 
+use App\Entity\Constants;
 use App\Entity\EntityProvider;
 use App\Entity\Catalogue;
 use App\Repository\CatalogueRepository;
@@ -80,6 +81,14 @@ class CatalogueService implements IServiceProviderInterface
     public function getClass(): string
     {
         return Catalogue::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassOnly(): string
+    {
+        return str_replace(Constants::PREPARED_DATA_PATH_ENTITY, "", $this->getClass());
     }
 
     /**

@@ -44,18 +44,22 @@ class MerchantService implements IServiceProviderInterface
     /**
      * MerchantService constructor.
      * @param MerchantRepository $repository
-     * @param array $merchant
+     * @param array $checkDuplicated
      * @param PrepareDataUtil $prepareDataUtil
      * @param string $dateTimeFormat
      */
-    public function __construct(MerchantRepository $repository, array $merchant, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat)
+    public function __construct(MerchantRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat)
     {
         $this->repository = $repository;
-        $this->fieldsCheckDuplicated = $merchant['fieldsCheckDuplicated'];
+        $this->fieldsCheckDuplicated = $checkDuplicated[strtolower($this->getClassOnly())];
         $this->prepareDataUtil = $prepareDataUtil;
         $this->dateTimeFormat = $dateTimeFormat;
     }
 
+    public function save(EntityProvider $entityProvider): ?EntityProvider
+    {
+        $this->repository->merge($entityProvider);
+    }
 
     /**
      * @param EntityProvider $object
@@ -66,7 +70,7 @@ class MerchantService implements IServiceProviderInterface
     {
         $isDuplicated = $this->isDuplicated($object);
         if ($isDuplicated) {
-            throw new DuplicatedException("Merchant");
+            throw new DuplicatedException($this->getClassOnly());
         }
 
         $object->setRegistrationDate(date_create());
@@ -76,7 +80,6 @@ class MerchantService implements IServiceProviderInterface
         $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), [$data]);
 
         return $data;
-
     }
 
     /**
@@ -114,6 +117,14 @@ class MerchantService implements IServiceProviderInterface
     }
 
     /**
+     * @return string
+     */
+    public function getClassOnly(): string
+    {
+        return str_replace(Constants::PREPARED_DATA_PATH_ENTITY, "", $this->getClass());
+    }
+
+    /**
      * @param array $value
      * @return array
      */
@@ -141,12 +152,14 @@ class MerchantService implements IServiceProviderInterface
      */
     public function isDuplicated(EntityProvider $object): bool
     {
-        foreach ($this->fieldsCheckDuplicated as $field) {
-            $getCheckField = $this->prepareDataUtil->getGetMethodByIdName($field);
-            $this->criteriaFields[$field] = $object->$getCheckField();
+        if (!$this->fieldsCheckDuplicated['enabled']) return false;
+
+        foreach ($this->fieldsCheckDuplicated['fields'] as $field) {
+            $getCheckFields = $this->prepareDataUtil->getGetMethodByIdName($field);
+            $this->criteriaFields[$field] = $object->$getCheckFields();
         }
         $check = true;
-        if (empty($this->repository->findOneBy($this->criteriaFields))){
+        if (empty($this->repository->findOneBy($this->criteriaFields))) {
             $check = false;
         }
         return $check;
@@ -170,10 +183,5 @@ class MerchantService implements IServiceProviderInterface
             "merchant_status_approval" => ["id_merchant_status_approval", "idMerchantStatusApproval", "Catalogue", "idCatalog", "id_catalog"],
             "person" => ["id_person", "idPerson", "Person", "idPerson", "id_person"]
         ];
-    }
-
-    public function save(EntityProvider $entityProvider): ?EntityProvider
-    {
-        // TODO: Implement save() method.
     }
 }

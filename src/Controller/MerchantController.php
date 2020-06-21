@@ -31,10 +31,6 @@ class MerchantController extends ControllerProvider
      * @var PersonService
      */
     private PersonService $personService;
-    /**
-     * @var PrepareDataUtil
-     */
-    private PrepareDataUtil $prepareDataUtil;
 
     /**
      * @var CatalogueService
@@ -48,19 +44,16 @@ class MerchantController extends ControllerProvider
      * @param MerchantService $MerchantService
      * @param PersonService $personService
      * @param CatalogueService $catalogueService
-     * @param PrepareDataUtil $prepareDataUtil
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
                                 MerchantService $MerchantService,
                                 PersonService $personService,
-                                CatalogueService $catalogueService,
-                                PrepareDataUtil $prepareDataUtil)
+                                CatalogueService $catalogueService)
     {
         parent::__construct($arrayTransformer, $serializer, $MerchantService);
         $this->personService = $personService;
         $this->catalogueService = $catalogueService;
-        $this->prepareDataUtil = $prepareDataUtil;
     }
 
 
@@ -88,41 +81,7 @@ class MerchantController extends ControllerProvider
      */
     public function create(Request $request): JsonResponse
     {
-        try {
-            $body = $request->getContent();
-            $object = $this->serializer->deserialize($body, Merchant::class, Constants::REQUEST_FORMAT_JSON);
-            $relations = $this->prepareDataUtil->prepareData($request, $this->service->getIds());
-            $object = $this->prepareDataUtil->joinPreparedData($object, $relations, $this->service->getIds());
-            try {
-                $person = $this->service->saveV2($object);
-            } catch (DuplicatedException $e) {
-                return new JsonResponse(
-                    array(
-                        Constants::RESULT_LABEL_STATUS => Constants::RESULT_DUPLICATED,
-                        Constants::RESULT_LABEL_DATA => $e->getMessage()
-                    ),
-                    Response::HTTP_CONFLICT
-                );
-            }
-
-            $result = new JsonResponse(
-                array(
-                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
-                    Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($person)
-                ),
-                Response::HTTP_CREATED
-            );
-        } catch (Exception $e) {
-            $error = join('-', [$e->getMessage(), $e->getFile(), $e->getLine(), $e->getCode(), $e->getTraceAsString()]);
-            $result = new JsonResponse(
-                array(
-                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_ERROR,
-                    Constants::RESULT_LABEL_DATA => $error
-                ),
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-        return $result;
+        return parent::createGeneric($request);
     }
 
 

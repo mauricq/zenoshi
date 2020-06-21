@@ -14,5 +14,6 @@ interface IServiceProviderInterface
     public function filterOneBy(array $criteria): array;
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array;
     public function getClass(): string;
+    public function getClassOnly(): string;
 
 }
