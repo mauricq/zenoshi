@@ -1,0 +1,5 @@
+parameters:
+    merchant:
+        checkDuplicated: true
+        checkDuplicatedTyep: OR
+        fieldsCheckDuplicated: ['merchantName', 'country']

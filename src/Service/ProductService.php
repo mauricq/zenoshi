@@ -74,10 +74,10 @@ class ProductService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
+     * @param array $value
      * @return array
      */
-    public function filterOneBy(string $value = ''): array
+    public function filterOneBy(array $value): array
     {
         return $this->repository->findOneBy($value);
     }

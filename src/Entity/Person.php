@@ -225,5 +225,12 @@ class Person extends EntityProvider
         return $this;
     }
 
+    /**
+     * @param int $idPerson
+     */
+    public function setIdPerson(int $idPerson): void
+    {
+        $this->idPerson = $idPerson;
+    }
 
 }

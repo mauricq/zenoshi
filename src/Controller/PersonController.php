@@ -22,13 +22,13 @@ class PersonController extends ControllerProvider
      * Person constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param PersonService $userService
+     * @param PersonService $service
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                PersonService $userService)
+                                PersonService $service)
     {
-        parent::__construct($arrayTransformer, $serializer, $userService);
+        parent::__construct($arrayTransformer, $serializer, $service);
     }
 
 

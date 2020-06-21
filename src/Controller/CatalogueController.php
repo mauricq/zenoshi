@@ -4,7 +4,9 @@
 namespace App\Controller;
 
 use App\Controller\Share\ControllerProvider;
+use App\Entity\Constants;
 use App\Service\CatalogueService;
+use App\Utils\PrepareDataUtil;
 use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,17 +20,18 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class CatalogueController extends ControllerProvider
 {
+
     /**
      * Catalogue constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param CatalogueService $userService
+     * @param CatalogueService $service
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                CatalogueService $userService)
+                                CatalogueService $service)
     {
-        parent::__construct($arrayTransformer, $serializer, $userService);
+        parent::__construct($arrayTransformer, $serializer, $service);
     }
 
 

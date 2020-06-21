@@ -1,4 +1,7 @@
 .idea
+.vagrant
+.git
+.github
 
 ###> symfony/framework-bundle ###
 /package-lock.json
@@ -12,5 +15,6 @@
 ###< symfony/framework-bundle ###
 
 ###> lexik/jwt-authentication-bundle ###
-/config/jwt/*.pem
+#/config/jwt/*.pem
 ###< lexik/jwt-authentication-bundle ###
+

@@ -266,5 +266,12 @@ class Merchant extends EntityProvider
         return $this;
     }
 
+    /**
+     * @param int $idMerchant
+     */
+    public function setId(int $idMerchant): void
+    {
+        $this->idMerchant = $idMerchant;
+    }
 
 }
