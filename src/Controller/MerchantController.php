@@ -75,7 +75,7 @@ class MerchantController extends ControllerProvider
 
 
     /**
-     * @Route("/", name="createMerchant", methods={"POST"})
+     * @Route("/", name="merchantCreate", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
@@ -83,7 +83,6 @@ class MerchantController extends ControllerProvider
     {
         return parent::createGeneric($request);
     }
-
 
     /**
      * @Route("/{field}/{value}", name="merchantfilterBy", methods={"GET"})
@@ -95,5 +94,26 @@ class MerchantController extends ControllerProvider
     public function merchantFilterBy(Request $request, string $field, string $value): JsonResponse
     {
         return parent::filterBy($request, $field, $value);
+    }
+
+    /**
+     * @Route("/{id}", name="merchantUpdate", methods={"PATCH"})
+     * @param Request $request
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function update(Request $request, string $id): JsonResponse
+    {
+        return parent::createGeneric($request, $id);
+    }
+
+    /**
+     * @Route("/{id}", name="merchantDelete", methods={"DELETE"})
+     * @param string $id
+     * @return JsonResponse
+     */
+    public function delete(string $id): JsonResponse
+    {
+        return parent::delete($id);
     }
 }

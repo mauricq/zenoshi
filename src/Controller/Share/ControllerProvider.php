@@ -45,6 +45,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
      * @var Utils
      */
     public Utils $util;
+
     /**
      * @required
      * @param Utils $util
@@ -53,6 +54,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
     {
         $this->util = $util;
     }
+
     /**
      * @required
      * @param PrepareDataUtil $prepareDataUtil
@@ -111,17 +113,19 @@ class ControllerProvider extends AbstractController implements IControllerProvid
 
     /**
      * @param Request $request
+     * @param string|null $id
      * @return JsonResponse
      */
-    public function createGeneric(Request $request): JsonResponse
+    public function createGeneric(Request $request, string $id = null): JsonResponse
     {
+        $update = !empty($id);
         try {
             $body = $request->getContent();
             $object = $this->serializer->deserialize($body, Merchant::class, Constants::REQUEST_FORMAT_JSON);
             $relations = $this->prepareDataUtil->prepareData($request, $this->service->getIds());
             $object = $this->prepareDataUtil->joinPreparedData($object, $relations, $this->service->getIds());
             try {
-                $person = $this->service->saveV2($object);
+                $person = $this->service->saveV2($object, $id);
             } catch (DuplicatedException $e) {
                 return new JsonResponse(
                     array(
@@ -137,7 +141,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
                     Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
                     Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($person)
                 ),
-                Response::HTTP_CREATED
+                $update ? Response::HTTP_OK : Response::HTTP_CREATED
             );
         } catch (Exception $e) {
             $error = join('-', [$e->getMessage(), $e->getFile(), $e->getLine(), $e->getCode(), $e->getTraceAsString()]);

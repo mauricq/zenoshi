@@ -63,20 +63,29 @@ class MerchantService implements IServiceProviderInterface
 
     /**
      * @param EntityProvider $object
+     * @param string|null $id
      * @return Merchant|bool|null
-     * @throws Exception
+     * @throws DuplicatedException
      */
-    public function saveV2(EntityProvider $object): ?array
+    public function saveV2(EntityProvider $object, string $id = null): ?array
     {
-        $isDuplicated = $this->isDuplicated($object);
+        $update = !empty($id);
+        $isDuplicated = $update ? false : $this->isDuplicated($object);
         if ($isDuplicated) {
             throw new DuplicatedException($this->getClassOnly());
         }
 
-        $object->setRegistrationDate(date_create());
+        if ($update) {
+            $oldData = $this->repository->find($id);
+            $object->setIdMerchant($id);
+            $object->setRegistrationDate($oldData->getRegistrationDate());
+        } else {
+            $object->setRegistrationDate(date_create());
+        }
+
         $this->repository->merge($object);
 
-        $data = $this->repository->findOneBy($this->criteriaFields);
+        $data = $update ? $object : $this->repository->findOneBy($this->criteriaFields);
         $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), [$data]);
 
         return $data;
