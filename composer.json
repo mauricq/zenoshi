@@ -92,7 +92,7 @@
   },
     "require-dev": {
     "coduo/php-matcher": "^3.1",
-    "doctrine/doctrine-fixtures-bundle": "^3.1",
+    "doctrine/doctrine-fixtures-bundle": "^3.3",
     "symfony/console": "4.*",
     "symfony/css-selector": "4.*"
   }
