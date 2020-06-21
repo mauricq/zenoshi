@@ -5,12 +5,12 @@ namespace App\Service;
 
 
 use App\Entity\Constants;
+use App\Entity\Merchant;
 use App\Entity\User;
 use App\Entity\EntityProvider;
 use App\Repository\mixeds;
 use App\Repository\UserEntityRepository;
 use App\Service\Share\IServiceProviderInterface;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
@@ -59,6 +59,16 @@ class UserService implements IServiceProviderInterface
     public function save(EntityProvider $object): ?EntityProvider
     {
         return $this->repository->merge($object);
+    }
+
+    /**
+     * @param EntityProvider $object
+     * @param string|null $id
+     * @return Merchant|bool|null
+     */
+    public function saveGeneric(EntityProvider $object, string $id = null): ?array
+    {
+        return null;
     }
 
     /**

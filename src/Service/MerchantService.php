@@ -67,7 +67,7 @@ class MerchantService implements IServiceProviderInterface
      * @return Merchant|bool|null
      * @throws DuplicatedException
      */
-    public function saveV2(EntityProvider $object, string $id = null): ?array
+    public function saveGeneric(EntityProvider $object, string $id = null): ?array
     {
         $update = !empty($id);
         $isDuplicated = $update ? false : $this->isDuplicated($object);

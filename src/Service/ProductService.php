@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Constants;
 use App\Entity\EntityProvider;
+use App\Entity\Merchant;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\Share\IServiceProviderInterface;
@@ -19,7 +20,7 @@ class ProductService implements IServiceProviderInterface
     /**
      * @var ProductRepository
      */
-    private $repository;
+    private ProductRepository $repository;
 
     /**
      * ProductService constructor.
@@ -38,6 +39,16 @@ class ProductService implements IServiceProviderInterface
     {
         $this->repository->merge($object);
         return $this->repository->findOneBy(["type" => $object->getType(), "name" => $object->getName()]);
+    }
+
+    /**
+     * @param EntityProvider $object
+     * @param string|null $id
+     * @return Merchant|bool|null
+     */
+    public function saveGeneric(EntityProvider $object, string $id = null): ?array
+    {
+        return null;
     }
 
     /**

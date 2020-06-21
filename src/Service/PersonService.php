@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Entity\Constants;
 use App\Entity\EntityProvider;
+use App\Entity\Merchant;
 use App\Entity\Person;
 use App\Repository\PersonRepository;
 use App\Service\Share\IServiceProviderInterface;
@@ -19,7 +20,7 @@ class PersonService implements IServiceProviderInterface
     /**
      * @var PersonRepository
      */
-    private $repository;
+    private PersonRepository $repository;
 
     /**
      * PersonService constructor.
@@ -39,6 +40,16 @@ class PersonService implements IServiceProviderInterface
     {
         $this->repository->merge($object);
         return $this->repository->findOneBy(["mobile" => $object->getMobile()]);
+    }
+
+    /**
+     * @param EntityProvider $object
+     * @param string|null $id
+     * @return Merchant|bool|null
+     */
+    public function saveGeneric(EntityProvider $object, string $id = null): ?array
+    {
+        return null;
     }
 
     /**
