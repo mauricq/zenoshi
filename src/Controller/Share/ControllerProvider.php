@@ -125,7 +125,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
             $relations = $this->prepareDataUtil->prepareData($request, $this->service->getIds());
             $object = $this->prepareDataUtil->joinPreparedData($object, $relations, $this->service->getIds());
             try {
-                $person = $this->service->saveV2($object, $id);
+                $person = $this->service->saveGeneric($object, $id);
             } catch (DuplicatedException $e) {
                 return new JsonResponse(
                     array(
