@@ -24,7 +24,7 @@ final class Version20200504231536 extends AbstractMigration
 
         $this->addSql('
         
-use zenoshidb;
+use az8lyu5njajf84ao;
         
 CREATE TABLE app_user (
   id INT AUTO_INCREMENT NOT NULL,
