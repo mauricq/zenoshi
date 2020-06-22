@@ -5,6 +5,7 @@ namespace App\Utils;
 
 
 use App\Entity\Constants;
+use App\Entity\EntityProvider;
 use JMS\Serializer\ArrayTransformerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -141,4 +142,5 @@ class PrepareDataUtil
     {
         return "get" . ucwords($idName);
     }
+
 }

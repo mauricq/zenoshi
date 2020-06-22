@@ -4,11 +4,15 @@
 namespace App\Service;
 
 
+use App\Entity\Constants;
 use App\Entity\EntityProvider;
 use App\Entity\Catalogue;
+use App\Entity\Merchant;
+use App\Errors\DuplicatedException;
 use App\Repository\CatalogueRepository;
 use App\Service\Share\IServiceProviderInterface;
 use App\Utils\PrepareDataUtil;
+use Doctrine\ORM\ORMException;
 
 /**
  * Class CatalogueService
@@ -49,8 +53,18 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
+     * @param EntityProvider $object
+     * @param string|null $id
+     * @return Merchant|bool|null
+     */
+    public function saveGeneric(EntityProvider $object, string $id = null): ?array
+    {
+        return null;
+    }
+
+    /**
      * @param string $value
-     * @throws \Doctrine\ORM\ORMException
+     * @throws ORMException
      */
     public function delete(string $value): void
     {
@@ -80,6 +94,14 @@ class CatalogueService implements IServiceProviderInterface
     public function getClass(): string
     {
         return Catalogue::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassOnly(): string
+    {
+        return str_replace(Constants::PREPARED_DATA_PATH_ENTITY, "", $this->getClass());
     }
 
     /**

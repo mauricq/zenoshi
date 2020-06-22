@@ -4,12 +4,13 @@
 namespace App\Service;
 
 
+use App\Entity\Constants;
+use App\Entity\Merchant;
 use App\Entity\User;
 use App\Entity\EntityProvider;
 use App\Repository\mixeds;
 use App\Repository\UserEntityRepository;
 use App\Service\Share\IServiceProviderInterface;
-use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
@@ -61,6 +62,16 @@ class UserService implements IServiceProviderInterface
     }
 
     /**
+     * @param EntityProvider $object
+     * @param string|null $id
+     * @return Merchant|bool|null
+     */
+    public function saveGeneric(EntityProvider $object, string $id = null): ?array
+    {
+        return null;
+    }
+
+    /**
      * @param string $value
      * @throws ORMException
      */
@@ -92,6 +103,14 @@ class UserService implements IServiceProviderInterface
     public function getClass(): string
     {
         return User::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClassOnly(): string
+    {
+        return str_replace(Constants::PREPARED_DATA_PATH_ENTITY, "", $this->getClass());
     }
 
     /**

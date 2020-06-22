@@ -4,48 +4,46 @@
 namespace App\Controller;
 
 use App\Controller\Share\ControllerProvider;
-use App\Entity\Merchant;
-use App\Service\MerchantService;
-use ErrorException;
+use App\Entity\Product;
+use App\Service\ProductService;
 use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("merchant")
- * Class MerchantController
+ * @Route("product")
+ * Class ProductController
  * @package App\Controller
  */
-class MerchantController extends ControllerProvider
+class ProductController extends ControllerProvider
 {
     /**
-     * Merchant constructor.
+     * Product constructor.
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
-     * @param MerchantService $merchantService
+     * @param ProductService $productService
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                MerchantService $merchantService)
+                                ProductService $productService)
     {
-        parent::__construct($arrayTransformer, $serializer, $merchantService);
+        parent::__construct($arrayTransformer, $serializer, $productService);
     }
 
     /**
-     * @Route("/", name="merchantCreate", methods={"POST"})
+     * @Route("/", name="productCreate", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
     {
-        return parent::createGeneric($request, Merchant::class);
+        return parent::createGeneric($request, Product::class);
     }
 
     /**
-     * @Route("/{field}/{value}", name="merchantFilterBy", methods={"GET"})
+     * @Route("/{field}/{value}", name="productFilterBy", methods={"GET"})
      * @param Request $request
      * @param string $field
      * @param string $value
@@ -57,18 +55,18 @@ class MerchantController extends ControllerProvider
     }
 
     /**
-     * @Route("/{id}", name="merchantUpdate", methods={"PATCH"})
+     * @Route("/{id}", name="productUpdate", methods={"PATCH"})
      * @param Request $request
      * @param string $id
      * @return JsonResponse
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        return parent::createGeneric($request, Merchant::class, $id);
+        return parent::createGeneric($request, Product::class, $id);
     }
 
     /**
-     * @Route("/{id}", name="merchantDelete", methods={"DELETE"})
+     * @Route("/{id}", name="productDelete", methods={"DELETE"})
      * @param string $id
      * @return JsonResponse
      */

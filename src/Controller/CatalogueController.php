@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
+ * @Route("catalogue")
  * Class ArticleController
  * @package App\Controller
  */
@@ -47,13 +48,13 @@ class CatalogueController extends ControllerProvider
 
 
     /**
-     * @Route("/catalogue/{type}", name="controllerFilterBy", methods={"GET"})
+     * @Route("/{value}", name="catalogueControllerFilterBy", methods={"GET"})
      * @param Request $request
-     * @param string $type
+     * @param string $value
      * @return JsonResponse
      */
-    public function controllerFilterBy(Request $request, string $type): JsonResponse
+    public function filterByType(Request $request, string $value): JsonResponse
     {
-        return parent::filterBy($request, $type);
+        return parent::filterBy($request, "value", $value);
     }
 }
