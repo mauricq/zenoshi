@@ -11,10 +11,10 @@ doctrine:
         default_connection: zenoshi
         connections:
             zenoshi:
-                dbname: hw7uahtkgg4sxor2
-                host: phtfaw4p6a970uc0.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
+                dbname: heroku_e8d729dc8cfaf03
+                host: us-cdbr-east-05.cleardb.net
                 port: 3306
-                user: 't2nmplcxtzmojqkw'
-                password: 'd2d0kwnuv42yvpi8'
+                user: 'bedc7a02f52de1'
+                password: '049905b1'
                 driver: 'pdo_mysql'
                 server_version: 'mariadb-10.0.17'
