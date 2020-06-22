@@ -113,19 +113,20 @@ class ControllerProvider extends AbstractController implements IControllerProvid
 
     /**
      * @param Request $request
+     * @param string $class
      * @param string|null $id
      * @return JsonResponse
      */
-    public function createGeneric(Request $request, string $id = null): JsonResponse
+    public function createGeneric(Request $request, string $class, string $id = null): JsonResponse
     {
         $update = !empty($id);
         try {
             $body = $request->getContent();
-            $object = $this->serializer->deserialize($body, Merchant::class, Constants::REQUEST_FORMAT_JSON);
+            $object = $this->serializer->deserialize($body, $class, Constants::REQUEST_FORMAT_JSON);
             $relations = $this->prepareDataUtil->prepareData($request, $this->service->getIds());
             $object = $this->prepareDataUtil->joinPreparedData($object, $relations, $this->service->getIds());
             try {
-                $person = $this->service->saveGeneric($object, $id);
+                $savedObject = $this->service->saveGeneric($object, $id);
             } catch (DuplicatedException $e) {
                 return new JsonResponse(
                     array(
@@ -139,7 +140,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
             $result = new JsonResponse(
                 array(
                     Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
-                    Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($person)
+                    Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($savedObject)
                 ),
                 $update ? Response::HTTP_OK : Response::HTTP_CREATED
             );

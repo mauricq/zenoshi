@@ -4,6 +4,7 @@
 namespace App\Controller;
 
 use App\Controller\Share\ControllerProvider;
+use App\Entity\Merchant;
 use App\Service\MerchantService;
 use ErrorException;
 use JMS\Serializer\ArrayTransformerInterface;
@@ -40,7 +41,7 @@ class MerchantController extends ControllerProvider
      */
     public function create(Request $request): JsonResponse
     {
-        return parent::createGeneric($request);
+        return parent::createGeneric($request, Merchant::class);
     }
 
     /**
@@ -63,7 +64,7 @@ class MerchantController extends ControllerProvider
      */
     public function update(Request $request, string $id): JsonResponse
     {
-        return parent::createGeneric($request, $id);
+        return parent::createGeneric($request, Merchant::class, $id);
     }
 
     /**

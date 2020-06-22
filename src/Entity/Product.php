@@ -168,5 +168,13 @@ class Product extends EntityProvider
         return $this;
     }
 
+    /**
+     * @param int $idProduct
+     */
+    public function setIdProduct(int $idProduct): void
+    {
+        $this->idProduct = $idProduct;
+    }
+
 
 }

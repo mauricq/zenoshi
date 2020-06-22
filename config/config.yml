@@ -4,3 +4,7 @@ parameters:
             enabled: true
             type: 'AND'
             fields: ['merchantName', 'country']
+        product:
+            enabled: true
+            type: 'AND'
+            fields: ['name', 'idMerchant']

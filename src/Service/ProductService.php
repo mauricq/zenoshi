@@ -8,8 +8,11 @@ use App\Entity\Constants;
 use App\Entity\EntityProvider;
 use App\Entity\Merchant;
 use App\Entity\Product;
+use App\Errors\DuplicatedException;
 use App\Repository\ProductRepository;
 use App\Service\Share\IServiceProviderInterface;
+use App\Service\Share\ServiceProvider;
+use App\Utils\PrepareDataUtil;
 
 /**
  * Class ProductService
@@ -21,14 +24,42 @@ class ProductService implements IServiceProviderInterface
      * @var ProductRepository
      */
     private ProductRepository $repository;
+    /**
+     * @var array
+     */
+    private array $fieldsCheckDuplicated;
+    /**
+     * @var array
+     */
+    private array $criteriaFields = [];
+    /**
+     * @var PrepareDataUtil
+     */
+    private PrepareDataUtil $prepareDataUtil;
+    /**
+     * @var string
+     */
+    private string $dateTimeFormat;
+    /**
+     * @var ServiceProvider
+     */
+    private ServiceProvider $serviceProvider;
 
     /**
      * ProductService constructor.
      * @param ProductRepository $repository
+     * @param array $checkDuplicated
+     * @param PrepareDataUtil $prepareDataUtil
+     * @param string $dateTimeFormat
+     * @param ServiceProvider $serviceProvider
      */
-    public function __construct(ProductRepository $repository)
+    public function __construct(ProductRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat, ServiceProvider $serviceProvider)
     {
         $this->repository = $repository;
+        $this->fieldsCheckDuplicated = $checkDuplicated[strtolower($this->getClassOnly())];
+        $this->prepareDataUtil = $prepareDataUtil;
+        $this->dateTimeFormat = $dateTimeFormat;
+        $this->serviceProvider = $serviceProvider;
     }
 
     /**
@@ -45,10 +76,27 @@ class ProductService implements IServiceProviderInterface
      * @param EntityProvider $object
      * @param string|null $id
      * @return Merchant|bool|null
+     * @throws DuplicatedException
      */
     public function saveGeneric(EntityProvider $object, string $id = null): ?array
     {
-        return null;
+        $update = !empty($id);
+        $isDuplicated = $update ? false : $this->isDuplicated($object);
+        if ($isDuplicated) {
+            throw new DuplicatedException($this->getClassOnly());
+        }
+
+        if ($update) {
+            $oldData = $this->repository->find($id);
+            $object->setIdProduct($id);
+        }
+
+        $this->repository->merge($object);
+
+        $data = $update ? $object : $this->repository->findOneBy($this->criteriaFields);
+        $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), [$data]);
+
+        return $data;
     }
 
     /**
@@ -111,6 +159,30 @@ class ProductService implements IServiceProviderInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
-        return $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), $result);
+    }
+
+    /**
+     * @param EntityProvider $object
+     * @return bool
+     */
+    public function isDuplicated(EntityProvider $object): bool
+    {
+        $this->criteriaFields = $this->serviceProvider->getCriteriaFields($this->fieldsCheckDuplicated, $object);
+        return $this->serviceProvider->isDuplicated($this->fieldsCheckDuplicated, $object, $this->repository);
+    }
+
+    /**
+     * @return array
+     */
+    public function getIds(): array
+    {
+        //json_key_input => id_field_db, idField, FK_Entity, FK_idEntity, FK_id_entity
+        return [
+            "merchant" => ["id_merchant", "idMerchant", "Merchant", "idMerchant", "id_merchant"],
+            "product_status" => ["id_product_status", "idProductStatus", "Catalogue", "idCatalog", "id_catalog"],
+            "photo_product" => ["id_photo_product", "idPhotoProduct", "File", "idFile", "id_file"]
+        ];
     }
 }

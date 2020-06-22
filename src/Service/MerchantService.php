@@ -10,6 +10,7 @@ use App\Entity\Merchant;
 use App\Errors\DuplicatedException;
 use App\Repository\MerchantRepository;
 use App\Service\Share\IServiceProviderInterface;
+use App\Service\Share\ServiceProvider;
 use App\Utils\PrepareDataUtil;
 use Doctrine\ORM\ORMException;
 use Exception;
@@ -40,6 +41,10 @@ class MerchantService implements IServiceProviderInterface
      * @var string
      */
     private string $dateTimeFormat;
+    /**
+     * @var ServiceProvider
+     */
+    private ServiceProvider $serviceProvider;
 
     /**
      * MerchantService constructor.
@@ -47,13 +52,15 @@ class MerchantService implements IServiceProviderInterface
      * @param array $checkDuplicated
      * @param PrepareDataUtil $prepareDataUtil
      * @param string $dateTimeFormat
+     * @param ServiceProvider $serviceProvider
      */
-    public function __construct(MerchantRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat)
+    public function __construct(MerchantRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat, ServiceProvider $serviceProvider)
     {
         $this->repository = $repository;
         $this->fieldsCheckDuplicated = $checkDuplicated[strtolower($this->getClassOnly())];
         $this->prepareDataUtil = $prepareDataUtil;
         $this->dateTimeFormat = $dateTimeFormat;
+        $this->serviceProvider = $serviceProvider;
     }
 
     public function save(EntityProvider $entityProvider): ?EntityProvider
@@ -161,17 +168,8 @@ class MerchantService implements IServiceProviderInterface
      */
     public function isDuplicated(EntityProvider $object): bool
     {
-        if (!$this->fieldsCheckDuplicated['enabled']) return false;
-
-        foreach ($this->fieldsCheckDuplicated['fields'] as $field) {
-            $getCheckFields = $this->prepareDataUtil->getGetMethodByIdName($field);
-            $this->criteriaFields[$field] = $object->$getCheckFields();
-        }
-        $check = true;
-        if (empty($this->repository->findOneBy($this->criteriaFields))) {
-            $check = false;
-        }
-        return $check;
+        $this->criteriaFields = $this->serviceProvider->getCriteriaFields($this->fieldsCheckDuplicated, $object);
+        return $this->serviceProvider->isDuplicated($this->fieldsCheckDuplicated, $object, $this->repository);
     }
 
     /**
