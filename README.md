@@ -1,5 +1,5 @@
 # Zenoshi Api
-REST application for Zenoshi.
+REST application for Zenoshi. 
 
 ## Installation 
 
