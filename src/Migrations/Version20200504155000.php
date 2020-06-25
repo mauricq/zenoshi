@@ -25,51 +25,51 @@ final class Version20200504155000 extends AbstractMigration
         $this->addSql('
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     18/6/2020 3:13:46                            */
+/* Created on:     23/6/2020 17:07:54                           */
 /*==============================================================*/
 
 
-/*        drop database az8lyu5njajf84ao;         */
+/*        drop database stu7oi68qomsjyjn;         */
 
-/*        create database az8lyu5njajf84ao;       */
+/*        create database stu7oi68qomsjyjn;       */
 
-/*        use az8lyu5njajf84ao;                   */
+/*        use stu7oi68qomsjyjn;                   */
 
-drop table if exists TRANSACTION;
+drop table if exists transaction;
 
-drop table if exists ACCOUNT;
+drop table if exists account;
 
-drop table if exists PICTUREPOOL;
+drop table if exists picturepool;
 
-drop table if exists RECEIP;
+drop table if exists receip;
 
-drop table if exists PRODUCT;
+drop table if exists product;
 
-drop table if exists MERCHANT;
+drop table if exists merchant;
 
-drop table if exists PINCODE;
+drop table if exists pincode;
 
-drop table if exists SOCIALNETWORK;
+drop table if exists socialnetwork;
 
-drop table if exists USER_HAS_PROFILE;
+drop table if exists user_has_profile;
 
-drop table if exists USER;
+drop table if exists user;
 
-drop table if exists PERSON;
+drop table if exists person;
 
-drop table if exists FILE;
+drop table if exists file;
 
-drop table if exists MENU;
+drop table if exists menu;
 
-drop table if exists PROFILE_MODULE;
+drop table if exists profile_module;
 
-drop table if exists MODULE;
+drop table if exists module;
 
-drop table if exists PROFILE;
+drop table if exists profile;
 
-drop table if exists REWARD;
+drop table if exists reward;
 
-drop table if exists CATALOGUE;
+drop table if exists catalogue;
 
 
 /*==============================================================*/
@@ -120,6 +120,8 @@ create table person
    birth_date           date,
    mobile               varchar(20) not null,
    address              varchar(200),
+   zip_code             varchar(10),
+   gender               char(1),
    primary key (id_person),
    constraint fk_client_location foreign key (cat_id_catalog)
       references catalogue (id_catalog) on delete restrict on update restrict,
@@ -314,10 +316,12 @@ create table profile_module
 (
    id_profile           int not null,
    id_module            int not null,
-   primary key (id_profile, id_module),
-   constraint fk_profile_module foreign key (id_profile)
+   id_profile_module    int not null,
+   created_at           datetime,
+   primary key (id_profile, id_module, id_profile_module),
+   constraint fk_profile_module_2 foreign key (id_profile)
       references profile (id_profile) on delete restrict on update restrict,
-   constraint fk_profile_module2 foreign key (id_module)
+   constraint fk_profile_module_1 foreign key (id_module)
       references module (id_module) on delete restrict on update restrict
 );
 
@@ -345,6 +349,7 @@ create table user
    id_user              int not null AUTO_INCREMENT,
    id_person            int,
    id_catalog           int,
+   cat_id_catalog       int,
    username             varchar(255),
    password             varchar(255),
    plainpassword        varchar(255),
@@ -358,7 +363,9 @@ create table user
    primary key (id_user),
    constraint fk_person_user foreign key (id_person)
       references person (id_person) on delete restrict on update restrict,
-   constraint fk_user_status foreign key (id_catalog)
+   constraint fk_user_status foreign key (cat_id_catalog)
+      references catalogue (id_catalog) on delete restrict on update restrict,
+   constraint fk_user_type foreign key (id_catalog)
       references catalogue (id_catalog) on delete restrict on update restrict
 );
 
@@ -404,16 +411,20 @@ create table user_has_profile
 (
    id_user              int not null,
    id_profile           int not null,
-   primary key (id_user, id_profile),
-   constraint fk_user_has_profile foreign key (id_user)
+   id_user_has_profile  int not null,
+   created_at           datetime,
+   primary key (id_user, id_profile, id_user_has_profile),
+   constraint fk_user_has_profile_1 foreign key (id_user)
       references user (id_user) on delete restrict on update restrict,
-   constraint fk_user_has_profile2 foreign key (id_profile)
+   constraint fk_user_has_profile_2 foreign key (id_profile)
       references profile (id_profile) on delete restrict on update restrict
 );
 
 
 
-alter table user rename column id_catalog to id_user_status;
+alter table user rename column cat_id_catalog to id_user_status;
+
+alter table user rename column id_catalog to id_user_type;
 
 alter table transaction rename column id_catalog to id_transaction_type;
 
@@ -450,6 +461,7 @@ alter table merchant rename column cat_id_catalog to id_merchant_category;
 alter table menu rename column id_catalog to id_menu_status;
 
 alter table catalogue rename column cat_id_catalog to id_parent;
+
 
 
         ');
