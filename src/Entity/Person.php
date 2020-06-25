@@ -71,6 +71,20 @@ class Person extends EntityProvider
     private $address;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="zip_code", type="string", length=10, nullable=true)
+     */
+    private $zipCode;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="gender", type="string", length=1, nullable=true, options={"fixed"=true})
+     */
+    private $gender;
+
+    /**
      * @var \Catalogue
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
@@ -185,6 +199,30 @@ class Person extends EntityProvider
     public function setAddress(?string $address): self
     {
         $this->address = $address;
+
+        return $this;
+    }
+
+    public function getZipCode(): ?string
+    {
+        return $this->zipCode;
+    }
+
+    public function setZipCode(?string $zipCode): self
+    {
+        $this->zipCode = $zipCode;
+
+        return $this;
+    }
+
+    public function getGender(): ?string
+    {
+        return $this->gender;
+    }
+
+    public function setGender(?string $gender): self
+    {
+        $this->gender = $gender;
 
         return $this;
     }

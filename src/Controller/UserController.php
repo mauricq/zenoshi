@@ -122,9 +122,13 @@ class UserController extends ControllerProvider
             $userObject->setUniqueId($userObject->getAppKey());
             $userObject->setIdPerson($person);
 
-            $catalogue = new Catalogue();
-            $catalogue->setIdCatalog(empty($request->get("user_status")) ? 0 : $request->get("user_status"));
-            $userObject->setIdUserStatus(empty($request->get("user_status")) ? null : $catalogue);
+            $usesStatus = new Catalogue();
+            $usesStatus->setIdCatalog(empty($request->get("user_status")) ? 0 : $request->get("user_status"));
+            $userObject->setIdUserStatus(empty($request->get("user_status")) ? null : $usesStatus);
+
+            $userType = new Catalogue();
+            $userType->setIdCatalog(empty($request->get("user_type")) ? 0 : $request->get("user_type"));
+            $userObject->setIdUserType(empty($request->get("user_type")) ? null : $userType);
 
             $userObjectResult = $this->service->save($userObject);
 

@@ -6,24 +6,24 @@ namespace App\Service;
 
 use App\Entity\Constants;
 use App\Entity\EntityProvider;
-use App\Entity\Product;
+use App\Entity\Reward;
 use App\Errors\DuplicatedException;
-use App\Repository\ProductRepository;
+use App\Repository\RewardRepository;
 use App\Service\Share\IServiceProviderInterface;
 use App\Service\Share\ServiceProvider;
 use App\Utils\PrepareDataUtil;
 use Doctrine\ORM\ORMException;
 
 /**
- * Class ProductService
+ * Class RewardService
  * @package App\Service
  */
-class ProductService implements IServiceProviderInterface
+class RewardService implements IServiceProviderInterface
 {
     /**
-     * @var ProductRepository
+     * @var RewardRepository
      */
-    private ProductRepository $repository;
+    private RewardRepository $repository;
     /**
      * @var array
      */
@@ -46,14 +46,14 @@ class ProductService implements IServiceProviderInterface
     private ServiceProvider $serviceProvider;
 
     /**
-     * ProductService constructor.
-     * @param ProductRepository $repository
+     * RewardService constructor.
+     * @param RewardRepository $repository
      * @param array $checkDuplicated
      * @param PrepareDataUtil $prepareDataUtil
      * @param string $dateTimeFormat
      * @param ServiceProvider $serviceProvider
      */
-    public function __construct(ProductRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat, ServiceProvider $serviceProvider)
+    public function __construct(RewardRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat, ServiceProvider $serviceProvider)
     {
         $this->repository = $repository;
         $this->fieldsCheckDuplicated = $checkDuplicated[strtolower($this->getClassOnly())];
@@ -88,7 +88,7 @@ class ProductService implements IServiceProviderInterface
 
         if ($update) {
             $oldData = $this->repository->find($id);
-            $object->setIdProduct($id);
+            $object->setIdReward($id);
         }
 
         $this->repository->merge($object);
@@ -130,7 +130,7 @@ class ProductService implements IServiceProviderInterface
      */
     public function getClass(): string
     {
-        return Product::class;
+        return Reward::class;
     }
 
     /**
@@ -181,8 +181,7 @@ class ProductService implements IServiceProviderInterface
         //json_key_input => id_field_db, idField, FK_Entity, FK_idEntity, FK_id_entity
         return [
             "merchant" => ["id_merchant", "idMerchant", "Merchant", "idMerchant", "id_merchant"],
-            "product_status" => ["id_product_status", "idProductStatus", "Catalogue", "idCatalog", "id_catalog"],
-            "photo_product" => ["id_photo_product", "idPhotoProduct", "File", "idFile", "id_file"]
+            "reward_status" => ["id_reward_status", "idRewardStatus", "Catalogue", "idCatalog", "id_catalog"]
         ];
     }
 }

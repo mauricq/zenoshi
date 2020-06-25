@@ -124,5 +124,13 @@ class Reward extends EntityProvider
         return $this;
     }
 
+    /**
+     * @param int $idReward
+     */
+    public function setIdReward(int $idReward): void
+    {
+        $this->idReward = $idReward;
+    }
+
 
 }

@@ -12,7 +12,7 @@ use JMS\Serializer\Annotation as Serializer;
 /**
  * User
  *
- * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_person_user", columns={"id_person"}), @ORM\Index(name="fk_user_status", columns={"id_user_status"})})
+ * @ORM\Table(name="user", indexes={@ORM\Index(name="fk_person_user", columns={"id_person"}), @ORM\Index(name="fk_user_status", columns={"id_user_status"}), @ORM\Index(name="fk_user_type", columns={"id_user_type"})})
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User extends EntityProvider implements UserInterface
@@ -118,27 +118,14 @@ class User extends EntityProvider implements UserInterface
     private $idUserStatus;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
+     * @var \Catalogue
      *
-     * @ORM\ManyToMany(targetEntity="Profile", inversedBy="idUser")
-     * @ORM\JoinTable(name="user_has_profile",
-     *   joinColumns={
-     *     @ORM\JoinColumn(name="id_user", referencedColumnName="id_user")
-     *   },
-     *   inverseJoinColumns={
-     *     @ORM\JoinColumn(name="id_profile", referencedColumnName="id_profile")
-     *   }
-     * )
+     * @ORM\ManyToOne(targetEntity="Catalogue")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_user_type", referencedColumnName="id_catalog")
+     * })
      */
-    private $idProfile;
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->idProfile = new \Doctrine\Common\Collections\ArrayCollection();
-    }
+    private $idUserType;
 
     public function getIdUser(): ?int
     {
@@ -296,28 +283,14 @@ class User extends EntityProvider implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Profile[]
-     */
-    public function getIdProfile(): Collection
+    public function getIdUserType(): ?Catalogue
     {
-        return $this->idProfile;
+        return $this->idUserType;
     }
 
-    public function addIdProfile(Profile $idProfile): self
+    public function setIdUserType(?Catalogue $idUserType): self
     {
-        if (!$this->idProfile->contains($idProfile)) {
-            $this->idProfile[] = $idProfile;
-        }
-
-        return $this;
-    }
-
-    public function removeIdProfile(Profile $idProfile): self
-    {
-        if ($this->idProfile->contains($idProfile)) {
-            $this->idProfile->removeElement($idProfile);
-        }
+        $this->idUserType = $idUserType;
 
         return $this;
     }
@@ -332,4 +305,6 @@ class User extends EntityProvider implements UserInterface
     {
         // TODO: Implement eraseCredentials() method.
     }
+
+
 }
