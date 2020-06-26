@@ -78,6 +78,27 @@ class Merchant extends EntityProvider
     private $registrationDate;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="merchant_type", type="string", length=20, nullable=true)
+     */
+    private $merchantType;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description", type="string", length=200, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="mobile", type="string", length=20, nullable=true)
+     */
+    private $mobile;
+
+    /**
      * @var \Catalogue
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
@@ -90,7 +111,7 @@ class Merchant extends EntityProvider
     /**
      * @var \Person
      *
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
@@ -214,6 +235,42 @@ class Merchant extends EntityProvider
     public function setRegistrationDate(\DateTimeInterface $registrationDate): self
     {
         $this->registrationDate = $registrationDate;
+
+        return $this;
+    }
+
+    public function getMerchantType(): ?string
+    {
+        return $this->merchantType;
+    }
+
+    public function setMerchantType(?string $merchantType): self
+    {
+        $this->merchantType = $merchantType;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getMobile(): ?string
+    {
+        return $this->mobile;
+    }
+
+    public function setMobile(?string $mobile): self
+    {
+        $this->mobile = $mobile;
 
         return $this;
     }

@@ -7,7 +7,11 @@ namespace App\Utils;
 use App\Entity\Constants;
 use App\Entity\EntityProvider;
 use JMS\Serializer\ArrayTransformerInterface;
+use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 class PrepareDataUtil
 {
@@ -15,16 +19,21 @@ class PrepareDataUtil
      * @var ArrayTransformerInterface
      */
     protected ArrayTransformerInterface $arrayTransformer;
+    /**
+     * @var SerializerInterface
+     */
+    protected SerializerInterface $serializer;
 
     /**
      * PrepareDataUtil constructor.
      * @param ArrayTransformerInterface $arrayTransformer
+     * @param SerializerInterface $serializer
      */
-    public function __construct(ArrayTransformerInterface $arrayTransformer)
+    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer)
     {
         $this->arrayTransformer = $arrayTransformer;
+        $this->serializer = $serializer;
     }
-
 
     /**
      * @param string $catalogName
@@ -86,9 +95,12 @@ class PrepareDataUtil
      * @param Request $request
      * @param array $ids
      * @return array
+     * @throws ExceptionInterface
      */
     public function prepareData(Request $request, array $ids): array
     {
+        $normalizer = new ObjectNormalizer(null, new CamelCaseToSnakeCaseNameConverter());
+
         $id_field = Constants::PREPARED_DATA_ID_FIELD;
         $fk_entity = Constants::PREPARED_DATA_FK_ENTITY;
         $fk_id_entity = Constants::PREPARED_DATA_FK_IDENTITY;
@@ -100,8 +112,14 @@ class PrepareDataUtil
             $method = $this->getSetMethodByIdName($val[$fk_id_entity]);
             $entity = Constants::PREPARED_DATA_PATH_ENTITY . $val[$fk_entity];
             $object = new $entity();
-            $object->$method($idValue);
-            $data[$idEntity] = $object;
+            if (is_array($idValue)) {
+                $entityDenormalized = $normalizer->denormalize($idValue, $entity);
+                $data[$idEntity] = $entityDenormalized;
+            }
+            else {
+                $object->$method($idValue);
+                $data[$idEntity] = $object;
+            }
         }
 
         return $data;
