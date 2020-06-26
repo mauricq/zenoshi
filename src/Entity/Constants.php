@@ -31,5 +31,6 @@ class Constants
     const PREPARED_DATA_FK_IDENTITY = "3";
     const PREPARED_DATA_FK_ID_ENTITY = "4";
     const PREPARED_DATA_PATH_ENTITY = "App\Entity\\";
+    const UNIQUE_ID_GROUP_GENERATION = 5;
 
 }

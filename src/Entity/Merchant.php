@@ -99,6 +99,20 @@ class Merchant extends EntityProvider
     private $mobile;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="ref_code", type="string", length=10, nullable=true)
+     */
+    private $refCode;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="discount_percent", type="integer", nullable=true)
+     */
+    private $discountPercent;
+
+    /**
      * @var \Catalogue
      *
      * @ORM\ManyToOne(targetEntity="Catalogue")
@@ -271,6 +285,30 @@ class Merchant extends EntityProvider
     public function setMobile(?string $mobile): self
     {
         $this->mobile = $mobile;
+
+        return $this;
+    }
+
+    public function getRefCode(): ?string
+    {
+        return $this->refCode;
+    }
+
+    public function setRefCode(?string $refCode): self
+    {
+        $this->refCode = $refCode;
+
+        return $this;
+    }
+
+    public function getDiscountPercent(): ?int
+    {
+        return $this->discountPercent;
+    }
+
+    public function setDiscountPercent(?int $discountPercent): self
+    {
+        $this->discountPercent = $discountPercent;
 
         return $this;
     }
