@@ -80,4 +80,38 @@ class UserEntityRepository extends ServiceEntityRepository
 
         return $result;
     }
+
+    /**
+     * Custom method to get user name from Database using username or email fields
+     * @param array $uniqueIds
+     * @return array
+     */
+    public function searchUniqueIdDuplicated(array $uniqueIds)
+    {
+        $result = $this->createQueryBuilder('u')
+            ->select('
+	(CASE 
+			WHEN( u.uniqueId = :unique_id_1 ) THEN 0
+			WHEN( u.uniqueId = :unique_id_2 ) THEN 1
+			WHEN( u.uniqueId = :unique_id_3 ) THEN 2
+			WHEN( u.uniqueId = :unique_id_4 ) THEN 3
+			WHEN( u.uniqueId = :unique_id_5 ) THEN 4
+			ELSE \'\'
+		END) as exist')
+            ->andwhere('u.uniqueId  in (:unique_id_1, :unique_id_2, :unique_id_3, :unique_id_4, :unique_id_5)')
+            ->setParameter('unique_id_1', $uniqueIds[0][1])
+            ->setParameter('unique_id_2', $uniqueIds[1][1])
+            ->setParameter('unique_id_3', $uniqueIds[2][1])
+            ->setParameter('unique_id_4', $uniqueIds[3][1])
+            ->setParameter('unique_id_5', $uniqueIds[4][1])
+            ->getQuery()
+            ->getResult();
+
+        if (empty($result)) return $result;
+
+        foreach ($result as $item) {
+            $return[$item['exist']] = $item['exist'];
+        }
+        return $return;
+    }
 }

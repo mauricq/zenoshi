@@ -11,6 +11,7 @@ use App\Entity\User;
 use App\Service\CatalogueService;
 use App\Service\UserService;
 use App\Service\PersonService;
+use App\Utils\UserUtil;
 use ErrorException;
 use Exception;
 use JMS\Serializer\ArrayTransformerInterface;
@@ -42,6 +43,10 @@ class UserController extends ControllerProvider
      * @var CatalogueService
      */
     private CatalogueService $catalogueService;
+    /**
+     * @var UserUtil
+     */
+    private UserUtil $userUtil;
 
     /**
      * User constructor.
@@ -51,13 +56,15 @@ class UserController extends ControllerProvider
      * @param PersonService $personService
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param CatalogueService $catalogueService
+     * @param UserUtil $userUtil
      */
-    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserService $service, PersonService $personService, UserPasswordEncoderInterface $passwordEncoder, CatalogueService $catalogueService)
+    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserService $service, PersonService $personService, UserPasswordEncoderInterface $passwordEncoder, CatalogueService $catalogueService, UserUtil $userUtil)
     {
         parent::__construct($arrayTransformer, $serializer, $service);
         $this->passwordEncoder = $passwordEncoder;
         $this->personService = $personService;
         $this->catalogueService = $catalogueService;
+        $this->userUtil = $userUtil;
     }
 
 
@@ -119,7 +126,7 @@ class UserController extends ControllerProvider
             $userObject->setAppKey($this->util->generateUid()); //TODO analyst AppKey
             $userObject->setCreatedAt(date_create());
             $userObject->setUpdatedAt(date_create());
-            $userObject->setUniqueId($userObject->getAppKey());
+            $userObject->setUniqueId($this->userUtil->generateCodRef()[1]);
             $userObject->setIdPerson($person);
 
             $usesStatus = new Catalogue();
