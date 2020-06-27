@@ -8,7 +8,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Reward
  *
- * @ORM\Table(name="reward", indexes={@ORM\Index(name="fk_reward_status", columns={"id_reward_status"})})
+ * @ORM\Table(name="reward", indexes={@ORM\Index(name="fk_file_reward", columns={"id_file_reward"}), @ORM\Index(name="fk_merchant_reward", columns={"id_merchant"}), @ORM\Index(name="fk_person_registration_reward", columns={"id_person_registration_reward"}), @ORM\Index(name="fk_reward_status", columns={"id_reward_status"})})
  * @ORM\Entity(repositoryClass="App\Repository\RewardRepository")
  */
 class Reward extends EntityProvider
@@ -81,6 +81,17 @@ class Reward extends EntityProvider
      * @Groups({"reward"})
      */
     private $idFileReward;
+
+    /**
+     * @var \Merchant
+     *
+     * @ORM\ManyToOne(targetEntity="Merchant")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_merchant", referencedColumnName="id_merchant")
+     * })
+     * @Groups({"reward"})
+     */
+    private $idMerchant;
 
     /**
      * @var \Person
@@ -189,6 +200,18 @@ class Reward extends EntityProvider
     public function setIdFileReward(?File $idFileReward): self
     {
         $this->idFileReward = $idFileReward;
+
+        return $this;
+    }
+
+    public function getIdMerchant(): ?Merchant
+    {
+        return $this->idMerchant;
+    }
+
+    public function setIdMerchant(?Merchant $idMerchant): self
+    {
+        $this->idMerchant = $idMerchant;
 
         return $this;
     }
