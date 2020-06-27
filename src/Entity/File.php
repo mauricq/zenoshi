@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * File
@@ -12,8 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class File extends EntityProvider
 {
-
-
     /**
      * @var int
      *
@@ -27,6 +26,7 @@ class File extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="file_name", type="string", length=100, nullable=false)
+     * @Groups({"reward"})
      */
     private $fileName;
 
@@ -34,6 +34,7 @@ class File extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="file_location", type="string", length=200, nullable=false)
+     * @Groups({"reward"})
      */
     private $fileLocation;
 

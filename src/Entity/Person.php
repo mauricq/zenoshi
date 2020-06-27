@@ -19,7 +19,7 @@ class Person extends EntityProvider
      * @ORM\Column(name="id_person", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"merchant"})
+     * @Groups({"merchant","reward"})
      */
     private $idPerson;
 
@@ -27,7 +27,7 @@ class Person extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=false)
-     * @Groups({"merchant"})
+     * @Groups({"merchant","reward"})
      */
     private $name;
 
@@ -35,7 +35,7 @@ class Person extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
-     * @Groups({"merchant"})
+     * @Groups({"merchant","reward"})
      */
     private $lastName;
 
@@ -64,7 +64,7 @@ class Person extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="mobile", type="string", length=20, nullable=false)
-     * @Groups({"merchant"})
+     * @Groups({"merchant","reward"})
      */
     private $mobile;
 

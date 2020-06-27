@@ -11,6 +11,7 @@ use JMS\Serializer\SerializerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @Route("reward")
@@ -36,6 +37,7 @@ class RewardController extends ControllerProvider
      * @Route("/", name="rewardCreate", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
     public function create(Request $request): JsonResponse
     {
@@ -59,6 +61,7 @@ class RewardController extends ControllerProvider
      * @param Request $request
      * @param string $id
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
     public function update(Request $request, string $id): JsonResponse
     {

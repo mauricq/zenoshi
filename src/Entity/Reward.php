@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Reward
@@ -18,6 +19,7 @@ class Reward extends EntityProvider
      * @ORM\Column(name="id_reward", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"reward"})
      */
     private $idReward;
 
@@ -25,6 +27,7 @@ class Reward extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="name_reward", type="string", length=100, nullable=false)
+     * @Groups({"reward"})
      */
     private $nameReward;
 
@@ -32,6 +35,7 @@ class Reward extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="description_reward", type="string", length=999, nullable=true)
+     * @Groups({"reward"})
      */
     private $descriptionReward;
 
@@ -39,6 +43,7 @@ class Reward extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="rule_reward", type="string", length=9999, nullable=true)
+     * @Groups({"reward"})
      */
     private $ruleReward;
 
@@ -46,6 +51,7 @@ class Reward extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="price", type="integer", nullable=true)
+     * @Groups({"reward"})
      */
     private $price;
 
@@ -53,6 +59,7 @@ class Reward extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="shipping", type="integer", nullable=true)
+     * @Groups({"reward"})
      */
     private $shipping;
 
@@ -60,6 +67,7 @@ class Reward extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="discount_price", type="integer", nullable=true)
+     * @Groups({"reward"})
      */
     private $discountPrice;
 
@@ -70,6 +78,7 @@ class Reward extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_file_reward", referencedColumnName="id_file")
      * })
+     * @Groups({"reward"})
      */
     private $idFileReward;
 
@@ -80,6 +89,7 @@ class Reward extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_person_registration_reward", referencedColumnName="id_person")
      * })
+     * @Groups({"reward"})
      */
     private $idPersonRegistrationReward;
 
@@ -90,6 +100,7 @@ class Reward extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_reward_status", referencedColumnName="id_catalog")
      * })
+     * @Groups({"reward"})
      */
     private $idRewardStatus;
 
