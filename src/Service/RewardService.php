@@ -12,7 +12,16 @@ use App\Repository\RewardRepository;
 use App\Service\Share\IServiceProviderInterface;
 use App\Service\Share\ServiceProvider;
 use App\Utils\PrepareDataUtil;
+use Doctrine\Common\Annotations\AnnotationException;
+use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
+use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
+use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class RewardService
@@ -44,6 +53,29 @@ class RewardService implements IServiceProviderInterface
      * @var ServiceProvider
      */
     private ServiceProvider $serviceProvider;
+    /**
+     * @var ClassMetadataFactory
+     */
+    private ClassMetadataFactory $classMetadataFactory;
+    /**
+     * @var ObjectNormalizer
+     */
+    private ObjectNormalizer $normalizer;
+    /**
+     * @var Serializer
+     */
+    private Serializer $serializer;
+
+    /**
+     * @required
+     * @throws AnnotationException
+     */
+    public function setClassMetadataFactory()
+    {
+        $this->classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $this->normalizer = new ObjectNormalizer($this->classMetadataFactory, new CamelCaseToSnakeCaseNameConverter());
+        $this->serializer = new Serializer([$this->normalizer, new DateTimeNormalizer('Y/m')]);
+    }
 
     /**
      * RewardService constructor.
@@ -77,6 +109,7 @@ class RewardService implements IServiceProviderInterface
      * @param string|null $id
      * @return array|null
      * @throws DuplicatedException
+     * @throws ExceptionInterface
      */
     public function saveGeneric(EntityProvider $object, string $id = null): ?array
     {
@@ -94,9 +127,8 @@ class RewardService implements IServiceProviderInterface
         $this->repository->merge($object);
 
         $data = $update ? $object : $this->repository->findOneBy($this->criteriaFields);
-        $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), [$data]);
 
-        return $data;
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -117,10 +149,10 @@ class RewardService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
-     * @return array
+     * @param array $value
+     * @return Reward
      */
-    public function filter(string $value = ''): array
+    public function filter(array $value): Reward
     {
         return $this->repository->findOneBy($value);
     }
@@ -144,10 +176,12 @@ class RewardService implements IServiceProviderInterface
     /**
      * @param array $value
      * @return array
+     * @throws ExceptionInterface
      */
     public function filterOneBy(array $value): array
     {
-        return $this->repository->findOneBy($value);
+        $data = $this->repository->findOneBy($value);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -156,11 +190,12 @@ class RewardService implements IServiceProviderInterface
      * @param null $limit
      * @param null $offset
      * @return array|null
+     * @throws ExceptionInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
-        $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
-        return $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), $result);
+        $data = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**

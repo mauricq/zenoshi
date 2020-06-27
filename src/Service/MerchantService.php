@@ -127,7 +127,7 @@ class MerchantService implements IServiceProviderInterface
         $this->repository->merge($object);
         $data = $update ? $object : $this->repository->findOneBy($this->criteriaFields);
 
-        return $this->serializer->normalize($data, null, ['groups' => ['merchant']]);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -180,7 +180,7 @@ class MerchantService implements IServiceProviderInterface
     public function filterOneBy(array $value): array
     {
         $data = $this->repository->findOneBy($value);
-        return $this->serializer->normalize($data, null, ['groups' => ['merchant']]);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -195,7 +195,7 @@ class MerchantService implements IServiceProviderInterface
     {
 
         $data = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
-        return $this->serializer->normalize($data, null, ['groups' => ['merchant']]);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
