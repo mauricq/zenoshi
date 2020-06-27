@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * @Route("merchant")
@@ -38,6 +39,7 @@ class MerchantController extends ControllerProvider
      * @Route("/", name="merchantCreate", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
     public function create(Request $request): JsonResponse
     {
@@ -61,6 +63,7 @@ class MerchantController extends ControllerProvider
      * @param Request $request
      * @param string $id
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
     public function update(Request $request, string $id): JsonResponse
     {

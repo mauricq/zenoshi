@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Person
@@ -18,6 +19,7 @@ class Person extends EntityProvider
      * @ORM\Column(name="id_person", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"merchant"})
      */
     private $idPerson;
 
@@ -25,6 +27,7 @@ class Person extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=false)
+     * @Groups({"merchant"})
      */
     private $name;
 
@@ -32,6 +35,7 @@ class Person extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="last_name", type="string", length=100, nullable=false)
+     * @Groups({"merchant"})
      */
     private $lastName;
 
@@ -60,6 +64,7 @@ class Person extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="mobile", type="string", length=20, nullable=false)
+     * @Groups({"merchant"})
      */
     private $mobile;
 
