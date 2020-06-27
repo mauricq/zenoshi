@@ -19,7 +19,7 @@ class Merchant extends EntityProvider
      * @ORM\Column(name="id_merchant", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"merchant"})
+     * @Groups({"merchant", "reward"})
      */
     private $idMerchant;
 
@@ -27,7 +27,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="merchant_name", type="string", length=200, nullable=true)
-     * @Groups({"merchant"})
+     * @Groups({"merchant", "reward"})
      */
     private $merchantName;
 
@@ -59,7 +59,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="country", type="string", length=100, nullable=true)
-     * @Groups({"merchant"})
+     * @Groups({"merchant", "reward"})
      */
     private $country;
 
@@ -67,7 +67,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="website", type="string", length=999, nullable=true)
-     * @Groups({"merchant"})
+     * @Groups({"merchant", "reward"})
      */
     private $website;
 
@@ -91,7 +91,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="merchant_type", type="string", length=20, nullable=true)
-     * @Groups({"merchant"})
+     * @Groups({"merchant", "reward"})
      */
     private $merchantType;
 
@@ -130,11 +130,11 @@ class Merchant extends EntityProvider
     /**
      * @var \Catalogue
      *
-     * @ORM\ManyToOne(targetEntity="Catalogue")
+     * @ORM\ManyToOne(targetEntity="Catalogue", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_merchant_category", referencedColumnName="id_catalog")
      * })
-     * @Groups({"merchant"})
+     * @Groups({"merchant", "reward"})
      */
     private $idMerchantCategory;
 

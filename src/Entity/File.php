@@ -23,9 +23,9 @@ class File extends EntityProvider
     private $idFile;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="file_name", type="string", length=100, nullable=false)
+     * @ORM\Column(name="file_name", type="string", length=100, nullable=true)
      * @Groups({"reward"})
      */
     private $fileName;
@@ -39,9 +39,9 @@ class File extends EntityProvider
     private $fileLocation;
 
     /**
-     * @var string
+     * @var string|null
      *
-     * @ORM\Column(name="file_real_name", type="string", length=200, nullable=false)
+     * @ORM\Column(name="file_real_name", type="string", length=200, nullable=true)
      */
     private $fileRealName;
 
@@ -84,7 +84,7 @@ class File extends EntityProvider
         return $this->fileName;
     }
 
-    public function setFileName(string $fileName): self
+    public function setFileName(?string $fileName): self
     {
         $this->fileName = $fileName;
 
@@ -108,7 +108,7 @@ class File extends EntityProvider
         return $this->fileRealName;
     }
 
-    public function setFileRealName(string $fileRealName): self
+    public function setFileRealName(?string $fileRealName): self
     {
         $this->fileRealName = $fileRealName;
 

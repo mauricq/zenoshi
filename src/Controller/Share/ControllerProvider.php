@@ -171,7 +171,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
                 array(
                     Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS
                 ),
-                Response::HTTP_CREATED
+                Response::HTTP_OK
             );
         } catch (Exception $e) {
             $result = new JsonResponse(
