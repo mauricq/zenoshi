@@ -12,6 +12,8 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class File extends EntityProvider
 {
+
+
     /**
      * @var int
      *
@@ -62,6 +64,14 @@ class File extends EntityProvider
      * @ORM\Column(name="status", type="string", length=10, nullable=true)
      */
     private $status;
+
+    /**
+     * File constructor.
+     */
+    public function __construct()
+    {
+        $this->creationDate = date_create();
+    }
 
     public function getIdFile(): ?int
     {

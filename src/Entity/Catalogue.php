@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Catalogue
@@ -18,6 +19,7 @@ class Catalogue extends EntityProvider
      * @ORM\Column(name="id_catalog", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"merchant"})
      */
     private $idCatalog;
 
@@ -46,6 +48,7 @@ class Catalogue extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=false)
+     * @Groups({"merchant"})
      */
     private $name;
 

@@ -18,6 +18,7 @@ use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Serializer\Exception\ExceptionInterface;
 
 /**
  * Class ControllerProvider
@@ -116,6 +117,7 @@ class ControllerProvider extends AbstractController implements IControllerProvid
      * @param string $class
      * @param string|null $id
      * @return JsonResponse
+     * @throws ExceptionInterface
      */
     public function createGeneric(Request $request, string $class, string $id = null): JsonResponse
     {

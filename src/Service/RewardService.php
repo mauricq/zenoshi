@@ -181,7 +181,9 @@ class RewardService implements IServiceProviderInterface
         //json_key_input => id_field_db, idField, FK_Entity, FK_idEntity, FK_id_entity
         return [
             "merchant" => ["id_merchant", "idMerchant", "Merchant", "idMerchant", "id_merchant"],
-            "reward_status" => ["id_reward_status", "idRewardStatus", "Catalogue", "idCatalog", "id_catalog"]
+            "person_registration_reward" => ["id_person_registration_reward", "idPersonRegistrationReward", "Person", "idPerson", "id_person"],
+            "reward_status" => ["id_reward_status", "idRewardStatus", "Catalogue", "idCatalog", "id_catalog"],
+            "file_reward" => ["id_file_reward", "idFileReward", "File", "idFile", "file_location"]
         ];
     }
 }

@@ -8,3 +8,7 @@ parameters:
             enabled: true
             type: 'AND'
             fields: ['name', 'idMerchant']
+        reward:
+            enabled: true
+            type: 'AND'
+            fields: ['nameReward', 'price']

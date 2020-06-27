@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Merchant
@@ -18,6 +19,7 @@ class Merchant extends EntityProvider
      * @ORM\Column(name="id_merchant", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups({"merchant"})
      */
     private $idMerchant;
 
@@ -25,6 +27,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="merchant_name", type="string", length=200, nullable=true)
+     * @Groups({"merchant"})
      */
     private $merchantName;
 
@@ -32,6 +35,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="address", type="string", length=200, nullable=true)
+     * @Groups({"merchant"})
      */
     private $address;
 
@@ -39,6 +43,7 @@ class Merchant extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="points", type="integer", nullable=true)
+     * @Groups({"merchant"})
      */
     private $points;
 
@@ -46,6 +51,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="city", type="string", length=100, nullable=true)
+     * @Groups({"merchant"})
      */
     private $city;
 
@@ -53,6 +59,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="country", type="string", length=100, nullable=true)
+     * @Groups({"merchant"})
      */
     private $country;
 
@@ -60,6 +67,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="website", type="string", length=999, nullable=true)
+     * @Groups({"merchant"})
      */
     private $website;
 
@@ -67,6 +75,7 @@ class Merchant extends EntityProvider
      * @var \DateTime|null
      *
      * @ORM\Column(name="approval_date", type="datetime", nullable=true)
+     * @Groups({"merchant"})
      */
     private $approvalDate;
 
@@ -74,6 +83,7 @@ class Merchant extends EntityProvider
      * @var \DateTime
      *
      * @ORM\Column(name="registration_date", type="datetime", nullable=false)
+     * @Groups({"merchant"})
      */
     private $registrationDate;
 
@@ -81,6 +91,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="merchant_type", type="string", length=20, nullable=true)
+     * @Groups({"merchant"})
      */
     private $merchantType;
 
@@ -88,6 +99,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="description", type="string", length=200, nullable=true)
+     * @Groups({"merchant"})
      */
     private $description;
 
@@ -95,6 +107,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="mobile", type="string", length=20, nullable=true)
+     * @Groups({"merchant"})
      */
     private $mobile;
 
@@ -102,6 +115,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="ref_code", type="string", length=10, nullable=true)
+     * @Groups({"merchant"})
      */
     private $refCode;
 
@@ -109,6 +123,7 @@ class Merchant extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="discount_percent", type="integer", nullable=true)
+     * @Groups({"merchant"})
      */
     private $discountPercent;
 
@@ -119,6 +134,7 @@ class Merchant extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_merchant_category", referencedColumnName="id_catalog")
      * })
+     * @Groups({"merchant"})
      */
     private $idMerchantCategory;
 
@@ -129,6 +145,7 @@ class Merchant extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
+     * @Groups({"merchant"})
      */
     private $idPerson;
 
@@ -139,6 +156,7 @@ class Merchant extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_merchant_status", referencedColumnName="id_catalog")
      * })
+     * @Groups({"merchant"})
      */
     private $idMerchantStatus;
 
@@ -149,6 +167,7 @@ class Merchant extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_merchant_status_approval", referencedColumnName="id_catalog")
      * })
+     * @Groups({"merchant"})
      */
     private $idMerchantStatusApproval;
 

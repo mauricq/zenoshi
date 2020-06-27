@@ -45,9 +45,43 @@ class Reward extends EntityProvider
     /**
      * @var int|null
      *
-     * @ORM\Column(name="incentive_points", type="integer", nullable=true)
+     * @ORM\Column(name="price", type="integer", nullable=true)
      */
-    private $incentivePoints;
+    private $price;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="shipping", type="integer", nullable=true)
+     */
+    private $shipping;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="discount_price", type="integer", nullable=true)
+     */
+    private $discountPrice;
+
+    /**
+     * @var \File
+     *
+     * @ORM\ManyToOne(targetEntity="File",cascade={"persist"})
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_file_reward", referencedColumnName="id_file")
+     * })
+     */
+    private $idFileReward;
+
+    /**
+     * @var \Person
+     *
+     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_person_registration_reward", referencedColumnName="id_person")
+     * })
+     */
+    private $idPersonRegistrationReward;
 
     /**
      * @var \Catalogue
@@ -100,14 +134,62 @@ class Reward extends EntityProvider
         return $this;
     }
 
-    public function getIncentivePoints(): ?int
+    public function getPrice(): ?int
     {
-        return $this->incentivePoints;
+        return $this->price;
     }
 
-    public function setIncentivePoints(?int $incentivePoints): self
+    public function setPrice(?int $price): self
     {
-        $this->incentivePoints = $incentivePoints;
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getShipping(): ?int
+    {
+        return $this->shipping;
+    }
+
+    public function setShipping(?int $shipping): self
+    {
+        $this->shipping = $shipping;
+
+        return $this;
+    }
+
+    public function getDiscountPrice(): ?int
+    {
+        return $this->discountPrice;
+    }
+
+    public function setDiscountPrice(?int $discountPrice): self
+    {
+        $this->discountPrice = $discountPrice;
+
+        return $this;
+    }
+
+    public function getIdFileReward(): ?File
+    {
+        return $this->idFileReward;
+    }
+
+    public function setIdFileReward(?File $idFileReward): self
+    {
+        $this->idFileReward = $idFileReward;
+
+        return $this;
+    }
+
+    public function getIdPersonRegistrationReward(): ?Person
+    {
+        return $this->idPersonRegistrationReward;
+    }
+
+    public function setIdPersonRegistrationReward(?Person $idPersonRegistrationReward): self
+    {
+        $this->idPersonRegistrationReward = $idPersonRegistrationReward;
 
         return $this;
     }
