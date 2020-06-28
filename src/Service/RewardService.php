@@ -194,7 +194,24 @@ class RewardService implements IServiceProviderInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
+        if (str_contains(reset($criteria), Constants::FILTER_SEPARATOR))
+            return $this->filterByForeignField($criteria, $orderBy, $limit, $offset);
+
         $data = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
+    }
+
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return array|null
+     * @throws ExceptionInterface
+     */
+    public function filterByForeignField(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
+    {
+        $data = $this->repository->filterByForeignField($criteria, $orderBy, $limit, $offset);
         return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 

@@ -23,7 +23,7 @@ class CatalogueService implements IServiceProviderInterface
     /**
      * @var CatalogueRepository
      */
-    private $repository;
+    private CatalogueRepository $repository;
     /**
      * @var PrepareDataUtil
      */
@@ -132,6 +132,7 @@ class CatalogueService implements IServiceProviderInterface
 
         return $data;
     }
+
     /**
      * @return array
      */
