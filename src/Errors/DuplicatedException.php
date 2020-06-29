@@ -20,4 +20,11 @@ class DuplicatedException extends Exception
     {
         parent::__construct($message . $this->defaultMessage, $this->defaultCode);
     }
+
+    /**
+     * @param string $message
+     */
+    public function setMessage(string $message) {
+        $this->message = $message;
+    }
 }

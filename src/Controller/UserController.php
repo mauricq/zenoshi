@@ -8,7 +8,9 @@ use App\Entity\Catalogue;
 use App\Entity\Constants;
 use App\Entity\Person;
 use App\Entity\User;
+use App\Errors\DuplicatedException;
 use App\Service\CatalogueService;
+use App\Service\UserCreateService;
 use App\Service\UserService;
 use App\Service\PersonService;
 use App\Utils\UserUtil;
@@ -47,6 +49,10 @@ class UserController extends ControllerProvider
      * @var UserUtil
      */
     private UserUtil $userUtil;
+    /**
+     * @var UserCreateService
+     */
+    private UserCreateService $userCreateService;
 
     /**
      * User constructor.
@@ -57,14 +63,23 @@ class UserController extends ControllerProvider
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @param CatalogueService $catalogueService
      * @param UserUtil $userUtil
+     * @param UserCreateService $userCreateService
      */
-    public function __construct(ArrayTransformerInterface $arrayTransformer, SerializerInterface $serializer, UserService $service, PersonService $personService, UserPasswordEncoderInterface $passwordEncoder, CatalogueService $catalogueService, UserUtil $userUtil)
+    public function __construct(ArrayTransformerInterface $arrayTransformer,
+                                SerializerInterface $serializer,
+                                UserService $service,
+                                PersonService $personService,
+                                UserPasswordEncoderInterface $passwordEncoder,
+                                CatalogueService $catalogueService,
+                                UserUtil $userUtil,
+                                UserCreateService $userCreateService)
     {
         parent::__construct($arrayTransformer, $serializer, $service);
         $this->passwordEncoder = $passwordEncoder;
         $this->personService = $personService;
         $this->catalogueService = $catalogueService;
         $this->userUtil = $userUtil;
+        $this->userCreateService = $userCreateService;
     }
 
 
@@ -84,65 +99,29 @@ class UserController extends ControllerProvider
         return empty($result) ? new JsonResponse([], Response::HTTP_NOT_FOUND) : new JsonResponse($result, Response::HTTP_OK);
     }
 
-
     /**
-     * @Route("/", name="createUser", methods={"POST"})
+     * @Route("/", name="userCreate", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      */
     public function create(Request $request): JsonResponse
     {
         try {
-            $body = $request->getContent();
-            $personObject = $this->serializer->deserialize($body, Person::class, Constants::REQUEST_FORMAT_JSON);
-            $personObject->setMobile(str_replace("+", "", $personObject->getMobile()));
-
-            $userObject = $this->serializer->deserialize($body, User::class, Constants::REQUEST_FORMAT_JSON);
-
-            $duplicated = $this->service->searchDuplicated(
-                empty($userObject->getUsername()) ? "" : $userObject->getUsername(), $userObject->getEmail(), $personObject->getMobile());
-
-            if (!empty($duplicated)) {
-                $data = "";
-                foreach ($duplicated as $dup) {
-                    if ($dup['duplicated'] === "email") $data = $data . Constants::RESULT_MESSAGE_DUPLICATED_EMAIL;
-                    if ($dup['duplicated'] === "mobile") $data = $data . Constants::RESULT_MESSAGE_DUPLICATED_MOBILE;
-                    if ($dup['duplicated'] === "username") $data = $data . Constants::RESULT_MESSAGE_DUPLICATED_USERNAME;
-                }
-                return new JsonResponse(
-                    array(
-                        Constants::RESULT_LABEL_STATUS => Constants::RESULT_DUPLICATED,
-                        Constants::RESULT_LABEL_DATA => $data
-                    ),
-                    Response::HTTP_CREATED
-                );
-            }
-
-            $person = $this->personService->save($personObject);
-
-            $userObject->setUsername(empty($userObject->getUserName()) ? $userObject->getEmail() : $userObject->getUserName());
-            $userObject->setPassword($this->passwordEncoder->encodePassword($userObject, $request->get("password")));
-            $userObject->setRoles(array('ROLE_USER'));
-            $userObject->setAppKey($this->util->generateUid()); //TODO analyst AppKey
-            $userObject->setCreatedAt(date_create());
-            $userObject->setUpdatedAt(date_create());
-            $userObject->setUniqueId($this->userUtil->generateCodRef()[1]);
-            $userObject->setIdPerson($person);
-
-            $usesStatus = new Catalogue();
-            $usesStatus->setIdCatalog(empty($request->get("user_status")) ? 0 : $request->get("user_status"));
-            $userObject->setIdUserStatus(empty($request->get("user_status")) ? null : $usesStatus);
-
-            $userType = new Catalogue();
-            $userType->setIdCatalog(empty($request->get("user_type")) ? 0 : $request->get("user_type"));
-            $userObject->setIdUserType(empty($request->get("user_type")) ? null : $userType);
-
-            $userObjectResult = $this->service->save($userObject);
+            $userObjectResult = $this->userCreateService->create($request);
 
             $result = new JsonResponse(
                 array(
                     Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
                     Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($userObjectResult)
+                ),
+                Response::HTTP_CREATED
+            );
+
+        } catch (DuplicatedException $de) {
+            return new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_DUPLICATED,
+                    Constants::RESULT_LABEL_DATA => $de->getMessage()
                 ),
                 Response::HTTP_CREATED
             );
