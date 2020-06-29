@@ -105,6 +105,7 @@ class UserCreateService
         $personObject->setMobile(str_replace("+", "", $personObject->getMobile()));
 
         $userObject = $this->serializer->deserialize($body, User::class, Constants::REQUEST_FORMAT_JSON);
+        $userObject->setUsername(empty($userObject->getUserName()) ? $userObject->getEmail() : $userObject->getUserName());
 
         $duplicated = $this->service->searchDuplicated(
             empty($userObject->getUsername()) ? "" : $userObject->getUsername(), $userObject->getEmail(), $personObject->getMobile());
@@ -123,7 +124,6 @@ class UserCreateService
 
         $person = $this->personService->save($personObject);
 
-        $userObject->setUsername(empty($userObject->getUserName()) ? $userObject->getEmail() : $userObject->getUserName());
         $userObject->setPassword($this->passwordEncoder->encodePassword($userObject, $request->get("password")));
         $userObject->setRoles(array('ROLE_USER'));
         $userObject->setAppKey($this->util->generateUid()); //TODO analyst AppKey

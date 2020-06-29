@@ -65,8 +65,8 @@ class UserEntityRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('u')
             ->select('
 	(CASE 
-		WHEN( u.username = :username ) THEN \'username\'
         WHEN( u.email = :email ) THEN \'email\'
+		WHEN( u.username = :username ) THEN \'username\'
         WHEN( p.mobile = :mobile ) THEN \'mobile\'
 		ELSE \'\'
 	END) as duplicated')
