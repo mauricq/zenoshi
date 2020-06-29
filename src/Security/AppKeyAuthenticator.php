@@ -42,7 +42,7 @@ class AppKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function start(Request $request, AuthenticationException $authException = null) : Response
     {
-        return new Response(Constants::UNAUTHORIZED_MESSAGE, 401);
+        return new Response(Constants::UNAUTHORIZED_MESSAGE, 401, ["Content-Type" => "application/json"]);
     }
 
     /**
@@ -94,7 +94,7 @@ class AppKeyAuthenticator extends AbstractGuardAuthenticator
      */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception) : ?Response
     {
-        return new Response(Constants::AUTHENTICATION_FAILED_MESSAGE, 403);
+        return new Response(Constants::AUTHENTICATION_FAILED_MESSAGE, 403, ["Content-Type" => "application/json"]);
     }
 
     /**

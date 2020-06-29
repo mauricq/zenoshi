@@ -17,7 +17,7 @@ security:
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
         api:
-            pattern:   ^(/|/api|app/|/*)
+            pattern:   ^(/reward|/merchant|/catalogue|test/)
             stateless: true
             anonymous: false
             provider: api_user_provider
@@ -28,4 +28,8 @@ security:
                 entry_point: App\Security\AppKeyAuthenticator
     access_control:
         - { path: ^/auth/token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^(/|/api|app/|/*), roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^/user, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^(/reward|/merchant), roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^(/catalogue), roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^(/test), roles: IS_AUTHENTICATED_FULLY }

@@ -5,22 +5,20 @@ namespace App\Controller;
 
 use App\Controller\Share\ControllerProvider;
 use App\Entity\Constants;
-use App\Entity\User;
+use App\Errors\DuplicatedException;
+use App\Service\UserCreateService;
 use App\Service\UserService;
-use App\Utils\TokenUtils;
+use Exception;
 use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
-use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Lexik\Bundle\JWTAuthenticationBundle\Response\JWTAuthenticationSuccessResponse;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTManager;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @Route("login")
@@ -30,35 +28,17 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class LoginController extends ControllerProvider
 {
     /**
-     * @var TokenUtils
-     */
-    protected $tokenUtils;
-
-    /**
      * @var JWTTokenManagerInterface
      */
-    private $JWTManager;
+    private JWTTokenManagerInterface $JWTManager;
     /**
      * @var EventDispatcherInterface
      */
-    private $dispatcher;
-
+    private EventDispatcherInterface $dispatcher;
     /**
-     * @return TokenUtils
+     * @var UserCreateService
      */
-    public function getTokenUtils(): TokenUtils
-    {
-        return $this->tokenUtils;
-    }
-
-    /**
-     * @required
-     * @param TokenUtils $tokenUtils
-     */
-    public function setTokenUtils(TokenUtils $tokenUtils): void
-    {
-        $this->tokenUtils = $tokenUtils;
-    }
+    private UserCreateService $userCreateService;
 
     /**
      * @required
@@ -83,14 +63,16 @@ class LoginController extends ControllerProvider
      * @param ArrayTransformerInterface $arrayTransformer
      * @param SerializerInterface $serializer
      * @param UserService $service
+     * @param UserCreateService $userCreateService
      */
     public function __construct(ArrayTransformerInterface $arrayTransformer,
                                 SerializerInterface $serializer,
-                                UserService $service)
+                                UserService $service,
+                                UserCreateService $userCreateService)
     {
         parent::__construct($arrayTransformer, $serializer, $service);
+        $this->userCreateService = $userCreateService;
     }
-
 
     /**
      * @Route("/", name="login", methods={"POST"})
@@ -99,19 +81,83 @@ class LoginController extends ControllerProvider
      */
     public function login(Request $request): JsonResponse
     {
-        $body = $request->getContent();
-        $user = $this->serializer->deserialize($body, User::class, Constants::REQUEST_FORMAT_JSON);
-        $user->setPassword($request->get(Constants::LOGIN_PASSWORD_LABEL));
+        try {
+            $userObject = $this->userCreateService->create($request);
+            $userObject->setPassword($request->get(Constants::LOGIN_PASSWORD_LABEL));
 
+            $jwt = $this->JWTManager->create($userObject);
+            $response = new JWTAuthenticationSuccessResponse($jwt);
 
-        $jwt = $this->JWTManager->create($user);
-        $response = new JWTAuthenticationSuccessResponse($jwt);
+            $event = new AuthenticationSuccessEvent(['token' => $jwt], $userObject, $response);
+            $this->dispatcher->dispatch($event);
 
-        $event = new AuthenticationSuccessEvent(['token' => $jwt], $user, $response);
-        $this->dispatcher->dispatch($event);
-        $response->setData($event->getData());
+            $response = ['token' => $jwt, 'user' => $userObject];
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
+                    Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($response)
+                ),
+                Response::HTTP_CREATED
+            );
 
-        return $response;
+        } catch (DuplicatedException $de) {
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_DUPLICATED,
+                    Constants::RESULT_LABEL_DATA => $de->getMessage()
+                ),
+                Response::HTTP_CREATED
+            );
+        } catch (Exception $e) {
+            $error = join('-', [$e->getMessage(), $e->getFile(), $e->getLine(), $e->getCode(), $e->getTraceAsString()]);
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_ERROR,
+                    Constants::RESULT_LABEL_DATA => $error
+                ),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $result;
+    }
+
+    /**
+     * @Route("/fb", name="loginFacebook", methods={"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function loginFacebook(Request $request): JsonResponse
+    {
+        try {
+            $userObject = $this->userCreateService->createByFacebook($request);
+
+            $jwt = $this->JWTManager->create($userObject);
+            $response = new JWTAuthenticationSuccessResponse($jwt);
+
+            $event = new AuthenticationSuccessEvent(['token' => $jwt], $userObject, $response);
+            $this->dispatcher->dispatch($event);
+
+            $response = ['token' => $jwt, 'user' => $userObject];
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
+                    Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($response) //TODO use normalizer
+                ),
+                Response::HTTP_CREATED
+            );
+        } catch (Exception $e) {
+            $error = join('-', [$e->getMessage(), $e->getFile(), $e->getLine(), $e->getCode(), $e->getTraceAsString()]);
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_ERROR,
+                    Constants::RESULT_LABEL_DATA => $error
+                ),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        return $result;
     }
 
 }

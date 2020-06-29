@@ -31,7 +31,6 @@ class PersonService implements IServiceProviderInterface
         $this->repository = $repository;
     }
 
-
     /**
      * @param EntityProvider $object
      * @return EntityProvider|null
@@ -40,6 +39,17 @@ class PersonService implements IServiceProviderInterface
     {
         $this->repository->merge($object);
         return $this->repository->findOneBy(["mobile" => $object->getMobile()]);
+    }
+
+    /**
+     * @param EntityProvider $object
+     * @param array $criteria
+     * @return EntityProvider|null
+     */
+    public function saveAndSearchBy(EntityProvider $object, array $criteria): ?EntityProvider
+    {
+        $this->repository->merge($object);
+        return $this->repository->findOneBy($criteria);
     }
 
     /**

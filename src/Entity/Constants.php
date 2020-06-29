@@ -17,8 +17,8 @@ class Constants
     const REQUEST_FORMAT_JSON = "json";
 
     const APP_KEY_HEADER_NAME = "appKey";
-    const UNAUTHORIZED_MESSAGE = "Unauthorized, use JWT login or AppKey";
-    const AUTHENTICATION_FAILED_MESSAGE = "Unauthorized, use JWT login or AppKey";
+    const UNAUTHORIZED_MESSAGE = "{\"Unauthorized, use JWT login or AppKey\"}";
+    const AUTHENTICATION_FAILED_MESSAGE = "{\"Unauthorized, use JWT login or AppKey\"}";
 
     const LOGIN_USERNAME_LABEL = "username";
     const LOGIN_PASSWORD_LABEL = "password";

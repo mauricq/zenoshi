@@ -101,7 +101,7 @@ class User extends EntityProvider implements UserInterface
     /**
      * @var \Person
      *
-     * @ORM\ManyToOne(targetEntity="Person")
+     * @ORM\ManyToOne(targetEntity="Person", cascade={"persist"})
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_person", referencedColumnName="id_person")
      * })
@@ -307,5 +307,25 @@ class User extends EntityProvider implements UserInterface
         // TODO: Implement eraseCredentials() method.
     }
 
+    /**
+     * @var string|null
+     *
+     */
+    private $statusFacebook;
 
+    /**
+     * @return string|null
+     */
+    public function getStatusFacebook(): ?string
+    {
+        return $this->statusFacebook;
+    }
+
+    /**
+     * @param string|null $statusFacebook
+     */
+    public function setStatusFacebook(?string $statusFacebook): void
+    {
+        $this->statusFacebook = $statusFacebook;
+    }
 }

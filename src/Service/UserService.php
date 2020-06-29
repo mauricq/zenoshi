@@ -128,10 +128,10 @@ class UserService implements IServiceProviderInterface
     /**
      * @param string $username
      * @param string $email
-     * @param string $mobile
+     * @param string|null $mobile
      * @return mixeds
      */
-    public function searchDuplicated(string $username, string $email, string $mobile)
+    public function searchDuplicated(string $username, string $email, ?string $mobile)
     {
         return $this->repository->searchDuplicated($username, $email, $mobile);
     }
