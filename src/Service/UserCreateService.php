@@ -146,7 +146,6 @@ class UserCreateService
     /**
      * @param Request $request
      * @return EntityProvider|UserInterface|null
-     * @throws DuplicatedException
      */
     public function createByFacebook(Request $request)
     {

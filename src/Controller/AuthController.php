@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -13,8 +14,10 @@ class AuthController extends AbstractFOSRestController
 {
     /**
      * @Route("/auth/token", name="get_token", methods={"GET","POST"})
+     * @param Request $request
      */
-    public function getTokenAction()
+    public function getTokenAction(Request $request)
     {
     }
+
 }

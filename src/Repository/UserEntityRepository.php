@@ -23,36 +23,6 @@ class UserEntityRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    // /**
-    //  * @return Person[] Returns an array of Person objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Person
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
-
-
     /**
      * Custom method to get user name from Database using username or email fields
      * @param string $username
@@ -113,5 +83,26 @@ class UserEntityRepository extends ServiceEntityRepository
             $return[$item['exist']] = $item['exist'];
         }
         return $return;
+    }
+
+    /**
+     * Custom method to get user name from Database using username or email fields
+     * @param string $username
+     * @return mixeds
+     * @throws NonUniqueResultException
+     */
+    public function loadUserByUsername($username)
+    {
+        $result = $this->createQueryBuilder('u')
+            ->join('u.idPerson', 'p', Join::WITH, 'u.idPerson = p.idPerson')
+            ->andwhere('u.username = :username OR u.email = :username OR p.mobile = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (empty($result)){
+            $result = new User();
+        }
+        return $result;
     }
 }

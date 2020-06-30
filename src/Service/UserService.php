@@ -11,6 +11,7 @@ use App\Entity\EntityProvider;
 use App\Repository\mixeds;
 use App\Repository\UserEntityRepository;
 use App\Service\Share\IServiceProviderInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\ORMException;
 use JMS\Serializer\ArrayTransformerInterface;
 use JMS\Serializer\SerializerInterface;
@@ -85,7 +86,7 @@ class UserService implements IServiceProviderInterface
      */
     public function getAll(): array
     {
-        $this->repository->findAll();
+        return $this->repository->findAll();
     }
 
     /**
@@ -139,5 +140,20 @@ class UserService implements IServiceProviderInterface
     public function prepareResponseData(User $object): array
     {
         return $this->arrayTransformer->toArray($object);
+    }
+
+    /**
+     * @param string $username
+     * @return mixeds|array
+     */
+    public function loadUserByUsername(string $username)
+    {
+       $data = [];
+        try {
+            $data = $this->repository->loadUserByUsername($username);
+        } catch (NonUniqueResultException $e) {
+            $data[0];
+        }
+        return $data;
     }
 }
