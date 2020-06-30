@@ -157,7 +157,7 @@ class LoginController extends ControllerProvider
                         Constants::RESULT_LABEL_STATUS => Constants::RESULT_ERROR,
                         Constants::RESULT_LABEL_DATA => Constants::AUTHENTICATION_WRONG_CREDENTIALS
                     ),
-                    Response::HTTP_CREATED
+                    Response::HTTP_NOT_FOUND
                 );
             }
 
@@ -173,7 +173,7 @@ class LoginController extends ControllerProvider
                     Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS,
                     Constants::RESULT_LABEL_DATA => $this->arrayTransformer->toArray($response) //TODO use normalizer
                 ),
-                Response::HTTP_CREATED
+                Response::HTTP_OK
             );
         } catch (Exception $e) {
             $error = join('-', [$e->getMessage(), $e->getFile(), $e->getLine(), $e->getCode(), $e->getTraceAsString()]);
