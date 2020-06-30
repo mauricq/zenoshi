@@ -20,6 +20,7 @@ class JWTTokenAuthenticator extends BaseAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return !$request->headers->has(Constants::APP_KEY_HEADER_NAME) &&  false !== $this->getTokenExtractor()->extract($request);
+        $validToken = $this->getTokenExtractor()->extract($request);
+        return !$request->headers->has(Constants::APP_KEY_HEADER_NAME) &&  false !== $validToken;
     }
 }
