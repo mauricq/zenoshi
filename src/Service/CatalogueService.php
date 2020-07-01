@@ -220,7 +220,7 @@ class CatalogueService implements IServiceProviderInterface
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
         $value = $criteria['value'];
-        $criteria = ["type" => $value, "status" => "A"];
+        $criteria = ["type" => $value, "status" => ["A", "P", "R"]];
         $orderBy = empty($orderBy) ? null : ['name' => 'ASC'];
 
         $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
