@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
@@ -19,6 +21,11 @@ class File extends EntityProvider
      * @ORM\Column(name="id_file", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @SerializedName("id_file")
+     * @Serializer\Type("integer")
+     *
+     * @Groups({"receip"})
      */
     private $idFile;
 
@@ -27,6 +34,11 @@ class File extends EntityProvider
      *
      * @ORM\Column(name="file_name", type="string", length=100, nullable=true)
      * @Groups({"reward"})
+     *
+     * @SerializedName("file_name")
+     * @Serializer\Type("string")
+     *
+     * @Groups({"receip"})
      */
     private $fileName;
 
@@ -35,6 +47,11 @@ class File extends EntityProvider
      *
      * @ORM\Column(name="file_location", type="string", length=200, nullable=false)
      * @Groups({"reward"})
+     *
+     * @SerializedName("file_location")
+     * @Serializer\Type("string")
+     *
+     * @Groups({"receip"})
      */
     private $fileLocation;
 
@@ -42,6 +59,11 @@ class File extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="file_real_name", type="string", length=200, nullable=true)
+     *
+     * @SerializedName("file_real_name")
+     * @Serializer\Type("string")
+     *
+     * @Groups({"receip"})
      */
     private $fileRealName;
 
@@ -49,6 +71,9 @@ class File extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="size", type="integer", nullable=true)
+     *
+     * @SerializedName("size")
+     * @Serializer\Type("integer")
      */
     private $size;
 
@@ -56,6 +81,11 @@ class File extends EntityProvider
      * @var \DateTime
      *
      * @ORM\Column(name="creation_date", type="datetime", nullable=false)
+     *
+     * @SerializedName("creation_date")
+     * @Serializer\Type("datetime")
+     *
+     * @Groups({"receip"})
      */
     private $creationDate;
 
@@ -63,8 +93,19 @@ class File extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="status", type="string", length=10, nullable=true)
+     *
+     * @SerializedName("status")
+     * @Serializer\Type("string")
      */
     private $status;
+
+    /**
+     * @var string
+     *
+     * @SerializedName("base64File")
+     * @Serializer\Type("string")
+     */
+    protected string $base64File;
 
     /**
      * File constructor.
@@ -149,6 +190,22 @@ class File extends EntityProvider
         $this->status = $status;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBase64File(): string
+    {
+        return $this->base64File;
+    }
+
+    /**
+     * @param string $base64File
+     */
+    public function setBase64File(string $base64File): void
+    {
+        $this->base64File = $base64File;
     }
 
 
