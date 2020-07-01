@@ -12,3 +12,7 @@ parameters:
             enabled: true
             type: 'AND'
             fields: ['nameReward', 'price']
+        catalogue:
+            enabled: true
+            type: 'AND'
+            fields: ['type', 'name']

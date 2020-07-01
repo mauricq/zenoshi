@@ -184,6 +184,32 @@ class ControllerProvider extends AbstractController implements IControllerProvid
         return $result;
     }
 
+
+    /**
+     * @param string $value
+     * @return JsonResponse
+     */
+    public function deleteLogic(string $value): JsonResponse
+    {
+        try {
+            $this->service->deleteLogic($value, true);
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_SUCCESS
+                ),
+                Response::HTTP_OK
+            );
+        } catch (Exception $e) {
+            $result = new JsonResponse(
+                array(
+                    Constants::RESULT_LABEL_STATUS => Constants::RESULT_ERROR
+                ),
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+        return $result;
+    }
+
     /**
      * @return JsonResponse
      */
