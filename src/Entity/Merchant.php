@@ -131,6 +131,7 @@ class Merchant extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="description_status", type="string", length=500, nullable=true)
+     * @Groups({"merchant"})
      */
     private $descriptionStatus;
 
