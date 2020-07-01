@@ -128,6 +128,14 @@ class Merchant extends EntityProvider
     private $discountPercent;
 
     /**
+     * @var string|null
+     *
+     * @ORM\Column(name="description_status", type="string", length=500, nullable=true)
+     * @Groups({"merchant"})
+     */
+    private $descriptionStatus;
+
+    /**
      * @var \Catalogue
      *
      * @ORM\ManyToOne(targetEntity="Catalogue", cascade={"persist"})
@@ -328,6 +336,18 @@ class Merchant extends EntityProvider
     public function setDiscountPercent(?int $discountPercent): self
     {
         $this->discountPercent = $discountPercent;
+
+        return $this;
+    }
+
+    public function getDescriptionStatus(): ?string
+    {
+        return $this->descriptionStatus;
+    }
+
+    public function setDescriptionStatus(?string $descriptionStatus): self
+    {
+        $this->descriptionStatus = $descriptionStatus;
 
         return $this;
     }

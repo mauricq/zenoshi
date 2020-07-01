@@ -6,10 +6,9 @@ namespace App\Service;
 
 use App\Entity\Constants;
 use App\Entity\EntityProvider;
-use App\Entity\Catalogue;
-use App\Entity\Merchant;
+use App\Entity\Pincode;
 use App\Errors\DuplicatedException;
-use App\Repository\CatalogueRepository;
+use App\Repository\PincodeRepository;
 use App\Service\Share\IServiceProviderInterface;
 use App\Service\Share\ServiceProvider;
 use App\Utils\PrepareDataUtil;
@@ -25,15 +24,15 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * Class CatalogueService
+ * Class PincodeService
  * @package App\Service
  */
-class CatalogueService implements IServiceProviderInterface
+class PincodeService implements IServiceProviderInterface
 {
     /**
-     * @var CatalogueRepository
+     * @var PincodeRepository
      */
-    private CatalogueRepository $repository;
+    private PincodeRepository $repository;
     /**
      * @var array
      */
@@ -79,26 +78,21 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
-     * CatalogueService constructor.
-     * @param CatalogueRepository $repository
-     * @param PrepareDataUtil $prepareDataUtil
+     * PincodeService constructor.
+     * @param PincodeRepository $repository
      * @param array $checkDuplicated
+     * @param PrepareDataUtil $prepareDataUtil
      * @param string $dateTimeFormat
      * @param ServiceProvider $serviceProvider
      */
-    public function __construct(CatalogueRepository $repository,
-                                PrepareDataUtil $prepareDataUtil,
-                                array $checkDuplicated,
-                                string $dateTimeFormat,
-                                ServiceProvider $serviceProvider)
+    public function __construct(PincodeRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat, ServiceProvider $serviceProvider)
     {
         $this->repository = $repository;
-        $this->prepareDataUtil = $prepareDataUtil;
         $this->fieldsCheckDuplicated = $checkDuplicated[strtolower($this->getClassOnly())];
+        $this->prepareDataUtil = $prepareDataUtil;
         $this->dateTimeFormat = $dateTimeFormat;
         $this->serviceProvider = $serviceProvider;
     }
-
 
     /**
      * @param EntityProvider $object
@@ -113,7 +107,7 @@ class CatalogueService implements IServiceProviderInterface
     /**
      * @param EntityProvider $object
      * @param string|null $id
-     * @return Merchant|bool|null
+     * @return array|null
      * @throws DuplicatedException
      * @throws ExceptionInterface
      */
@@ -127,18 +121,14 @@ class CatalogueService implements IServiceProviderInterface
 
         if ($update) {
             $oldData = $this->repository->find($id);
-            $object->setIdCatalog($id);
+            $object->setIdPincode($id);
         }
 
         $this->repository->merge($object);
 
         $data = $update ? $object : $this->repository->findOneBy($this->criteriaFields);
 
-        $class = strtolower($this->getClassOnly());
-        $groups[] = $class;
-        if ($update) $groups[] = $class."Uploaded";
-
-        return $this->serializer->normalize($data, null, ['groups' => $groups]);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -151,23 +141,6 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
-     * @param bool $logic
-     * @throws ORMException
-     */
-    public function deleteLogic(string $value, bool $logic = false): void
-    {
-        if ($logic)
-        {
-            $update = $this->repository->find($value);
-            $update->setStatus("I");
-            $this->repository->merge($update);
-        } else {
-            $this->repository->removeById($this->getClass(), $value);
-        }
-    }
-
-    /**
      * @return array
      */
     public function getAll(): array
@@ -176,10 +149,10 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
-     * @return array
+     * @param array $value
+     * @return Pincode
      */
-    public function filter(string $value = ''): array
+    public function filter(array $value): Pincode
     {
         return $this->repository->findOneBy($value);
     }
@@ -189,7 +162,7 @@ class CatalogueService implements IServiceProviderInterface
      */
     public function getClass(): string
     {
-        return Catalogue::class;
+        return Pincode::class;
     }
 
     /**
@@ -203,10 +176,12 @@ class CatalogueService implements IServiceProviderInterface
     /**
      * @param array $value
      * @return array
+     * @throws ExceptionInterface
      */
     public function filterOneBy(array $value): array
     {
-        return [$this->repository->findOneBy($value)];
+        $data = $this->repository->findOneBy($value);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -219,15 +194,25 @@ class CatalogueService implements IServiceProviderInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
-        $value = $criteria['value'];
-        $criteria = ["type" => $value, "status" => ["A", "P", "R"]];
-        $orderBy = empty($orderBy) ? null : ['name' => 'ASC'];
+        if (str_contains(reset($criteria), Constants::FILTER_SEPARATOR))
+            return $this->filterByForeignField($criteria, $orderBy, $limit, $offset);
 
-        $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
-        $data = $this->prepareDataUtil->deleteParentCatalog($value, $result);
-        $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), $data);
+        $data = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
+    }
 
-        return $data;
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return array|null
+     * @throws ExceptionInterface
+     */
+    public function filterByForeignField(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
+    {
+        $data = $this->repository->filterByForeignField($criteria, $orderBy, $limit, $offset);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -247,7 +232,10 @@ class CatalogueService implements IServiceProviderInterface
     {
         //json_key_input => id_field_db, idField, FK_Entity, FK_idEntity, FK_id_entity
         return [
-            "parent" => ["id_parent", "idParent", "Catalogue", "idCatalog", "id_catalog"]
+            "merchant" => ["id_merchant", "idMerchant", "Merchant", "idMerchant", "id_merchant"],
+            "person_registration_pincode" => ["id_person_registration_pincode", "idPersonRegistrationPincode", "Person", "idPerson", "id_person"],
+            "pincode_status" => ["id_pincode_status", "idPincodeStatus", "Catalogue", "idCatalog", "id_catalog"],
+            "file_pincode" => ["id_file_pincode", "idFilePincode", "File", "idFile", "file_location"]
         ];
     }
 }
