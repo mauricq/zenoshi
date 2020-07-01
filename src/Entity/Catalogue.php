@@ -19,7 +19,7 @@ class Catalogue extends EntityProvider
      * @ORM\Column(name="id_catalog", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
-     * @Groups({"merchant","reward"})
+     * @Groups({"merchant","reward","catalogue","catalogueParent"})
      */
     private $idCatalog;
 
@@ -27,6 +27,7 @@ class Catalogue extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="status", type="string", length=10, nullable=false)
+     * @Groups({"catalogue"})
      */
     private $status;
 
@@ -34,6 +35,7 @@ class Catalogue extends EntityProvider
      * @var string|null
      *
      * @ORM\Column(name="icon", type="string", length=100, nullable=true)
+     * @Groups({"catalogue"})
      */
     private $icon;
 
@@ -41,6 +43,7 @@ class Catalogue extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="type", type="string", length=100, nullable=false)
+     * @Groups({"catalogue","catalogueParent"})
      */
     private $type;
 
@@ -48,7 +51,7 @@ class Catalogue extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=200, nullable=false)
-     * @Groups({"merchant","reward"})
+     * @Groups({"merchant","reward","catalogue"})
      */
     private $name;
 
@@ -56,6 +59,7 @@ class Catalogue extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=200, nullable=false)
+     * @Groups({"catalogue"})
      */
     private $description;
 
@@ -66,6 +70,7 @@ class Catalogue extends EntityProvider
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_parent", referencedColumnName="id_catalog")
      * })
+     * @Groups({"catalogueUploaded","catalogueParent"})
      */
     private $idParent;
 
