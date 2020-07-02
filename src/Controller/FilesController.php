@@ -69,7 +69,7 @@ class FilesController
     }
 
     /**
-     * @Route("/", name="save", methods={"POST"})
+     * @Route("/", name="saveFiles", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      * @throws Exception
