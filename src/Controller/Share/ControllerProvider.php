@@ -7,6 +7,7 @@ namespace App\Controller\Share;
 use App\Entity\Constants;
 use App\Entity\Merchant;
 use App\Errors\DuplicatedException;
+use App\Errors\ElementNotFoundException;
 use App\Service\Share\IServiceProviderInterface;
 use App\Utils\PrepareDataUtil;
 use App\Utils\Utils;
@@ -133,6 +134,14 @@ class ControllerProvider extends AbstractController implements IControllerProvid
                 return new JsonResponse(
                     array(
                         Constants::RESULT_LABEL_STATUS => Constants::RESULT_DUPLICATED,
+                        Constants::RESULT_LABEL_DATA => $e->getMessage()
+                    ),
+                    Response::HTTP_CONFLICT
+                );
+            } catch (ElementNotFoundException $e) {
+                return new JsonResponse(
+                    array(
+                        Constants::RESULT_LABEL_STATUS => Constants::RESULT_NOT_FOUND,
                         Constants::RESULT_LABEL_DATA => $e->getMessage()
                     ),
                     Response::HTTP_CONFLICT

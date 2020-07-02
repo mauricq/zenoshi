@@ -6,10 +6,10 @@ namespace App\Service;
 
 use App\Entity\Constants;
 use App\Entity\EntityProvider;
-use App\Entity\Catalogue;
-use App\Entity\Merchant;
+use App\Entity\Receip;
 use App\Errors\DuplicatedException;
-use App\Repository\CatalogueRepository;
+use App\Errors\ElementNotFoundException;
+use App\Repository\ReceipRepository;
 use App\Service\Share\IServiceProviderInterface;
 use App\Service\Share\ServiceProvider;
 use App\Utils\PrepareDataUtil;
@@ -26,15 +26,15 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * Class CatalogueService
+ * Class ReceiptService
  * @package App\Service
  */
-class CatalogueService implements IServiceProviderInterface
+class ReceiptService implements IServiceProviderInterface
 {
     /**
-     * @var CatalogueRepository
+     * @var ReceipRepository
      */
-    private CatalogueRepository $repository;
+    private ReceipRepository $repository;
     /**
      * @var array
      */
@@ -78,29 +78,27 @@ class CatalogueService implements IServiceProviderInterface
         $this->classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $this->normalizer = new ObjectNormalizer($this->classMetadataFactory, new CamelCaseToSnakeCaseNameConverter());
         $this->serializer = new Serializer([new DateTimeNormalizer([DateTimeNormalizer::FORMAT_KEY => $dateTimeFormat]), $this->normalizer], [new JsonEncoder()]);
+
+//        $metadataAwareNameConverter = new MetadataAwareNameConverter($this->classMetadataFactory); // injection of MetadataAwareNameConverter
+//        new ObjectNormalizer($this->classMetadataFactory, $metadataAwareNameConverter)
     }
 
     /**
-     * CatalogueService constructor.
-     * @param CatalogueRepository $repository
-     * @param PrepareDataUtil $prepareDataUtil
+     * ReceiptService constructor.
+     * @param ReceipRepository $repository
      * @param array $checkDuplicated
+     * @param PrepareDataUtil $prepareDataUtil
      * @param string $dateTimeFormat
      * @param ServiceProvider $serviceProvider
      */
-    public function __construct(CatalogueRepository $repository,
-                                PrepareDataUtil $prepareDataUtil,
-                                array $checkDuplicated,
-                                string $dateTimeFormat,
-                                ServiceProvider $serviceProvider)
+    public function __construct(ReceipRepository $repository, array $checkDuplicated, PrepareDataUtil $prepareDataUtil, string $dateTimeFormat, ServiceProvider $serviceProvider)
     {
         $this->repository = $repository;
-        $this->prepareDataUtil = $prepareDataUtil;
         $this->fieldsCheckDuplicated = $checkDuplicated[strtolower($this->getClassOnly())];
+        $this->prepareDataUtil = $prepareDataUtil;
         $this->dateTimeFormat = $dateTimeFormat;
         $this->serviceProvider = $serviceProvider;
     }
-
 
     /**
      * @param EntityProvider $object
@@ -115,9 +113,10 @@ class CatalogueService implements IServiceProviderInterface
     /**
      * @param EntityProvider $object
      * @param string|null $id
-     * @return Merchant|bool|null
+     * @return array|null
      * @throws DuplicatedException
      * @throws ExceptionInterface
+     * @throws ElementNotFoundException
      */
     public function saveGeneric(EntityProvider $object, string $id = null): ?array
     {
@@ -129,18 +128,17 @@ class CatalogueService implements IServiceProviderInterface
 
         if ($update) {
             $oldData = $this->repository->find($id);
-            $object->setIdCatalog($id);
+            if (empty($oldData)) throw new ElementNotFoundException (Constants::RESULT_MESSAGE_NOT_FOUND);
+            $object->setIdReward($oldData->getIdReceip());
+        } else {
+            $object->setDateRegistration(date_create());
         }
 
         $this->repository->merge($object);
 
         $data = $update ? $object : $this->repository->findOneBy($this->criteriaFields);
 
-        $class = strtolower($this->getClassOnly());
-        $groups[] = $class;
-        if ($update) $groups[] = $class."Uploaded";
-
-        return $this->serializer->normalize($data, null, ['groups' => $groups]);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -153,23 +151,6 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
-     * @param bool $logic
-     * @throws ORMException
-     */
-    public function deleteLogic(string $value, bool $logic = false): void
-    {
-        if ($logic)
-        {
-            $update = $this->repository->find($value);
-            $update->setStatus("I");
-            $this->repository->merge($update);
-        } else {
-            $this->repository->removeById($this->getClass(), $value);
-        }
-    }
-
-    /**
      * @return array
      */
     public function getAll(): array
@@ -178,10 +159,10 @@ class CatalogueService implements IServiceProviderInterface
     }
 
     /**
-     * @param string $value
-     * @return array
+     * @param array $value
+     * @return Receip
      */
-    public function filter(string $value = ''): array
+    public function filter(array $value): Receip
     {
         return $this->repository->findOneBy($value);
     }
@@ -191,7 +172,7 @@ class CatalogueService implements IServiceProviderInterface
      */
     public function getClass(): string
     {
-        return Catalogue::class;
+        return Receip::class;
     }
 
     /**
@@ -205,10 +186,12 @@ class CatalogueService implements IServiceProviderInterface
     /**
      * @param array $value
      * @return array
+     * @throws ExceptionInterface
      */
     public function filterOneBy(array $value): array
     {
-        return [$this->repository->findOneBy($value)];
+        $data = $this->repository->findOneBy($value);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -221,15 +204,25 @@ class CatalogueService implements IServiceProviderInterface
      */
     public function filterBy(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
     {
-        $value = $criteria['value'];
-        $criteria = ["type" => $value, "status" => ["A", "P", "R"]];
-        $orderBy = empty($orderBy) ? null : ['name' => 'ASC'];
+        if (str_contains(reset($criteria), Constants::FILTER_SEPARATOR))
+            return $this->filterByForeignField($criteria, $orderBy, $limit, $offset);
 
-        $result = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
-        $data = $this->prepareDataUtil->deleteParentCatalog($value, $result);
-        $data = $this->prepareDataUtil->deleteParamsFromCatalog($this->getIds(), $data);
+        $data = $this->repository->findBy($criteria, $orderBy, $limit, $offset);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
+    }
 
-        return $data;
+    /**
+     * @param array $criteria
+     * @param array|null $orderBy
+     * @param null $limit
+     * @param null $offset
+     * @return array|null
+     * @throws ExceptionInterface
+     */
+    public function filterByForeignField(array $criteria, array $orderBy = null, $limit = null, $offset = null): ?array
+    {
+        $data = $this->repository->filterByForeignField($criteria, $orderBy, $limit, $offset);
+        return $this->serializer->normalize($data, null, ['groups' => [strtolower($this->getClassOnly())]]);
     }
 
     /**
@@ -249,7 +242,9 @@ class CatalogueService implements IServiceProviderInterface
     {
         //json_key_input => id_field_db, idField, FK_Entity, FK_idEntity, FK_id_entity
         return [
-            "parent" => ["id_parent", "idParent", "Catalogue", "idCatalog", "id_catalog"]
+            "person_upload_receip" => ["id_person_upload_receip", "idPersonUploadReceip", "Person", "idPerson", "id_person"],
+            "merchant" => ["id_merchant", "idMerchant", "Merchant", "idMerchant", "id_merchant"],
+            "receip_approbation" => ["id_receip_approbation", "idReceipApprobation", "File", "idFile", "file_location"]
         ];
     }
 }

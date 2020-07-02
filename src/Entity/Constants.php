@@ -7,11 +7,14 @@ class Constants
     const RESULT_SUCCESS = "SUCCESS";
     const RESULT_ERROR = "ERROR";
     const RESULT_DUPLICATED = "DUPLICATED";
+    const RESULT_NOT_FOUND = "NOT FOUND";
     const RESULT_DUPLICATED_CODE = 002;
+    const RESULT_NOT_FOUND_CODE = 003;
     const RESULT_MESSAGE_DUPLICATED_EMAIL = "Email already registered. ";
     const RESULT_MESSAGE_DUPLICATED_USERNAME = "Username already registered. ";
     const RESULT_MESSAGE_DUPLICATED_MOBILE = "Mobile already registered. ";
     const RESULT_MESSAGE_DUPLICATED = " already registered. ";
+    const RESULT_MESSAGE_NOT_FOUND = "Element not found. ";
     const RESULT_LABEL_DATA = "Data";
     const RESULT_LABEL_STATUS = "Status";
     const REQUEST_FORMAT_JSON = "json";

@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -23,9 +24,11 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
+ * This class allows to manage the receipts but only the image files.
+ *
  * @Route("files")
  */
-class FileController
+class FilesController
 {
     /**
      * @var ClassMetadataFactory
@@ -46,13 +49,14 @@ class FileController
 
     /**
      * @required
+     * @param string $dateTimeFormat
      * @throws AnnotationException
      */
-    public function setClassMetadataFactory()
+    public function setClassMetadataFactory(string $dateTimeFormat)
     {
         $this->classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $this->normalizer = new ObjectNormalizer($this->classMetadataFactory, new CamelCaseToSnakeCaseNameConverter());
-        $this->serializer = new Serializer([$this->normalizer, new DateTimeNormalizer('Y/m')]);
+        $this->serializer = new Serializer([new DateTimeNormalizer([DateTimeNormalizer::FORMAT_KEY => $dateTimeFormat]), $this->normalizer], [new JsonEncoder()]);
     }
 
     /**
@@ -65,7 +69,7 @@ class FileController
     }
 
     /**
-     * @Route("", name="save", methods={"POST"})
+     * @Route("/", name="save", methods={"POST"})
      * @param Request $request
      * @return JsonResponse
      * @throws Exception

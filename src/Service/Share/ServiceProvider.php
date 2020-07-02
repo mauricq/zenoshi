@@ -6,6 +6,7 @@ namespace App\Service\Share;
 
 use App\Entity\EntityProvider;
 use App\Utils\PrepareDataUtil;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 class ServiceProvider
@@ -18,14 +19,20 @@ class ServiceProvider
      * @var array
      */
     private array $criteriaFields = [];
+    /**
+     * @var string
+     */
+    private string $dateTimeFormat;
 
     /**
      * ServiceProvider constructor.
      * @param PrepareDataUtil $prepareDataUtil
+     * @param string $dateTimeFormat
      */
-    public function __construct(PrepareDataUtil $prepareDataUtil)
+    public function __construct(PrepareDataUtil $prepareDataUtil, string $dateTimeFormat)
     {
         $this->prepareDataUtil = $prepareDataUtil;
+        $this->dateTimeFormat = $dateTimeFormat;
     }
 
     /**
@@ -39,7 +46,9 @@ class ServiceProvider
 
         foreach ($fields['fields'] as $field) {
             $getCheckFields = $this->prepareDataUtil->getGetMethodByIdName($field);
-            $this->criteriaFields[$field] = $object->$getCheckFields();
+            $dataField = $object->$getCheckFields();
+//            if ($dataField instanceof DateTime) $dataField = $dataField->format($this->dateTimeFormat);
+            $this->criteriaFields[$field] = $dataField;
         }
 
         return $this->criteriaFields;

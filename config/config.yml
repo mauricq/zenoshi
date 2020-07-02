@@ -16,3 +16,7 @@ parameters:
             enabled: true
             type: 'AND'
             fields: ['type', 'name']
+        receip:
+            enabled: true
+            type: 'AND'
+            fields: ['merchantName', 'amount', 'dateEmission']
