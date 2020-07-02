@@ -4,7 +4,9 @@
 namespace App\Utils;
 
 
+use Exception;
 use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 class Utils
 {
@@ -19,15 +21,24 @@ class Utils
         $this->sizeCodRef = $sizeCodRef/2;
     }
 
+    /**
+     * @return UuidInterface
+     */
     public function generateUid()
     {
         return Uuid::uuid4();
     }
 
-    public function generateCodRef(): array
+    /**
+     * @param string $size
+     * @return array
+     * @throws Exception
+     */
+    public function generateCodRef($size = ""): array
     {
+        $sizeRandomBytes = empty($size) ? $this->sizeCodRef : $size;
         $codRef = [];
-        $random = random_bytes($this->sizeCodRef);
+        $random = random_bytes($sizeRandomBytes);
         $codRef[] = $random;
         $codRef[] = bin2hex($random);
         return $codRef;

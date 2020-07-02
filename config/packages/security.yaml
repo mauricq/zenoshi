@@ -17,7 +17,7 @@ security:
                 failure_handler:          lexik_jwt_authentication.handler.authentication_failure
                 require_previous_session: false
         api:
-            pattern:   ^(/reward|/merchant|/catalogue|test/)
+            pattern:   ^(/test|/reward|/merchant|/catalogue|/files)
             stateless: true
             anonymous: false
             provider: api_user_provider
@@ -33,3 +33,4 @@ security:
         - { path: ^(/reward|/merchant), roles: IS_AUTHENTICATED_FULLY }
         - { path: ^(/catalogue), roles: IS_AUTHENTICATED_FULLY }
         - { path: ^(/test), roles: IS_AUTHENTICATED_FULLY }
+        - { path: ^(/files), roles: IS_AUTHENTICATED_FULLY }

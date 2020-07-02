@@ -40,5 +40,6 @@ class Constants
     const FILTER_SEPARATOR = ":";
     const FILTER_POSITION_FILTER = 0;
     const FILTER_POSITION_VALUE = 1;
+    const FILE_SEPARATOR = "\\";
 
 }
