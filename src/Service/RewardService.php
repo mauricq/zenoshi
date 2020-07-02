@@ -15,6 +15,7 @@ use App\Utils\PrepareDataUtil;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\ORM\ORMException;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Exception\ExceptionInterface;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
@@ -68,13 +69,14 @@ class RewardService implements IServiceProviderInterface
 
     /**
      * @required
+     * @param string $dateTimeFormat
      * @throws AnnotationException
      */
-    public function setClassMetadataFactory()
+    public function setClassMetadataFactory(string $dateTimeFormat)
     {
         $this->classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
         $this->normalizer = new ObjectNormalizer($this->classMetadataFactory, new CamelCaseToSnakeCaseNameConverter());
-        $this->serializer = new Serializer([$this->normalizer, new DateTimeNormalizer('Y/m')]);
+        $this->serializer = new Serializer([new DateTimeNormalizer([DateTimeNormalizer::FORMAT_KEY => $dateTimeFormat]), $this->normalizer], [new JsonEncoder()]);
     }
 
     /**

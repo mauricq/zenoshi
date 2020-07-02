@@ -6,6 +6,7 @@
 parameters:
     dateTimeFormat: 'Y-m-d H:i:s'
     sizeCodRef: 6  # This number must be even (Multiples of 2)
+    pathTempFiles: '%kernel.project_dir%/public/tmp'
 
 imports:
     - { resource: 'config.yml' }
@@ -20,6 +21,7 @@ services:
             $dateTimeFormat: '%dateTimeFormat%'
             $checkDuplicated: '%checkDuplicated%'
             $sizeCodRef: '%sizeCodRef%'
+            $pathTempFiles: '%pathTempFiles%'
 
 
     # makes classes in src/ available to be used as services

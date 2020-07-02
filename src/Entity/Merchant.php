@@ -4,6 +4,9 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Merchant
@@ -75,6 +78,11 @@ class Merchant extends EntityProvider
      * @var \DateTime|null
      *
      * @ORM\Column(name="approval_date", type="datetime", nullable=true)
+     *
+     * @Assert\DateTime(format="Y-m-d H:i:s", message="Incorrect DateTime format. Please use: 'Y-m-d H:i:s'")
+     * @SerializedName("approval_date")
+     * @Serializer\Type("DateTime<'Y-m-d H:i:s'>")
+     *
      * @Groups({"merchant"})
      */
     private $approvalDate;

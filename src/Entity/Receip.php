@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use DateTimeInterface;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
+use JMS\Serializer\Annotation\SerializedName;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Receip
@@ -18,6 +23,8 @@ class Receip extends EntityProvider
      * @ORM\Column(name="id_receip", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     *
+     * @Groups({"receip"})
      */
     private $idReceip;
 
@@ -25,6 +32,8 @@ class Receip extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="merchant_name", type="string", length=200, nullable=false)
+     *
+     * @Groups({"receip"})
      */
     private $merchantName;
 
@@ -32,20 +41,30 @@ class Receip extends EntityProvider
      * @var string
      *
      * @ORM\Column(name="amount", type="decimal", precision=10, scale=0, nullable=false)
+     *
+     * @Groups({"receip"})
      */
     private $amount;
 
     /**
      * @var \DateTime
      *
+     * @Assert\DateTime(format="Y-m-d H:i:s", message="Incorrect DateTime format. Please use: 'Y-m-d H:i:s'")
+     * @SerializedName("date_emission")
+     * @Serializer\Type("DateTime<'Y-m-d H:i:s'>")
+     *
      * @ORM\Column(name="date_emission", type="datetime", nullable=false)
+     *
+     * @Groups({"receip"})
      */
     private $dateEmission;
 
     /**
-     * @var \DateTime
+     * @var DateTimeInterface
      *
      * @ORM\Column(name="date_registration", type="datetime", nullable=false)
+     *
+     * @Groups({"receip"})
      */
     private $dateRegistration;
 
@@ -53,6 +72,8 @@ class Receip extends EntityProvider
      * @var int|null
      *
      * @ORM\Column(name="incentive_points", type="integer", nullable=true)
+     *
+     * @Groups({"receip"})
      */
     private $incentivePoints;
 
