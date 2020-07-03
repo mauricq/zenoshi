@@ -82,7 +82,7 @@
       "@auto-scripts"
     ],
     "compile": [
-      "chmod -R 0700 var/www/zenoshi/public/_img"
+      "chmod -R 0700 zenoshi/public/_img"
     ]
   },
   "conflict": {
