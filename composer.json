@@ -82,7 +82,7 @@
       "@auto-scripts"
     ],
     "compile": [
-      "chmod -R 0770 public/_img/"
+      "chmod -R 0772 public/_img/"
     ]
   },
   "conflict": {
