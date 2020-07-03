@@ -20,3 +20,7 @@ parameters:
             enabled: true
             type: 'AND'
             fields: ['merchantName', 'amount', 'dateEmission']
+        file:
+            enabled: true
+            type: 'AND'
+            fields: ['fileName', 'size']
