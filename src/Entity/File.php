@@ -25,7 +25,7 @@ class File extends EntityProvider
      * @SerializedName("id_file")
      * @Serializer\Type("integer")
      *
-     * @Groups({"receip"})
+     * @Groups({"receip", "file"})
      */
     private $idFile;
 
@@ -38,7 +38,7 @@ class File extends EntityProvider
      * @SerializedName("file_name")
      * @Serializer\Type("string")
      *
-     * @Groups({"receip"})
+     * @Groups({"receip", "file"})
      */
     private $fileName;
 
@@ -51,7 +51,7 @@ class File extends EntityProvider
      * @SerializedName("file_location")
      * @Serializer\Type("string")
      *
-     * @Groups({"receip"})
+     * @Groups({"receip", "file"})
      */
     private $fileLocation;
 
@@ -63,7 +63,7 @@ class File extends EntityProvider
      * @SerializedName("file_real_name")
      * @Serializer\Type("string")
      *
-     * @Groups({"receip"})
+     * @Groups({"receip", "file"})
      */
     private $fileRealName;
 
@@ -85,7 +85,7 @@ class File extends EntityProvider
      * @SerializedName("creation_date")
      * @Serializer\Type("datetime")
      *
-     * @Groups({"receip"})
+     * @Groups({"receip", "file"})
      */
     private $creationDate;
 
@@ -106,6 +106,14 @@ class File extends EntityProvider
      * @Serializer\Type("string")
      */
     protected string $base64File;
+
+    /**
+     * @var string
+     *
+     * @SerializedName("secuencial")
+     * @Serializer\Type("string")
+     */
+    protected string $idPerson;
 
     /**
      * File constructor.
@@ -206,6 +214,22 @@ class File extends EntityProvider
     public function setBase64File(string $base64File): void
     {
         $this->base64File = $base64File;
+    }
+
+    /**
+     * @return string
+     */
+    public function getIdPerson(): string
+    {
+        return $this->idPerson;
+    }
+
+    /**
+     * @param string $idPerson
+     */
+    public function setIdPerson(string $idPerson): void
+    {
+        $this->idPerson = $idPerson;
     }
 
 
